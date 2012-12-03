@@ -111,6 +111,8 @@ function showApp(app) {
 		$('#delete').button({ disabled: true });
 		$('#clear').button({ disabled: true });
 	}
+	
+	selectSchemas(app);
 }
 
 /**
@@ -196,18 +198,17 @@ function getForm(app) {
 	app.Label = $('input:text[name=Label]').val();
 	app.Description = $('input:text[name=Description]').val();
 	app.Url = $('input:text[name=Url]').val();
-	
 	if($('input[name="IsActive"]')[0].checked) {
 		app.IsActive = "true";
 	} else {
 		app.IsActive = "false";
 	}
-	
 	if($('input[name="IsUrlExternal"]')[0].checked) {
 		app.IsUrlExternal = "true";
 	} else {
 		app.IsUrlExternal = "false";
 	}
+	app.Schemas = getSelectSchemas();
 }
 
 /**
@@ -255,6 +256,21 @@ function errorHandler(errs,data){
 	alert(str+="\n\n");
 }
 
+function selectSchemas(app) {
+	$(".SCHEMA_CBX").each(function(){
+		$(this).prop('checked',false);
+	});
+	if(app && app.Schemas) {
+		var tmp = app.Schemas.split(",");
+		for(var i in tmp) {
+			var str = $.trim(tmp[i]);
+			if(str.length > 0) {
+				$("input[value='"+str+"']").prop('checked',true);
+			}
+		}
+	}
+}
+
 function selectAllSchemas(cb) {
 	var select = $(cb).prop('checked');
 	$(".SCHEMA_CBX").each(function(){
@@ -266,9 +282,8 @@ function getSelectSchemas() {
 	var str = "";
 	$(".SCHEMA_CBX").each(function(){
 		if($(this).prop('checked')) {
-			if(str.length == 0) str += ",";
+			if(str.length > 0) str += ",";
 			str += $(this).val();
-			str += ",";
 		}
 	});
 	return str;
@@ -278,7 +293,7 @@ function showSchemas(schema) {
 	var con = $('#SCHEMA_ID_LIST');
 	con.html('');
 	for(var i in schema) {
-		con.append('<div><input type="checkbox" name="SCHEMA_ID_'+schema[i].name+'" value="'+schema[i].label+'" class="SCHEMA_CBX" onchange="makeClearable()"/>'+schema[i].label+'</div>');
+		con.append('<div><input type="checkbox" name="SCHEMA_ID_'+schema[i].name+'" value="'+schema[i].name+'" class="SCHEMA_CBX" onchange="makeClearable()"/>'+schema[i].label+'</div>');
 	}
 }
 
@@ -287,12 +302,12 @@ function showSchemas(schema) {
  */
 var schemas = new DFRequest({
 	app: "admin",
-	service: "",
-	resource: "DB",
+	service: "DB",
+	resource: "/Schema",
 	type: DFRequestType.POST,
 	success: function(json,request) {
 		if(!parseErrors(json,errorHandler)) {
-			showSchemas(json.resource);
+			showSchemas(json.table);
 		}
 	}
 });
@@ -324,7 +339,11 @@ $(document).ready(function() {
 		if(selectApp) {
 			getForm(selectApp);
 			var t = selectApp.Name;
-			selectApp.Name = null;
+			delete selectApp.Name;
+			delete selectApp.CreatedById;
+			delete selectApp.CreatedDate;
+			delete selectApp.LastModifiedById;
+			delete selectApp.LastModifiedDate;
 			appio.update(selectApp);
 			selectApp = t;
 		} else {

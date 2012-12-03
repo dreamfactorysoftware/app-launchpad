@@ -147,6 +147,10 @@ $(document).ready(function() {
 	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
 		if(selectAppGrp) {
 			getForm(selectAppGrp);
+			delete selectAppGrp.CreatedById;
+			delete selectAppGrp.CreatedDate;
+			delete selectAppGrp.LastModifiedById;
+			delete selectAppGrp.LastModifiedDate;
 			appgrpio.update(selectAppGrp);
 		} else {
 			var appGrp = {};

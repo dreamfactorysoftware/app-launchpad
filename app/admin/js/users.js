@@ -255,12 +255,6 @@ function pullFormData(obj) {
 		obj.RoleIds = roleId;
 	}
 	
-	// make sure we are not sending back unused data
-	obj.CreatedById      = null;
-	obj.CreatedDate      = null;
-	obj.LastModifiedDate = null;
-	obj.LastModifiedById = null;
-	obj.ConfirmCode      = null;
 }
 
 /**
@@ -293,6 +287,10 @@ $(document).ready(function() {
 		try {
 			if(selectUser) {
 				pullFormData(selectUser);
+				delete selectUser.CreatedById;
+				delete selectUser.CreatedDate;
+				delete selectUser.LastModifiedById;
+				delete selectUser.LastModifiedDate;
 				dfio.update(selectUser);
 			} else {
 				var user = {};

@@ -277,11 +277,7 @@ $(document).ready(function() {
 			$("#clearLists").button({ disabled: true });
 			$('#appsList').dfPagerUI('enableAll');
 			$('#appGrpList').dfPagerUI('enableAll');
-		},
-		error: function(err) {
-			$('#errorMsg').html(err);
-			$('#errorDialog').dialog('open');
-   		}
+		}
 	});
 	
 	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
@@ -303,16 +299,18 @@ $(document).ready(function() {
 				current_apps[i].AppGroupIds = tmp;
 				var tmp = current_apps[i];
 				// purge unwanted updates
-				tmp.Name = null;
-				tmp.CreatedById = null;
-				tmp.CreatedDate = null;
-				tmp.Description = null;
-				tmp.IsActive = null;
-				tmp.IsUrlExternal = null;
-				tmp.Label = null;
-				tmp.LastModifiedById = null;
-				tmp.LastModifiedDate = null;
-				tmp.Url = null;
+
+				delete tmp.CreatedById;
+				delete tmp.CreatedDate;
+				delete tmp.LastModifiedById;
+				delete tmp.LastModifiedDate;
+				delete tmp.Name;
+				delete tmp.Description;
+				delete tmp.IsActive;
+				delete tmp.IsUrlExternal;
+				delete tmp.Label;
+				delete tmp.Url;
+				
 				changes[changes.length] = tmp;
 			}
 		}

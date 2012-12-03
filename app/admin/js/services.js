@@ -205,6 +205,10 @@ $(document).ready(function() {
 	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
 		if(selectService) {
 			getForm(selectService);
+			delete selectService.CreatedById;
+			delete selectService.CreatedDate;
+			delete selectService.LastModifiedById;
+			delete selectService.LastModifiedDate;
 			serviceio.update(selectService);
 		} else {
 			var service = {};

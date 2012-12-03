@@ -499,6 +499,10 @@ $(document).ready(function() {
 	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
 		if(selectRole) {
 			processForm(selectRole);
+			delete selectRole.CreatedById;
+			delete selectRole.CreatedDate;
+			delete selectRole.LastModifiedById;
+			delete selectRole.LastModifiedDate;
 			roleio.update(selectRole);
 		} else {
 			var role = {};
