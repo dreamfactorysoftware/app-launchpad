@@ -1,4 +1,7 @@
-
+/**
+ * Administration button set navigation
+ * @param current_button
+ */
 function makeAdminNav(current_button) {
 	$( '#admin_radio' ).append('<input type="radio" id="index" name="radio"'+(current_button == 'index' ? 'checked="checked"' : '')+'/><label for="index">Users</label>');
 	$( '#admin_radio' ).append('<input type="radio" id="roles" name="radio" '+(current_button == 'roles' ? 'checked="checked"' : '')+'/><label for="roles">Roles</label>');
@@ -18,6 +21,10 @@ function makeAdminNav(current_button) {
 	
 }
 
+/**
+ * Administration functions for maintaining the height of the UI to
+ * fill into the space provided by LaunchPad.
+ */
 function resizeUi() {
     var h = $(window).height();
     $("#main_content").css('height', h );
@@ -34,6 +41,9 @@ $(window).bind('resize', function() {
 
 
 /**
+ * Administration global error handling function. Every admin module
+ * uses this function to read and report errors.
+ * 
  * 
  * @param errs
  * @param data

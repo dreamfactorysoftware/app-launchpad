@@ -4,7 +4,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 		<link rel="shortcut icon" href="favicon.ico"/>
-		<title>LaunchPad v0.2.15</title>
+		<title>LaunchPad v0.2.20</title>
 		
 		<!-- Standard CSS -->
 		<link rel="stylesheet" href="themes/df-default/jquery-ui-1.9.1.custom.css" type="text/css" />
@@ -66,7 +66,6 @@ function showSignInControls(show) {
 	} else {
 		$('#dfControl1').html('Welcome! <span class="dfTxtHeader3">'+User.FullName+'</span> [<a id="dfSignOutLink" class="dfPointer"> Log Out </a>]');
 		$( "#dfSignOutLink" ).click(function() {$( "#logoffDialog" ).dialog("open");});
-		$('#Password').val("");
 	}
 }
 
@@ -82,25 +81,12 @@ function doSignOut() {
 
 function reportError(errorMsg,data) {
 	var str = errorMsg.toString();
-	if(str.indexOf("Login request") != -1) {
-		$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
-		doSignIn();
+	if(str.indexOf("Service request failed") != -1 && str.indexOf("InvalidSession") != -1) {
+		// do better handling in the future?
 	} else {
-		if(User != null) {
-			if(errorMsg.indexOf("INVALIDSESSION") != -1 && top.parent.relogin) {
-				relogin();
-				return;
-			} else {
-				$('#errorMsg').html(errorMsg);
-				$('#errorDialog').dialog('open');
-			}
-		} else {
-			if(str.indexOf("[QUERYFAILED]: Record with Id") == -1) { 
-				$("#loginErrorMessage").html('<b>Enter your User ID and Password and click Sign In below;</b><br/><br/>');
-			}
-			doSignIn();
-		}
+		$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
 	}
+	relogin();
 }
 
 var appio = new DFRequest({
@@ -112,9 +98,6 @@ var appio = new DFRequest({
 			initTabs();
 			addDefaultTab();
 		}
-	},
-	error: function(err) {
-		reportError(err.statusText);
 	}
 });
 
@@ -126,9 +109,6 @@ var appGrpio = new DFRequest({
 			AppGrps = CommonUtilities.flattenResponse(json);
 			appio.retrieve({order:"Label"});
 		}
-	},
-	error: function(err) {
-		reportError(err.statusText);
 	}
 });
 
@@ -160,18 +140,11 @@ var userio = new DFRequest({
 				User = json;
 				appGrpio.retrieve({order:"Name"});
 				showSignInControls(false);
+				$('#Password').val("");
 			} else {
 				showSignInControls(true);
 				doSignIn();
 			}
-		}
-	},
-	error: function(err) {
-		if(User != null) {
-			reportError(err.statusText);
-		} else {
-			$("#loginErrorMessage").html('<b>'+err.statusText+'</b><br/><br/>');
-			doSignIn();
 		}
 	}
 });
