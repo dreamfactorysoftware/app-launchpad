@@ -248,7 +248,12 @@
 							str += '\n\t'+(i+1)+'. '+errs[i];
 						}
 					} else {
-						str += 'The following error occured; '+errs[0];
+						if(errs[0].indexOf("INVALIDSESSION") != -1 && top.parent.relogin) {
+							top.parent.relogin();
+							return;
+						} else {
+							str += 'The following error occured; '+errs[0];
+						}
 					}
 					alert(str+="\n\n");
 				})) {

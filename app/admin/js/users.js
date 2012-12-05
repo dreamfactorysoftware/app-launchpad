@@ -116,24 +116,6 @@ function makeClearable() {
 
 /**
  * 
- * @param errs
- * @param data
- */
-function errorHandler(errs,data) {
-	var str = '';
-	if(errs.length > 1) {
-		str += 'The following errors occured; ';
-		for(var i in errs) {
-			str += '\n\t'+(i+1)+'. '+errs[i];
-		}
-	} else {
-		str += 'The following error occured; '+errs[0];
-	}
-	alert(str+="\n\n");
-}
-
-/**
- * 
  */
 var dfio = new DFRequest({
 	app: "admin",
@@ -173,8 +155,6 @@ var dfio = new DFRequest({
 				}
 			}
 		}
-		
-		
 		$("#save").button({ disabled: true });
 	}
 });
@@ -189,18 +169,7 @@ var roleio = new DFRequest({
 	type: DFRequestType.POST,
 	params: {fields: "Id,Name"},
 	success: function(json,request) {
-		if(!parseErrors(json,function(errs,data){
-			var str = '';
-			if(errs.length > 1) {
-				str += 'The following errors occured; ';
-				for(var i in errs) {
-					str += '\n\t'+(i+1)+'. '+errs[i];
-				}
-			} else {
-				str += 'The following error occured; '+errs[0];
-			}
-			alert(str+="\n\n");
-		})) {
+		if(!parseErrors(json,errorHandler)) {
 			if(request) {
 				var roles = CommonUtilities.flattenResponse(json);
 				var rs = $("#roleSelector");

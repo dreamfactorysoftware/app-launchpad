@@ -49,6 +49,12 @@ $(window).bind('resize', function() {
     resizeTimer = setTimeout(resizeUi, 100);
 });
 
+function relogin() {
+	showContent(false);
+	showSignInControls(true);
+	doSignIn();
+}
+
 function doSignIn() {
 	$( "#loginDialog" ).dialog("open");
 }
@@ -81,8 +87,13 @@ function reportError(errorMsg,data) {
 		doSignIn();
 	} else {
 		if(User != null) {
-			$('#errorMsg').html(errorMsg);
-			$('#errorDialog').dialog('open');
+			if(errorMsg.indexOf("INVALIDSESSION") != -1 && top.parent.relogin) {
+				relogin();
+				return;
+			} else {
+				$('#errorMsg').html(errorMsg);
+				$('#errorDialog').dialog('open');
+			}
 		} else {
 			if(str.indexOf("[QUERYFAILED]: Record with Id") == -1) { 
 				$("#loginErrorMessage").html('<b>Enter your User ID and Password and click Sign In below;</b><br/><br/>');

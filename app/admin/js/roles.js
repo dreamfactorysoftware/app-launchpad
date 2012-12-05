@@ -116,18 +116,7 @@ var roleio = new DFRequest({
 	resource: '/Role',
 	type: DFRequestType.POST,
 	success: function(json,request) {
-		if(!parseErrors(json,function(errs,data){
-			var str = '';
-			if(errs.length > 1) {
-				str += 'The following errors occured; ';
-				for(var i in errs) {
-					str += '\n\t'+(i+1)+'. '+errs[i];
-				}
-			} else {
-				str += 'The following error occured; '+errs[0];
-			}
-			alert(str+="\n\n");
-		})) {
+		if(!parseErrors(json,errorHandler)) {
 			if(request) {
 				switch(request.action) {
 					case DFRequestActions.UPDATE:
@@ -158,18 +147,7 @@ var appio = new DFRequest({
 	service: "System",
 	resource: "/App",
 	success: function(json) {
-		if(!parseErrors(json,function(errs,data){
-			var str = '';
-			if(errs.length > 1) {
-				str += 'The following errors occured; ';
-				for(var i in errs) {
-					str += '\n\t'+(i+1)+'. '+errs[i];
-				}
-			} else {
-				str += 'The following error occured; '+errs[0];
-			}
-			alert(str+="\n\n");
-		})) {
+		if(!parseErrors(json,errorHandler)) {
 			current_apps = CommonUtilities.flattenResponse(json);
 			showApps(current_apps);
 		}

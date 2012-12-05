@@ -125,24 +125,6 @@ function makeClearable() {
 
 /**
  * 
- * @param errs
- * @param data
- */
-function errorHandler(errs,data) {
-	var str = '';
-	if(errs.length > 1) {
-		str += 'The following errors occured;\n';
-		for(var i in errs) {
-			str += '\n\t'+(i+1)+'. '+errs[i];
-		}
-	} else {
-		str += 'The following error occured; '+errs[0];
-	}
-	alert(str+="\n\n");
-}
-
-/**
- * 
  */
 var appio = new DFRequest({
 	app: "admin",
