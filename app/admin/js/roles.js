@@ -105,7 +105,6 @@ function showRole(role) {
 function makeClearable() {
 	$('#clear').button({ disabled: false });
 	$('#save').button({ disabled: false });
-	$('#rolesList').dfPagerUI('disableAll');
 }
 
 /**
@@ -132,13 +131,13 @@ var roleio = new DFRequest({
 			if(request) {
 				switch(request.action) {
 					case DFRequestActions.UPDATE:
-						$("#rolesList").dfPager('fetch');
+						$("#rolesList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.CREATE:
-						$("#rolesList").dfPager('fetch');
+						$("#rolesList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.DELETE:
-						$("#rolesList").dfPager('fetch');
+						$("#rolesList").dfSearchWidget('go');
 						break;
 					default:
 						// maybe refresh?
@@ -147,7 +146,6 @@ var roleio = new DFRequest({
 			}
 		}
 		$("#save").button({ disabled: true });
-		$("#rolesList").dfPagerUI("enableAll");
 		$("#savingDialog").dialog("close");
 	}
 });
@@ -513,7 +511,6 @@ $(document).ready(function() {
 	});
 	
 	$("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
-		$('#rolesList').dfPagerUI('enableAll');
 		showRole();
 	});
 	
@@ -581,17 +578,13 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#rolesList").dfPagerUI({
+	$("#rolesList").dfSearchWidget({
 		app: "admin",
 		service: "System",
 		resource: "/Role",
-		pageNo: 0,
-		pageLimit: 1,
-		pageLimits: [10,25,50,100],
-		orderBy: 0,
-		orderFields: ["Id","AppId","Name"],
-		renderer: function(container,json) {
-			var roles = CommonUtilities.flattenResponse(json);
+		offsetHeight: 25,
+		noSearchTerm: true,
+		renderer: function(container,roles) {
 			if(roles.length > 0) {
 				current_roles = roles;
 				renderRoles(container,roles);
@@ -606,6 +599,8 @@ $(document).ready(function() {
 			}
 		}
 	});
+	
+	
 	
 	serviceDescriptor.retrieve({order:"label"});
 	

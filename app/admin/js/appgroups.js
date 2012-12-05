@@ -67,7 +67,6 @@ function showAppGrp(appGrp) {
 
 function makeClearable() {
 	$('#clear').button({ disabled: false });
-	$('#appGrpList').dfPagerUI('disableAll');
 	$("#save").button({ disabled: false });
 }
 
@@ -99,13 +98,13 @@ var appgrpio = new DFRequest({
 			if(request) {
 				switch(request.action) {
 					case DFRequestActions.UPDATE:
-						$("#appGrpList").dfPager('fetch');
+						$("#appGrpList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.CREATE:
-						$("#appGrpList").dfPager('fetch');
+						$("#appGrpList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.DELETE:
-						$("#appGrpList").dfPager('fetch');
+						$("#appGrpList").dfSearchWidget('go');
 						break;
 					default:
 						// maybe refresh?
@@ -114,7 +113,6 @@ var appgrpio = new DFRequest({
 			}
 		}
 		$("#save").button({ disabled: true });
-		$('#appGrpList').dfPagerUI('enableAll');
 		$('#savingDialog').dialog('close');
 	}
 });
@@ -161,7 +159,6 @@ $(document).ready(function() {
 	});
 	
 	$("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
-		$('#appGrpList').dfPagerUI('enableAll');
 		showAppGrp();
 	});
 	
@@ -183,17 +180,13 @@ $(document).ready(function() {
 	$("#AppType").buttonset();
 	$("#active").buttonset();
 	
-	$('#appGrpList').dfPagerUI({
+	$("#appGrpList").dfSearchWidget({
 		app: 'admin',
 		service: "System",
 		resource: '/AppGroup',
-		pageNo: 0,
-		pageLimit: 1,
-		pageLimits: [10,25,50,100],
-		orderBy: 0,
-		orderFields: ['Id'],
-		renderer: function(container,json) {
-			var apps = CommonUtilities.flattenResponse(json);
+		offsetHeight: 25,
+		noSearchTerm: true,
+		renderer: function(container,apps) {
 			if(apps.length > 0) {
 				current_app_grps = apps;
 				renderApps(container,apps);

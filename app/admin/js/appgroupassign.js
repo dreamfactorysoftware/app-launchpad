@@ -96,8 +96,6 @@ function addAppToGrp(appIndex,appGrpIndex) {
 
 function makeClearable() {
 	$('#clearLists').button({ disabled: false });
-	$('#'+TABLE_APP_GRPS).dfPagerUI('disableAll');
-	$('#'+TABLE_APPS).dfPagerUI('disableAll');
 	$("#save").button({ disabled: false });
 }
 
@@ -237,15 +235,8 @@ $(document).ready(function() {
 	});
 	
 	$("#clearLists").button({icons: {primary: "ui-icon-trash"}}).click(function(){
-		var users = $('#appsList').dfPagerUI('getUIContainer');
-		users.html('');
-		renderApps(users,current_apps);
-		var roles = $('#appGrpList').dfPagerUI('getUIContainer');
-		roles.html('');
-		renderAppGrps(roles,current_grps);
-		resizeUi();
-		$('#appsList').dfPagerUI('enableAll');
-		$('#appGrpList').dfPagerUI('enableAll');
+		$("#appGrpList").dfSearchWidget("go");
+		$("#appsList").dfSearchWidget("go");
 		diableAllListControls();
 	});
 
@@ -275,8 +266,6 @@ $(document).ready(function() {
 			parseErrors(json,errorHandler);
 			$("#save").button({ disabled: true });
 			$("#clearLists").button({ disabled: true });
-			$('#appsList').dfPagerUI('enableAll');
-			$('#appGrpList').dfPagerUI('enableAll');
 		}
 	});
 	
@@ -319,18 +308,14 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('#appsList').dfPagerUI({
+	$("#appsList").dfSearchWidget({
 		app: "admin",
 		service: "System",
 		resource: "/App",
-		pageNo: 0,
-		pageLimit: 1,
-		pageLimits: [10,25,50,100],
-		orderBy: 0,
-		orderFields: ['Id','Name','Label'],
-		renderer: function(container,json) {
+		offsetHeight: 25,
+		noSearchTerm: true,
+		renderer: function(container,apps) {
 			resetSelector(TABLE_APPS);
-			var apps = CommonUtilities.flattenResponse(json);
 			if(apps.length > 0) {
 				current_apps = apps;
 				renderApps(container,apps);
@@ -347,18 +332,14 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('#appGrpList').dfPagerUI({
-		app: "admin",
+	$("#appGrpList").dfSearchWidget({
+		app: 'admin',
 		service: "System",
-		resource: "/AppGroup",
-		pageNo: 0,
-		pageLimit: 1,
-		pageLimits: [10,25,50,100],
-		orderBy: 0,
-		orderFields: ['Id','Label','Name'],
-		renderer: function(container,json) {
+		resource: '/AppGroup',
+		offsetHeight: 25,
+		noSearchTerm: true,
+		renderer: function(container,app_grps) {
 			resetSelector(TABLE_APP_GRPS);
-			var app_grps = CommonUtilities.flattenResponse(json);
 			if(app_grps.length > 0) {
 				current_grps = app_grps;
 				renderAppGrps(container,app_grps);
@@ -373,6 +354,7 @@ $(document).ready(function() {
 			doRefresh();
 		}
 	});
+	
 	
 	diableAllListControls();
 });

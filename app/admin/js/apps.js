@@ -120,7 +120,6 @@ function showApp(app) {
  */
 function makeClearable() {
 	$('#clear').button({ disabled: false });
-	$('#appsList').dfPagerUI('disableAll');
 	$("#save").button({ disabled: false });
 }
 
@@ -154,13 +153,13 @@ var appio = new DFRequest({
 			if(request) {
 				switch(request.action) {
 					case DFRequestActions.UPDATE:
-						$("#appsList").dfPager('fetch');
+						$("#appsList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.CREATE:
-						$("#appsList").dfPager('fetch');
+						$("#appsList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.DELETE:
-						$("#appsList").dfPager('fetch');
+						$("#appsList").dfSearchWidget('go');
 						break;
 					default:
 						// maybe refresh?
@@ -169,7 +168,6 @@ var appio = new DFRequest({
 			}
 		}
 		$("#save").button({ disabled: true });
-		$('#appsList').dfPagerUI('enableAll');
 	}
 });
 
@@ -257,6 +255,7 @@ function errorHandler(errs,data){
 }
 
 function selectSchemas(app) {
+	$("#SELECT_ALL_SCHEMAS").prop('checked',false);
 	$(".SCHEMA_CBX").each(function(){
 		$(this).prop('checked',false);
 	});
@@ -355,7 +354,6 @@ $(document).ready(function() {
 	});
 	
 	$("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
-		$('#appsList').dfPagerUI('enableAll');
 		showApp();
 	});
 	
@@ -377,18 +375,14 @@ $(document).ready(function() {
 			}
 		}
 	});
-	
-	$('#appsList').dfPagerUI({
+
+	$("#appsList").dfSearchWidget({
 		app: 'admin',
 		service: "System",
 		resource: '/App',
-		pageNo: 0,
-		pageLimit: 1,
-		pageLimits: [10,25,50,100],
-		orderBy: 0,
-		orderFields: ['Id','Name','Label','IsActive','Url','IsUrlExternal'],
-		renderer: function(container,json) {
-			var apps = CommonUtilities.flattenResponse(json);
+		offsetHeight: 25,
+		noSearchTerm: true,
+		renderer: function(container,apps) {
 			for(var i in apps) {
 				if(reselectApp && apps[i].Name == CommonUtilities.getQueryParameter('selectedApp')) {
 					selectApp = apps[i];

@@ -111,7 +111,6 @@ function showService(service) {
  */
 function makeClearable() {
 	$('#clear').button({ disabled: false });
-	$('#serviceList').dfPagerUI('disableAll');
 	$("#save").button({ disabled: false });
 }
 
@@ -143,13 +142,13 @@ var serviceio = new DFRequest({
 			if(request) {
 				switch(request.action) {
 					case DFRequestActions.UPDATE:
-						$("#serviceList").dfPager('fetch');
+						$("#serviceList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.CREATE:
-						$("#serviceList").dfPager('fetch');
+						$("#serviceList").dfSearchWidget('go');
 						break;
 					case DFRequestActions.DELETE:
-						$("#serviceList").dfPager('fetch');
+						$("#serviceList").dfSearchWidget('go');
 						break;
 					default:
 						// maybe refresh?
@@ -158,7 +157,6 @@ var serviceio = new DFRequest({
 			}
 		}
 		$("#save").button({ disabled: true });
-		$('#serviceList').dfPagerUI('enableAll');
 	}
 });
 
@@ -220,7 +218,6 @@ $(document).ready(function() {
 	});
 	
 	$("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
-		$('#serviceList').dfPagerUI('enableAll');
 		showService();
 	});
 	
@@ -257,18 +254,14 @@ $(document).ready(function() {
 				break;
 		}
 	});
-	
-	$("#serviceList").dfPagerUI({
+
+	$("#serviceList").dfSearchWidget({
 		app: "admin",
 		service: "System",
 		resource: "/Service",
-		pageNo: 0,
-		pageLimit: 1,
-		pageLimits: [10,25,50,100],
-		orderBy: 0,
-		orderFields: ["Id","Name"],
-		renderer: function(container,json) {
-			var services = CommonUtilities.flattenResponse(json);
+		offsetHeight: 25,
+		noSearchTerm: true,
+		renderer: function(container,services) {
 			if(services.length > 0) {
 				current_service = services;
 				renderServices(container,services);
