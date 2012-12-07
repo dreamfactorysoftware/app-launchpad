@@ -5,6 +5,7 @@ var isPageDirty = false;
 	
 var selected_app_grp_id = -1;
 var current_app_grps = null;
+var current_apps = null;
 var selectAppGrp = null;
 
 function makeAppGrpButton(id,name,container) {
@@ -43,6 +44,10 @@ function selectCurrentRole() {
 	}
 }
 
+/**
+ * 
+ * @param appGrp
+ */
 function showAppGrp(appGrp) {
 	selectAppGrp = appGrp;
 	if(appGrp) {
@@ -63,13 +68,27 @@ function showAppGrp(appGrp) {
 		$('#delete').button({ disabled: true });
 		$('#clear').button({ disabled: true });
 	}
+	selectApps(appGrp);
 }
 
+/**
+ * Select all applications
+ * @param cb
+ */
+function selectAllApps(cb) {
+	var select = $(cb).prop('checked');
+	$(".APP_CBX").each(function(){
+		$(this).prop('checked',select);
+	});
+}
+
+/**
+ * 
+ */
 function makeClearable() {
 	$('#clear').button({ disabled: false });
 	$("#save").button({ disabled: false });
 }
-
 
 var appgrpio = new DFRequest({
 	app: 'admin',
@@ -82,12 +101,15 @@ var appgrpio = new DFRequest({
 				switch(request.action) {
 					case DFRequestActions.UPDATE:
 						$("#appGrpList").dfSearchWidget('go');
+						updateLaunchPad("Do you want to update LaunchPad now with the changes?");
 						break;
 					case DFRequestActions.CREATE:
 						$("#appGrpList").dfSearchWidget('go');
+						updateLaunchPad("Do you want to update LaunchPad now with new Application Group?");
 						break;
 					case DFRequestActions.DELETE:
 						$("#appGrpList").dfSearchWidget('go');
+						updateLaunchPad("Do you want to update LaunchPad now without the Application Group?");
 						break;
 					default:
 						// maybe refresh?
@@ -112,14 +134,95 @@ function deleteAppGrp(confirmed) {
 	}
 }
 
+/**
+ * The Application IO object
+ */
+var appio = new DFRequest({
+	app:  "admin",
+	service: "System",
+	resource: "/App",
+	success: function(json) {
+		if(!parseErrors(json,errorHandler)) {
+			current_apps = CommonUtilities.flattenResponse(json);
+			showApps(current_apps);
+		}
+	}
+});
+
+/**
+ * 
+ * @param apps
+ */
+function showApps(apps) {
+	var con = $('#APP_ID_LIST');
+	con.html('');
+	for(var i in apps) {
+		con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].Id+'" value="'+apps[i].Id+'" data-groups="'+apps[i].AppGroupIds+'" class="APP_CBX" onchange="makeClearable()"/>'+apps[i].Label+'</div>');
+	}
+}
+
+/**
+ * Select apps for this role...
+ * @param role
+ */
+function selectApps(grp) {
+	$(".APP_CBX").each(function(){
+		var tmp = $(this).data("groups");
+		var selected = false;
+		if(tmp && grp) {
+			var atmp = tmp.split(",");
+			for(var i in atmp) {
+				var value = $.trim(atmp[i]);
+				if(value) {
+					if(value == grp.Id) {						
+						selected = true;
+						break;
+					}
+				}
+			}
+		}
+		$(this).prop('checked',selected);
+	});
+}
+
+/**
+ * Select all applications
+ * @param cb
+ */
+function selectAllApps(cb) {
+	var select = $(cb).prop('checked');
+	$(".APP_CBX").each(function(){
+		$(this).prop('checked',select);
+	});
+}
+
+/**
+ * 
+ * @returns {String}
+ */
+function getSelectAppIds() {
+	var str = "";
+	$(".APP_CBX").each(function(){
+		if($(this).prop('checked')) {
+			if(str.length == 0) str += ",";
+			str += $(this).val();
+			str += ",";
+		}
+	});
+	return str;
+}
+
 function getForm(grp) {
 	grp.Name = $('input:text[name=Name]').val();
 	grp.Description = $('input:text[name=Description]').val();
+	grp.AppIds = getSelectAppIds();
 }
 
 $(document).ready(function() {
 	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 	makeAdminNav('appgroups');
+	appio.retrieve();
+	
 	
 	$("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function(){
 		deleteAppGrp();

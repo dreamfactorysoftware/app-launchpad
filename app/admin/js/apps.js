@@ -123,6 +123,7 @@ function makeClearable() {
 	$("#save").button({ disabled: false });
 }
 
+
 /**
  * 
  */
@@ -136,12 +137,15 @@ var appio = new DFRequest({
 				switch(request.action) {
 					case DFRequestActions.UPDATE:
 						$("#appsList").dfSearchWidget('go');
+						updateLaunchPad("Do you want to update LaunchPad now with the changes?");
 						break;
 					case DFRequestActions.CREATE:
 						$("#appsList").dfSearchWidget('go');
+						updateLaunchPad("Do you want to update LaunchPad now with the new Application?");
 						break;
 					case DFRequestActions.DELETE:
 						$("#appsList").dfSearchWidget('go');
+						updateLaunchPad("Do you want to update LaunchPad now without the Application?");
 						break;
 					default:
 						// maybe refresh?

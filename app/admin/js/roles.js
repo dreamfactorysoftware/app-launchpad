@@ -200,7 +200,7 @@ function addService() {
 	});
 	
 	if(!exists) {
-		makeClearable();
+		
 		$("#SERVICE_ID_LIST").append(makeServiceComponentLine(index,{
 			Service: psrv,
 			Component: pcomp,
@@ -216,7 +216,14 @@ function addService() {
 		$('#Update').prop('checked',false);
 		$('#Delete').prop('checked',false);
 		
+		if(selectRole) {
+			processForm(selectRole);
+			showRole(selectRole);
+		}
+
 		measureScrollbars();
+		
+		makeClearable();
 	}
 }
 
@@ -369,8 +376,14 @@ function removeService() {
 	var c = confirm("Are you sure you want to remove the service '"+label+"' from the list? ");
 	if(c) {
 		$("#SRV_"+index).remove();
+		if(selectRole) {
+			processForm(selectRole);
+			showRole(selectRole);
+		}
 		makeClearable();
 	}
+	
+	
 }
 
 /**
@@ -577,8 +590,6 @@ $(document).ready(function() {
 			}
 		}
 	});
-	
-	
 	
 	serviceDescriptor.retrieve({order:"label"});
 	

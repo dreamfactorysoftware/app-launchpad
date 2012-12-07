@@ -55,9 +55,26 @@
 								<div class="cClear"><!--  --></div>
 							</div>
 							
-							<br/>
-							<br/>
-							<div class="cTM1" align="right">
+							
+							<div class="cTM1 cClear">
+								<div class="cLeft cW25 formLabel" align="right">
+									<strong>Applications:&nbsp;</strong>
+								</div>
+								<div class="cLeft cW75">
+									<div class="confinedPane cClear ui-widget ui-state-default ui-corner-top " align="left">
+										<div>
+											<input type="checkbox" id="SELECT_ALL_APPS" name="SELECT_ALL_APPS" value="ALL" class="APP_SELECT_ALL" onchange="selectAllApps(this);makeClearable()"/>All Applications
+										</div>
+									</div>
+									<div id="APPS_SCROLLER" class="scrollablePane cH98 cClear ui-widget ui-state-default ui-corner-bottom whitebg" style="border-top: 0px;" align="center">
+										<div id="APP_ID_LIST" class="" align="left"></div>
+									</div>
+									<div class="cClear"><!--  --></div>
+								</div>
+								<div class="cClear"><!--  --></div>
+							</div>
+							
+							<div class="cTM1 cClear" align="right">
 								<button id="clear">New Group</button>
 								<button id="delete">Delete Group</button>
 								<button id="save"><span id="saveLabel">Save Group</span></button>

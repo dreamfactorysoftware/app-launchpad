@@ -8,7 +8,7 @@ function makeAdminNav(current_button) {
 	$( '#admin_radio' ).append('<input type="radio" id="roleassign" name="radio" '+(current_button == 'roleassign' ? 'checked="checked"' : '')+'/><label for="roleassign">Assign Roles</label>');
 	$( '#admin_radio' ).append('<input type="radio" id="apps" name="radio" '+(current_button == 'apps' ? 'checked="checked"' : '')+'/><label for="apps">Applications</label>');
 	$( '#admin_radio' ).append('<input type="radio" id="appgroups" name="radio" '+(current_button == 'appgroups' ? 'checked="checked"' : '')+'/><label for="appgroups">Groups</label>');
-	$( '#admin_radio' ).append('<input type="radio" id="appgroupassign" name="radio" '+(current_button == 'appgroupassign' ? 'checked="checked"' : '')+'/><label for="appgroupassign">Assign Groups</label>');
+	//$( '#admin_radio' ).append('<input type="radio" id="appgroupassign" name="radio" '+(current_button == 'appgroupassign' ? 'checked="checked"' : '')+'/><label for="appgroupassign">Assign Groups</label>');
 	$( '#admin_radio' ).append('<input type="radio" id="services" name="radio" '+(current_button == 'services' ? 'checked="checked"' : '')+'/><label for="services">Services</label>');
 	
 	$( '#admin_radio' ).buttonset().click(function() {
@@ -26,10 +26,9 @@ function makeAdminNav(current_button) {
  * fill into the space provided by LaunchPad.
  */
 function resizeUi() {
-    var h = $(window).height();
-    $("#main_content").css('height', h );
-    var button_bar = $("#admin_radio").height();
-   $("#admin_panel").css('height', (h - button_bar));
+	var h = $(window).height()-35;
+	var button_bar = $("#admin_radio").outerHeight();
+	$("#admin_panel").css('height', (h - button_bar));
 };
 
 var resizeTimer = null;
@@ -64,4 +63,18 @@ function errorHandler(errs,data) {
 		}
 	}
 	alert(str+="\n\n");
+}
+
+
+/**
+ * 
+ */
+function updateLaunchPad(msg) {
+	if(top.parent.refresh) {
+		if(confirm(msg)) {
+			top.parent.refresh();
+		} else {
+			alert("You will have to refresh LaunchPad manually to view any changes you have made.");
+		}
+	}
 }
