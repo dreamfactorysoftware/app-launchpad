@@ -37,7 +37,7 @@
 									<strong>Name:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
-									<input type="text" class="cW98" id="rName" value="" onkeyup="makeClearable()"/>
+									<input type="text" class="cW98 ONKEYUP" id="rName" value=""/>
 								</div>
 								<div class="cClear"><!--  --></div>
 							</div>
@@ -46,7 +46,7 @@
 									<strong>Description:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
-									<input type="text" class="cW98" id="rDescription" value="" onkeyup="makeClearable()"/>
+									<input type="text" class="cW98 ONKEYUP" id="rDescription" value=""/>
 								</div>
 								<div class="cClear"><!--  --></div>
 							</div>
@@ -58,7 +58,7 @@
 									<div style="height:70px;">
 										<div class="scrollablePane cClear ui-widget ui-state-default ui-corner-top " align="left">
 											<div>
-												<input type="checkbox" id="SELECT_ALL_APPS" name="SELECT_ALL_APPS" value="ALL" class="APP_SELECT_ALL" onchange="selectAllApps(this);makeClearable()"/>All Applications
+												<input type="checkbox" id="SELECT_ALL_APPS" name="SELECT_ALL_APPS" value="ALL" class="APP_SELECT_ALL ONCHANGE" onchange="selectAllApps(this);"/>All Applications
 											</div>
 										</div>
 										<div style="height:75px;position:relative;top:-1px;">
@@ -101,7 +101,7 @@
 											<div id="ServicesWidgets">
 												
 												<div class="cLeft cW30">
-													<select id="serviceSelect" data-index="-1" class="cW100" onchange="doListSelect(this);">
+													<select id="serviceSelect" data-index="-1" class="cW100">
 														<option value="*">All</option>
 													</select>
 												</div>

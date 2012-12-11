@@ -4,7 +4,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 		<link rel="shortcut icon" href="favicon.ico"/>
-		<title>LaunchPad v0.2.25</title>
+		<title>LaunchPad v0.2.50</title>
 		
 		<!-- Standard CSS -->
 		<link rel="stylesheet" href="themes/df-default/jquery-ui-1.9.1.custom.css" type="text/css" />
@@ -24,411 +24,436 @@
 		
 		<script>
 
-var User = null;
-var AppGrps = null;
-var Apps = null;
-
-var tab_counter = 0;
-var tab_content = '';
-var $tabs = null;
-
-var max_chars_image = 13;
-var max_chars_button = 20;
-
-var singleApp = false;
-
-function resizeUi() {
-	var o_size = $(window).height()-(($(".dfHeader").outerHeight()+$(".dfFooter").outerHeight())*1.4);
-	$("#appSelector").css('height', o_size);
-	$(".ui-tabs-panel").css('height', o_size); 
-};
-
-var resizeTimer = null;
-
-$(window).bind('resize', function() {
-    if (resizeTimer) clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(resizeUi, 100);
-});
-
+/**
+ * Used to reset page when an invalid session is detected
+ * or refresh page when changes have been made to LaunchPad
+ * data. 
+ * 
+ */
 function relogin() {
-	showContent(false);
-	showSignInControls(true);
-	doSignIn();
+	window.location = window.location;
 }
+
+var appGrpio = null;
 
 function refresh() {
-	appGrpio.retrieve({order:"Name"});
+	if(appGrpio) appGrpio.retrieve({order:"Name"});
 }
-
-function doSignIn() {
-	$( "#loginDialog" ).dialog("open");
-}
-
-function showSignInControls(show) {
-	if(show) {
-		$('#dfControl1').html('Please [<a id="dfSignInLink" class="dfPointer dfTxtHeader3">Log In</a>]');
-		$( "#dfSignInLink" ).click(function() {$( "#loginDialog" ).dialog("open");});
-	} else {
-		$('#dfControl1').html('Welcome! <span class="dfTxtHeader3">'+User.FullName+'</span> [<a id="dfSignOutLink" class="dfPointer"> Log Out </a>]');
-		$( "#dfSignOutLink" ).click(function() {$( "#logoffDialog" ).dialog("open");});
-	}
-}
-
-function performSignIn() {
-	$( "#loginDialog" ).dialog("close");
-	$('#dfControl1').html('<i>Logging In, Please Wait...</i>');
-	userio.post(JSON.stringify({UserName: $('#UserName').val(),Password:base64_encode($('#Password').val())}), null, "/Login");
-}
-
-function doSignOut() {
-	$("#logoffDialog").dialog("open");
-}
-
-function reportError(errorMsg,data) {
-	var str = errorMsg.toString();
-	if(str.indexOf("Service request failed") != -1 && str.indexOf("InvalidSession") != -1) {
-		// do better handling in the future?
-	} else {
-		$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
-	}
-	relogin();
-}
-
-var appio = new DFRequest({
-	service: 'System',
-	resource: '/App',
-	success: function(json,request) {
-		if(!parseErrors(json,reportError)) {
-			Apps = CommonUtilities.flattenResponse(json);
-			if(Apps.length > 1) {
-				initTabs();
-				addDefaultTab();
-			} else {
-				showApp(Apps[0]);
-			}
-		}
-	}
-});
-
-var appGrpio = new DFRequest({
-	service: 'System',
-	resource: '/AppGroup',
-	success: function(json,request) {
-		if(!parseErrors(json,reportError)) {
-			AppGrps = CommonUtilities.flattenResponse(json);
-			appio.retrieve({order:"Label"});
-		}
-	}
-});
-
-function getAppsFor(appGrpId) {
-	var tmp = [];
-	for(var i in Apps) {
-		if(Apps[i].AppGroupIds && Apps[i].AppGroupIds.length>0&& Apps[i].AppGroupIds.indexOf(","+appGrpId+",") != -1) {
-			tmp[tmp.length] = Apps[i];
-		}
-	}
-	return tmp;
-}
-
-function getAppById(id) {
-	for(var i in Apps) {
-		if(Apps[i].Id == id) {
-			return Apps[i];
-		}
-	}
-}
-
-var userio = new DFRequest({
-	service: 'User',
-	resource: '/Session',
-	success: function(json,request) {
-		if(!parseErrors(json,reportError)) {
-			if(json.UserName) {
-				User = json;
-				appGrpio.retrieve({order:"Name"});
-				showSignInControls(false);
-				$('#Password').val("");
-			} else {
-				showSignInControls(true);
-				doSignIn();
-			}
-		}
-	}
-});
-
-var tabOptions = {
-	tabTemplate: "<li><span class='cRight dfPointer ui-icon ui-icon-close'>Remove Tab</span><a href='#{href}'>#{label}</a></li>",
-	add: function( event, ui ) {
-		if(tab_content) $( ui.panel ).append(tab_content);
-	}
-};
-
-function showApp(app) {
-	singleApp = true;
-	getCurrentTicket({
-		success: function(ticket) {
-			var url = app.Url;
-			if(!(app.IsUrlExternal=="true")) {
-				if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
-					url = '/'+url;
-				}
-				url = getCurrentServer()+'/apps/'+app.Name+url;
-			}
-			if(url.indexOf('?') != -1) {
-				if(url.substr(-1) === "&" ) {
-					url += 'svr='+escape(getCurrentServer())+'&';
-				} else {
-					url += '&svr='+escape(getCurrentServer())+'&';
-				}
-			} else {
-				url += '?svr='+escape(getCurrentServer())+'&';
-			}
-			url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
-			$('#dfContent').html('<div id="appSelector" class="cW100"><iframe src="'+url+'" width="100%" height="100%" id="SINGLE_APP" border="0" frameborder="0"></iframe></div>');
-			resizeUi();
-		}
-	});
-}
-
-function initTabs() {
-	$('#dfContent').html('<div id="leftControl" class="cLeft"><div id="navigation"></div></div><div id="rightContent"><div class="cLeft cW100"><div id="appSelector" class="cW100"><ul></ul></div></div></div>');
-	$tabs = $( "#appSelector").tabs(tabOptions);
-	$('#leftControl').html('<div id="navigation"></div>');
-	setup();
-}
-
-function createDisplay(id,href,longdesc) {
-	var tmp = '<iframe class="displayFrame" frameborder="0" marginheight="0" marginwidth="0" ';
-	if(id) tmp += 'name="'+id+'"';
-	if(href) tmp += 'src="'+href+'" ';
-	if(longdesc) tmp += 'longdesc="'+longdesc+'" ';
-	tmp += '></iframe>';
-	return tmp;
-}
-
-function addTabFunctions(tab) {
-	$("span",tab).unbind('click');
-	$("span",tab).click(function() {
-		var $parent = $( this ).parent();
-		var index = $( "li", $tabs ).index( $parent );
-		$parent.find('a').each(function(){
-			var id = parseInt($(this).attr('href').substring('#tabs-'.length));
-			$('.btn'+id).button( "option", "icons", {secondary:'ui-icon-play'} );
-		});
-		$tabs.tabs( "remove", index );
-		if($( "#appSelector span.ui-icon-close" ).length < 1) addDefaultTab();
-	});
-}
-
-
-function addDefaultTab() {
-	tab_content = createDisplay('DEFAULT_TAB','defaulttab.html','Default Tab');;
-	addTabFunctions($tabs.tabs( "add", "#tabs-DEFAULT",'Welcome!'));
-	resizeUi();
-}
-
-function clearTabs() {
-	$('#rightContent').load('<div class="cLeft cW100"><div id="appSelector" class="cW100"><ul></ul></div></div>');
-}
-
-function destroySpace() {
-	$('#dfContent').load("splash.html");
-}
-
-function showContent(sw) {
-	if(sw) {
-		$('#leftControl').fadeIn(250);
-		$('#rightContent').fadeIn(250);
-		$( "#leftControl" ).show( 'fade', 1500 );
-		$( "#rightContent" ).show( 'fade', 3500 );
-	} else {
-		$( "#leftControl" ).hide( 'fade', 2000 );
-		$( "#rightContent" ).hide( 'fade', 2000 ,function(){destroySpace();});
-	}
-}
-
-function getTicket() {
-	return User.ticket;
-}
-
-function setTicket(ticket) {
-	User.ticket = ticket;
-}
-
-function getTicketExpires() {
-	return User.ticket_expiry;
-}
-
-function hasTicketExpired() {
-	var future = new Number(User.ticket_expiry*1000);
-	var now = new Date().getTime();
-	if(future-now >= 0) return false;
-	return true;
-}
-
-function refreshTicket(opts) {
-	var callback = opts.success;
-	var errCallback = opts.error;
-	new DFRequest({
-		service: 'User',
-		resource: '/Ticket',
-		success: function(json) {
-			var err = checkFailure(json);
-			if(err) {
-				doSignIn();
-			} else {
-				User.ticket = json.ticket;
-				User.ticket_expiry = json.ticket_expiry;
-				if(callback) callback(json);
-			}
-		},
-		error: function (msg) {
-			if(errCallback) {
-				errCallback(msg);
-			} else {
-				throw(msg);
-			}
-		}
-	}).retrieve();
-}
-
-function getCurrentTicket(opts) {
-	if(hasTicketExpired()) {
-		refreshTicket(opts);
-	} else {
-		opts.success(getTicket());
-	}
-}
-
-function addTab(app) {
-	getCurrentTicket({
-		success: function(ticket) {
-			var url = app.Url;
-			if(!(app.IsUrlExternal=="true")) {
-				if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
-					url = '/'+url;
-				}
-				url = getCurrentServer()+'/apps/'+app.Name+url;
-			}
-			if(url.indexOf('?') != -1) {
-				if(url.substr(-1) === "&" ) {
-					url += 'svr='+escape(getCurrentServer())+'&';
-				} else {
-					url += '&svr='+escape(getCurrentServer())+'&';
-				}
-			} else {
-				url += '?svr='+escape(getCurrentServer())+'&';
-			}
-			url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
-			tab_content = createDisplay("disp" + app.Id,url,app.Description);
-			addTabFunctions($tabs.tabs( "add", "#tabs-" + app.Id, app.Label ));
-			$tabs.tabs( "option", "selected", $('#appSelector ul a[href="#tabs-' + app.Id+'"]').parent().index() );
-			resizeUi();
-		},
-		error: function(msg,faultString) {
-			$('.btn'+app.Id).button( "option", "icons", {secondary:'ui-icon-play'} );
-			$().dfui('sessionExpired',faultString);
-		}
-	});
-}
-
-function makeNavButton(id,icon,label) {
-	var tmpBtn = $('<button class="appButton btn'+id+'" id="app'+id+'"></button>');
-	if(label) {
-		if(label.length <= max_chars_image) tmpBtn.append(icon);
-		if(label.length > max_chars_button) label = label.substring(0,max_chars_button);
-		label = label.replace(/ /g,'&nbsp;');
-		tmpBtn.append(label);
-	} else {
-		tmpBtn.append(icon);
-		tmpBtn.append("No Label");
-	}
-	return tmpBtn;
-}
-
-function icon(app) {
-	var ico = '';
-	if(app.IsUrlExternal=="true") {
-		var appUrl = app.Url;
-		var tmp = appUrl.substring(appUrl.lastIndexOf('//')+2);
-		if(tmp.indexOf('/') != -1) {
-			tmp = tmp.substring(0,tmp.lastIndexOf('/'));
-		}
-		tmp = appUrl.substring(0,appUrl.lastIndexOf('//')+2)+tmp;
-		ico = tmp+'/favicon.ico';
-	} else {
-		ico = getCurrentServer()+'/apps/'+app.Name+'/favicon.ico';
-	}
-	return '<img src="'+ico+'" onerror="this.style.display=\'none\'" class="cLeft" width="16" height="16" border="0"/>';
-}
-
-function setup() {
-	var display = $("#navigation");
-	for(var i in AppGrps) {
-		display.append('<h3><a href="#">'+AppGrps[i].Name+'</a></h3>');
-		var appsList = $('<div></div>');
-		
-		var apps = getAppsFor( AppGrps[i].Id);
-		
-		for(var j in apps) {
-			if(apps[j].Name == "LaunchPad") continue;
-			appsList.append(this.makeNavButton(apps[j].Id,icon(apps[j]),apps[j].Label));
-		}
-		
-		appsList.append('<br/>');
-		display.append(appsList);
-		
-	}
-	
-	/* all apps group*/
-	display.append('<h3><a href="#">All Applications</a></h3>');
-	var appsList = $('<div></div>');
-	for(var j in Apps) {
-		if(Apps[j].Name == "LaunchPad") continue;
-		appsList.append(this.makeNavButton(Apps[j].Id,icon(Apps[j]),Apps[j].Label));
-	}
-	appsList.append('<br/>');
-	display.append(appsList);
-	
-	display.accordion({ autoHeight: false });
-	
-	$( ".appButton" ).button({
-		text: true,
-		icons: {
-			secondary: 'ui-icon-play'
-		}
-	}).click(function() {
-		var appId = $(this).attr('id');
-		if(appId && User) {
-			var id = appId.substring(3);
-			var app = getAppById(id);
-			if(app) {
-				if($(this).button( "option", "icons" ).secondary == 'ui-icon-play') {
-					$('.btn'+id).button( "option", "icons", {secondary:'ui-icon-seek-next'} );
-					addTab(app);
-				}
-				var xindex = 0;
-				$('[role*="tab"]').each(function(){
-					var $this = $(this);
-					var tx = $this.attr("aria-controls");
-					if(tx && tx.indexOf("tabs-") == 0) {
-						if(tx == "tabs-"+app.Id) {
-							$('#appSelector').tabs( "option", "active", xindex );
-						} else {
-							xindex++;
-						}
-					}
-				});
-			}
-		}
-	});
-}
-
 
 $(document).ready(function() {
 	
 	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+	
+	var User = null;
+	var AppGrps = null;
+	var Apps = null;
+	
+	var tab_counter = 0;
+	var tab_content = '';
+	var $tabs = null;
+	
+	var max_chars_image = 13;
+	var max_chars_button = 20;
+	
+	var singleApp = false;
+
+	function resizeUi() {
+		var o_size = $(window).height()-(($(".dfHeader").outerHeight()+$(".dfFooter").outerHeight())*1.4);
+		$("#appSelector").css('height', o_size);
+		$(".ui-tabs-panel").css('height', o_size); 
+	};
+	
+	var resizeTimer = null;
+	
+	$(window).bind('resize', function() {
+	    if (resizeTimer) clearTimeout(resizeTimer);
+	    resizeTimer = setTimeout(resizeUi, 100);
+	});
+	
+	function relogin() {
+		showContent(false);
+		showSignInControls(true);
+		doSignIn();
+	}
+	
+	function refresh() {
+		appGrpio.retrieve({order:"Name"});
+	}
+	
+	function doSignIn() {
+		$( "#loginDialog" ).dialog("open");
+	}
+	
+	function showSignInControls(show) {
+		if(show) {
+			$('#dfControl1').html('Please [<a id="dfSignInLink" class="dfPointer dfTxtHeader3">Log In</a>]');
+			$( "#dfSignInLink" ).click(function() {$( "#loginDialog" ).dialog("open");});
+		} else {
+			$('#dfControl1').html('Welcome! <span class="dfTxtHeader3">'+User.FullName+'</span> [<a id="dfSignOutLink" class="dfPointer" title="End Your Session Now"> Log Out </a>]');
+			$('#dfControl1').append('<br/>');
+			$('#dfControl1').append('[&nbsp;<a id="dfProfileLnk" class="dfPointer" title="Change Your Profile">Profile</a>&nbsp;|&nbsp;<a id="dfPasswordLnk" class="dfPointer" title="Change Your Password">Password</a>&nbsp;]');
+			$( "#dfSignOutLink" ).click(function() {$( "#logoffDialog" ).dialog("open");});
+			$( "#dfProfileLnk" ).click(function() {
+				alert("Change Profile");
+			});
+			$( "#dfPasswordLnk" ).click(function() {
+				alert("Change Password");
+			});
+		}
+	}
+	
+	function performSignIn() {
+		$( "#loginDialog" ).dialog("close");
+		$('#dfControl1').html('<i>Logging In, Please Wait...</i>');
+		userio.post(JSON.stringify({UserName: $('#UserName').val(),Password:base64_encode($('#Password').val())}), null, "/Login");
+	}
+	
+	function doSignOut() {
+		$("#logoffDialog").dialog("open");
+	}
+	
+	function reportError(errorMsg,data) {
+		var str = errorMsg.toString();
+		if(str.indexOf("Service request failed") != -1 && str.indexOf("InvalidSession") != -1) {
+			// do better handling in the future?
+		} else {
+			$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
+		}
+		relogin();
+	}
+	
+	var appio = new DFRequest({
+		service: 'System',
+		resource: '/App',
+		success: function(json,request) {
+			if(!parseErrors(json,reportError)) {
+				Apps = CommonUtilities.flattenResponse(json);
+				if(Apps.length > 1) {
+					initTabs();
+					addDefaultTab();
+				} else {
+					showApp(Apps[0]);
+				}
+			}
+		}
+	});
+	
+	appGrpio = new DFRequest({
+		service: 'System',
+		resource: '/AppGroup',
+		success: function(json,request) {
+			if(!parseErrors(json,reportError)) {
+				AppGrps = CommonUtilities.flattenResponse(json);
+				appio.retrieve({order:"Label"});
+			}
+		}
+	});
+	
+	function getAppsFor(appGrpId) {
+		var tmp = [];
+		for(var i in Apps) {
+			if(Apps[i].AppGroupIds && Apps[i].AppGroupIds.length>0&& Apps[i].AppGroupIds.indexOf(","+appGrpId+",") != -1) {
+				tmp[tmp.length] = Apps[i];
+			}
+		}
+		return tmp;
+	}
+	
+	function getAppById(id) {
+		for(var i in Apps) {
+			if(Apps[i].Id == id) {
+				return Apps[i];
+			}
+		}
+	}
+	
+	var userio = new DFRequest({
+		service: 'User',
+		resource: '/Session',
+		success: function(json,request) {
+			if(!parseErrors(json,reportError)) {
+				if(json.UserName) {
+					User = json;
+					appGrpio.retrieve({order:"Name"});
+					showSignInControls(false);
+					$('#Password').val("");
+				} else {
+					showSignInControls(true);
+					doSignIn();
+				}
+			}
+		}
+	});
+	
+	var tabOptions = {
+		tabTemplate: "<li><span class='cRight dfPointer ui-icon ui-icon-close'>Remove Tab</span><a href='#{href}'>#{label}</a></li>",
+		add: function( event, ui ) {
+			if(tab_content) $( ui.panel ).append(tab_content);
+		}
+	};
+	
+	function showApp(app) {
+		singleApp = true;
+		getCurrentTicket({
+			success: function(ticket) {
+				var url = app.Url;
+				if(!(app.IsUrlExternal=="true")) {
+					if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
+						url = '/'+url;
+					}
+					url = getCurrentServer()+'/apps/'+app.Name+url;
+				}
+				if(url.indexOf('?') != -1) {
+					if(url.substr(-1) === "&" ) {
+						url += 'svr='+escape(getCurrentServer())+'&';
+					} else {
+						url += '&svr='+escape(getCurrentServer())+'&';
+					}
+				} else {
+					url += '?svr='+escape(getCurrentServer())+'&';
+				}
+				url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
+				$('#dfContent').html('<div id="appSelector" class="cW100"><iframe src="'+url+'" width="100%" height="100%" id="SINGLE_APP" border="0" frameborder="0"></iframe></div>');
+				resizeUi();
+			}
+		});
+	}
+	
+	function initTabs() {
+		$('#dfContent').html('<div id="leftControl" class="cLeft"><div id="navigation"></div></div><div id="rightContent"><div class="cLeft cW100"><div id="appSelector" class="cW100"><ul></ul></div></div></div>');
+		$tabs = $( "#appSelector").tabs(tabOptions);
+		$('#leftControl').html('<div id="navigation"></div>');
+		setup();
+	}
+	
+	function createDisplay(id,href,longdesc) {
+		var tmp = '<iframe class="displayFrame" frameborder="0" marginheight="0" marginwidth="0" ';
+		if(id) tmp += 'name="'+id+'"';
+		if(href) tmp += 'src="'+href+'" ';
+		if(longdesc) tmp += 'longdesc="'+longdesc+'" ';
+		tmp += '></iframe>';
+		return tmp;
+	}
+	
+	function addTabFunctions(tab) {
+		$("span",tab).unbind('click');
+		$("span",tab).click(function() {
+			var $parent = $( this ).parent();
+			var index = $( "li", $tabs ).index( $parent );
+			$parent.find('a').each(function(){
+				var id = parseInt($(this).attr('href').substring('#tabs-'.length));
+				$('.btn'+id).button( "option", "icons", {secondary:'ui-icon-play'} );
+			});
+			$tabs.tabs( "remove", index );
+			if($( "#appSelector span.ui-icon-close" ).length < 1) addDefaultTab();
+		});
+	}
+	
+	
+	function addDefaultTab() {
+		tab_content = createDisplay('DEFAULT_TAB','defaulttab.html','Default Tab');;
+		addTabFunctions($tabs.tabs( "add", "#tabs-DEFAULT",'Welcome!'));
+		resizeUi();
+	}
+	
+	function clearTabs() {
+		$('#rightContent').load('<div class="cLeft cW100"><div id="appSelector" class="cW100"><ul></ul></div></div>');
+	}
+	
+	function destroySpace() {
+		$('#dfContent').load("splash.html");
+	}
+	
+	function showContent(sw) {
+		if(sw) {
+			$('#leftControl').fadeIn(250);
+			$('#rightContent').fadeIn(250);
+			$( "#leftControl" ).show( 'fade', 1500 );
+			$( "#rightContent" ).show( 'fade', 3500 );
+		} else {
+			$( "#leftControl" ).hide( 'fade', 2000 );
+			$( "#rightContent" ).hide( 'fade', 2000 ,function(){destroySpace();});
+		}
+	}
+	
+	function getTicket() {
+		return User.ticket;
+	}
+	
+	function setTicket(ticket) {
+		User.ticket = ticket;
+	}
+	
+	
+	
+	function getTicketExpires() {
+		return User.ticket_expiry;
+	}
+	
+	function hasTicketExpired() {
+		var future = new Number(User.ticket_expiry*1000);
+		var now = new Date().getTime();
+		if(future-now >= 0) return false;
+		return true;
+	}
+	
+	function refreshTicket(opts) {
+		var callback = opts.success;
+		var errCallback = opts.error;
+		new DFRequest({
+			service: 'User',
+			resource: '/Ticket',
+			success: function(json) {
+				var err = checkFailure(json);
+				if(err) {
+					doSignIn();
+				} else {
+					User.ticket = json.ticket;
+					User.ticket_expiry = json.ticket_expiry;
+					if(callback) callback(json.ticket);
+				}
+			},
+			error: function (msg) {
+				if(errCallback) {
+					errCallback(msg);
+				} else {
+					throw(msg);
+				}
+			}
+		}).retrieve();
+	}
+	
+	function getCurrentTicket(opts) {
+		if(hasTicketExpired()) {
+			refreshTicket(opts);
+		} else {
+			opts.success(getTicket());
+		}
+	}
+	
+	function addTab(app) {
+		getCurrentTicket({
+			success: function(ticket) {
+				var url = app.Url;
+				if(!(app.IsUrlExternal=="true")) {
+					if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
+						url = '/'+url;
+					}
+					url = getCurrentServer()+'/apps/'+app.Name+url;
+				}
+				if(url.indexOf('?') != -1) {
+					if(url.substr(-1) === "&" ) {
+						url += 'svr='+escape(getCurrentServer())+'&';
+					} else {
+						url += '&svr='+escape(getCurrentServer())+'&';
+					}
+				} else {
+					url += '?svr='+escape(getCurrentServer())+'&';
+				}
+				url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
+				tab_content = createDisplay("disp" + app.Id,url,app.Description);
+				addTabFunctions($tabs.tabs( "add", "#tabs-" + app.Id, app.Label ));
+				$tabs.tabs( "option", "selected", $('#appSelector ul a[href="#tabs-' + app.Id+'"]').parent().index() );
+				resizeUi();
+			},
+			error: function(msg,faultString) {
+				$('.btn'+app.Id).button( "option", "icons", {secondary:'ui-icon-play'} );
+				$().dfui('sessionExpired',faultString);
+			}
+		});
+	}
+	
+	function makeNavButton(id,icon,label) {
+		var tmpBtn = $('<button class="appButton btn'+id+'" id="app'+id+'"></button>');
+		if(label) {
+			if(label.length <= max_chars_image) tmpBtn.append(icon);
+			if(label.length > max_chars_button) label = label.substring(0,max_chars_button);
+			label = label.replace(/ /g,'&nbsp;');
+			tmpBtn.append(label);
+		} else {
+			tmpBtn.append(icon);
+			tmpBtn.append("No Label");
+		}
+		return tmpBtn;
+	}
+	
+	function icon(app) {
+		var ico = '';
+		if(app.IsUrlExternal=="true") {
+			var appUrl = app.Url;
+			var tmp = appUrl.substring(appUrl.lastIndexOf('//')+2);
+			if(tmp.indexOf('/') != -1) {
+				tmp = tmp.substring(0,tmp.lastIndexOf('/'));
+			}
+			tmp = appUrl.substring(0,appUrl.lastIndexOf('//')+2)+tmp;
+			ico = tmp+'/favicon.ico';
+		} else {
+			ico = getCurrentServer()+'/apps/'+app.Name+'/favicon.ico';
+		}
+		return '<img src="'+ico+'" onerror="this.style.display=\'none\'" class="cLeft" width="16" height="16" border="0"/>';
+	}
+	
+	function setup() {
+		var display = $("#navigation");
+		for(var i in AppGrps) {
+			display.append('<h3><a href="#">'+AppGrps[i].Name+'</a></h3>');
+			var appsList = $('<div></div>');
+			
+			var apps = getAppsFor( AppGrps[i].Id);
+			
+			for(var j in apps) {
+				if(apps[j].Name == "LaunchPad") continue;
+				appsList.append(makeNavButton(apps[j].Id,icon(apps[j]),apps[j].Label));
+			}
+			
+			appsList.append('<br/>');
+			display.append(appsList);
+			
+		}
+		
+		/* all apps group*/
+		display.append('<h3><a href="#">All Applications</a></h3>');
+		var appsList = $('<div></div>');
+		for(var j in Apps) {
+			if(Apps[j].Name == "LaunchPad") continue;
+			appsList.append(makeNavButton(Apps[j].Id,icon(Apps[j]),Apps[j].Label));
+		}
+		appsList.append('<br/>');
+		display.append(appsList);
+		
+		display.accordion({ autoHeight: false });
+		
+		$( ".appButton" ).button({
+			text: true,
+			icons: {
+				secondary: 'ui-icon-play'
+			}
+		}).click(function() {
+			var appId = $(this).attr('id');
+			if(appId && User) {
+				var id = appId.substring(3);
+				var app = getAppById(id);
+				if(app) {
+					if($(this).button( "option", "icons" ).secondary == 'ui-icon-play') {
+						$('.btn'+id).button( "option", "icons", {secondary:'ui-icon-seek-next'} );
+						addTab(app);
+					}
+					var xindex = 0;
+					$('[role*="tab"]').each(function(){
+						var $this = $(this);
+						var tx = $this.attr("aria-controls");
+						if(tx && tx.indexOf("tabs-") == 0) {
+							if(tx == "tabs-"+app.Id) {
+								$('#appSelector').tabs( "option", "active", xindex );
+							} else {
+								xindex++;
+							}
+						}
+					});
+				}
+			}
+		});
+	}
 
 	$('#UserName').keydown(function (e){
 		if(e.keyCode == 13){

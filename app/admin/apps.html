@@ -41,7 +41,7 @@
 									<strong>Name:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
-									<input type="text" class="cW98" name="Name" value="" onkeyup="makeClearable()"/>
+									<input type="text" class="cW98 ONKEYUP" name="Name" value=""/>
 								</div>
 								<div class="cClear"><!--  --></div>
 							</div>
@@ -50,7 +50,7 @@
 									<strong>Label:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
-									<input type="text" class="cW98" name="Label" value="" onkeyup="makeClearable()"/>
+									<input type="text" class="cW98 ONKEYUP" name="Label" value=""/>
 								</div>
 								<div class="cClear"><!--  --></div>
 							</div>
@@ -59,7 +59,7 @@
 									<strong>Description:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
-									<input type="text" class="cW98" name="Description" value="" onkeyup="makeClearable()"/>
+									<input type="text" class="cW98 ONKEYUP" name="Description" value=""/>
 								</div>
 								<div class="cClear"><!--  --></div>
 							</div>
@@ -69,7 +69,7 @@
 									<strong>URL:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
-									<input type="text" class="cW98" name="Url" value="" onkeyup="makeClearable()"/>
+									<input type="text" class="cW98 ONKEYUP" name="Url" value=""/>
 								</div>
 								<div class="cClear"><!--  --></div>
 							</div>
@@ -80,7 +80,7 @@
 								</div>
 								<div class="cLeft cW75">
 									<div id="AppType">
-										<input type="radio" id="External" name="IsUrlExternal" onchange="makeClearable()"/><label for="External">External</label><input type="radio" id="Local" name="IsUrlExternal" onchange="makeClearable()" checked="checked" /><label for="Local">Local</label>
+										<input type="radio" id="External" name="IsUrlExternal" class="ONCHANGE"/><label for="External">External</label><input type="radio" id="Local" name="IsUrlExternal"  class="ONCHANGE" checked="checked" /><label for="Local">Local</label>
 									</div>
 								</div>
 								<div class="cClear"><!--  --></div>
@@ -92,7 +92,7 @@
 								</div>
 								<div class="cLeft cW75">
 									<div id="active">
-										<input type="radio" id="IsActive" name="IsActive" onchange="makeClearable()"/><label for="IsActive">Active</label><input type="radio" id="InActive" name="IsActive" onchange="makeClearable()" checked="checked" /><label for="InActive">Inactive</label>
+										<input type="radio" id="IsActive" name="IsActive" class="ONCHANGE"/><label for="IsActive">Active</label><input type="radio" id="InActive" name="IsActive" class="ONCHANGE" checked="checked" /><label for="InActive">Inactive</label>
 									</div>
 								</div>
 								<div class="cClear"><!--  --></div>
@@ -107,7 +107,7 @@
 									<div>
 										<div class="confinedPane cClear ui-widget ui-state-default ui-corner-top " align="left">
 											<div>
-												<input type="checkbox" id="SELECT_ALL_SCHEMAS" name="SELECT_ALL_APPS" value="ALL" class="SCHEMA_SELECT_ALL" onchange="selectAllSchemas(this);makeClearable()"/>All Schemas
+												<input type="checkbox" id="SELECT_ALL_SCHEMAS" name="SELECT_ALL_APPS" value="ALL" class="SCHEMA_SELECT_ALL"/>All Schemas
 											</div>
 										</div>
 										<div>
@@ -172,7 +172,7 @@
 						<input type="hidden" name="import" value="true"/>
 						<input id="uploadFileInput" type="file" name="files" onchange="this.form.submit()"/>
 					</form>
-					<iframe id="uploadFileIframe" name="uploadFileIframe" src="about:blank" width="100%" height="70px" onload="checkResults(this)"></iframe>
+					<iframe id="uploadFileIframe" name="uploadFileIframe" src="about:blank" width="100%" height="70px"></iframe>
 				</div>
 				
 				<div id="confirmDeleteAppDialog" title="Please Confirm Delete:" class="cTxtLeft">
