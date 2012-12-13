@@ -119,8 +119,16 @@
 								</div>
 							</div>
 							
-							<div>
-								&nbsp;
+							<div class="">
+								<div class="cLeft cW25 formLabel" align="right">
+									<strong>Target&nbsp;Devices:&nbsp;</strong>
+								</div>
+								<div class="cLeft cW75">
+									<input type="checkbox" id="cell" value="true" onchange="makeClearable()"/>CellPhone
+									<input type="checkbox" id="tablet" value="true" onchange="makeClearable()"/>Tablet
+									<input type="checkbox" id="desktop" value="true" onchange="makeClearable()"/>Desktop
+								</div>
+								<div class="cClear" style="height:10px;"><!--  --></div>
 							</div>
 							
 							<div class="">
@@ -128,14 +136,8 @@
 									<strong>File&nbsp;Manager:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
+									<button id="export" class="cRight">Export Application</button>
 									<button id="filemanager">Open FileManager</button>
-								</div>
-								<div class="cClear"><!--  --></div>
-							</div>
-							
-							<div class="cTM1">
-								<div class="cLeft cW75 cLM25">
-									<button id="export">Export Application</button>
 								</div>
 								<div class="cClear"><!--  --></div>
 							</div>
@@ -144,8 +146,8 @@
 							<br/>
 							<div class="cTM1" align="right">
 							
-							<span id="fileManagement" style="display:none;"><button id="import">Import Application</button></span>
-							
+							<span id="fileManagement" style="display:none;">
+								<button id="import">Import Application</button></span>
 								<button id="clear">New App</button>
 								<button id="delete">Delete App</button>
 								<button id="save"><span id="saveLabel">Save App</span></button>

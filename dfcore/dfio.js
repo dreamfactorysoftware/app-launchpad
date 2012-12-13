@@ -63,7 +63,8 @@ var CommonUtilities = {
 		return JSON.stringify(json);
 	},
 	/**
-	 * 
+	 * This method takes the response from the server and flattens it into
+	 * first tier objects.
 	 * @param json
 	 * @returns {Array}
 	 */

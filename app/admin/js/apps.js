@@ -2,6 +2,10 @@
  * apps.js
  */
 
+function makeClearable() {
+	$('#clear').button({ disabled: false });
+	$("#save").button({ disabled: false });
+}
 
 $(document).ready(function() {
 		
@@ -96,6 +100,11 @@ $(document).ready(function() {
 			$("#export").button({ disabled: false });
 			$('#delete').button({ disabled: false });
 			$('#clear').button({ disabled: false });
+			
+			$("#cell").prop('checked',app.cell=="true");
+			$("#tablet").prop('checked',app.tablet=="true");
+			$("#desktop").prop('checked',app.desktop=="true");
+			
 		} else {
 			if(current_apps) {
 				for(var i in current_apps) {
@@ -114,19 +123,15 @@ $(document).ready(function() {
 			$("#export").button({ disabled: true });
 			$('#delete').button({ disabled: true });
 			$('#clear').button({ disabled: true });
+			
+
+			$("#cell").prop('checked',false);
+			$("#tablet").prop('checked',false);
+			$("#desktop").prop('checked',false);
 		}
 		
 		selectSchemas(app);
 	}
-	
-	/**
-	 * 
-	 */
-	function makeClearable() {
-		$('#clear').button({ disabled: false });
-		$("#save").button({ disabled: false });
-	}
-	
 	
 	/**
 	 * 
@@ -186,6 +191,7 @@ $(document).ready(function() {
 		app.Label = $('input:text[name=Label]').val();
 		app.Description = $('input:text[name=Description]').val();
 		app.Url = $('input:text[name=Url]').val();
+		
 		if($('input[name="IsActive"]')[0].checked) {
 			app.IsActive = "true";
 		} else {
@@ -196,6 +202,25 @@ $(document).ready(function() {
 		} else {
 			app.IsUrlExternal = "false";
 		}
+		
+		if($("#cell").prop('checked')) {
+			app.cell = "true";
+		} else {
+			app.cell = "false";
+		}
+
+		if($("#tablet").prop('checked')) {
+			app.tablet = "true";
+		} else {
+			app.tablet = "false";
+		}
+
+		if($("#desktop").prop('checked')) {
+			app.desktop = "true";
+		} else {
+			app.desktop = "false";
+		}
+		
 		app.Schemas = getSelectSchemas();
 	}
 	

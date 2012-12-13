@@ -4,7 +4,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 		<link rel="shortcut icon" href="favicon.ico"/>
-		<title>LaunchPad v0.2.50</title>
+		<title>LaunchPad v0.3.59</title>
 		
 		<!-- Standard CSS -->
 		<link rel="stylesheet" href="themes/df-default/jquery-ui-1.9.1.custom.css" type="text/css" />
@@ -94,18 +94,34 @@ $(document).ready(function() {
 			$('#dfControl1').append('[&nbsp;<a id="dfProfileLnk" class="dfPointer" title="Change Your Profile">Profile</a>&nbsp;|&nbsp;<a id="dfPasswordLnk" class="dfPointer" title="Change Your Password">Password</a>&nbsp;]');
 			$( "#dfSignOutLink" ).click(function() {$( "#logoffDialog" ).dialog("open");});
 			$( "#dfProfileLnk" ).click(function() {
-				alert("Change Profile");
+				
+				if(User) {
+					
+					$("#fullname").val(User.FullName);
+					//$("#firstname").val(User.FirstName);
+					//$("#lastname").val(User.LastName);
+					$("#email").val(User.Email);
+					//$("#phone").val(User.Phone);
+					
+					$("#changeProfileDialog").dialog("open");
+				}
 			});
 			$( "#dfPasswordLnk" ).click(function() {
-				alert("Change Password");
+				$("#changePasswordDialog").dialog("open");
 			});
 		}
 	}
 	
 	function performSignIn() {
-		$( "#loginDialog" ).dialog("close");
-		$('#dfControl1').html('<i>Logging In, Please Wait...</i>');
-		userio.post(JSON.stringify({UserName: $('#UserName').val(),Password:base64_encode($('#Password').val())}), null, "/Login");
+		
+		if($('#UserName').val() && $('#Password').val()) {
+			$( "#loginDialog" ).dialog("close");
+			$('#dfControl1').html('<i>Logging In, Please Wait...</i>');
+			userio.post(JSON.stringify({UserName: $('#UserName').val(),Password:base64_encode($('#Password').val())}), null, "/Login");
+		} else {
+			$("#loginErrorMessage").html('<b>You must enter UserName and Password to continue</b><br/><br/>');
+		}
+		
 	}
 	
 	function doSignOut() {
@@ -114,12 +130,19 @@ $(document).ready(function() {
 	
 	function reportError(errorMsg,data) {
 		var str = errorMsg.toString();
-		if(str.indexOf("Service request failed") != -1 && str.indexOf("InvalidSession") != -1) {
-			// do better handling in the future?
+		if(str.toLowerCase().indexOf("error logging in") != -1 || str.toLowerCase().indexOf("error generating session") != -1 || str.toLowerCase().indexOf("invalidparam") != -1) {
+			$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
+			relogin();
+		} else if(str.toUpperCase().indexOf("[INVALIDSESSION]") != -1) {
+			// is this a ticket that is expired?
+			$("#changePasswordDialog").dialog("close");
+			$("#changeProfileDialog").dialog("close");
+			relogin();
 		} else {
+			// write to both areas just in case we are not where we think we are...
+			$("#changePasswordErrorMessage").html('<b>'+str+'</b><br/><br/>');
 			$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
 		}
-		relogin();
 	}
 	
 	var appio = new DFRequest({
@@ -172,14 +195,27 @@ $(document).ready(function() {
 		resource: '/Session',
 		success: function(json,request) {
 			if(!parseErrors(json,reportError)) {
-				if(json.UserName) {
-					User = json;
-					appGrpio.retrieve({order:"Name"});
-					showSignInControls(false);
-					$('#Password').val("");
-				} else {
-					showSignInControls(true);
-					doSignIn();
+				if(request) {
+					switch(request.action) {
+						case DFRequestActions.UPDATE:
+							
+							if(request.url.indexOf("/changepassword") != -1) {
+								$("#changePasswordDialog").dialog("close");
+							}
+							
+							break;
+						default:
+							if(json.UserName) {
+								User = json;
+								appGrpio.retrieve({order:"Name"});
+								showSignInControls(false);
+								$('#Password').val("");
+							} else {
+								showSignInControls(true);
+								doSignIn();
+							}
+							break;
+					}
 				}
 			}
 		}
@@ -213,7 +249,7 @@ $(document).ready(function() {
 					url += '?svr='+escape(getCurrentServer())+'&';
 				}
 				url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
-				$('#dfContent').html('<div id="appSelector" class="cW100"><iframe src="'+url+'" width="100%" height="100%" id="SINGLE_APP" border="0" frameborder="0"></iframe></div>');
+				$('#dfContent').html('<div id="appSelector" class="cW100"><iframe webkitallowfullscreen="true" mozallowfullscreen="true" src="'+url+'" width="100%" height="100%" id="SINGLE_APP" border="0" frameborder="0"></iframe></div>');
 				resizeUi();
 			}
 		});
@@ -227,7 +263,7 @@ $(document).ready(function() {
 	}
 	
 	function createDisplay(id,href,longdesc) {
-		var tmp = '<iframe class="displayFrame" frameborder="0" marginheight="0" marginwidth="0" ';
+		var tmp = '<iframe webkitallowfullscreen="true" mozallowfullscreen="true" class="displayFrame" frameborder="0" marginheight="0" marginwidth="0" ';
 		if(id) tmp += 'name="'+id+'"';
 		if(href) tmp += 'src="'+href+'" ';
 		if(longdesc) tmp += 'longdesc="'+longdesc+'" ';
@@ -336,7 +372,7 @@ $(document).ready(function() {
 			success: function(ticket) {
 				var url = app.Url;
 				if(!(app.IsUrlExternal=="true")) {
-					if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
+					if(url && (url.indexOf('/') > 0 || url.indexOf('/') == -1)) {
 						url = '/'+url;
 					}
 					url = getCurrentServer()+'/apps/'+app.Name+url;
@@ -507,6 +543,82 @@ $(document).ready(function() {
 		buttons: {	}
 	});
 	
+	$("#changePasswordDialog").dialog({
+		resizable: false,
+		modal: true,
+		autoOpen: false,
+		closeOnEscape: false,
+		beforeClose: function( event, ui ) {
+			$("#OldPassword").val("");
+			$("#NPassword").val("");
+			$("#VPassword").val("");
+			$("#NPassword").removeClass("RedBorder");
+			$("#NPassword").removeClass("GreenBorder");
+			$("#VPassword").removeClass("RedBorder");
+			$("#VPassword").removeClass("GreenBorder");
+		},
+		buttons: {
+			"Change Password": function() {
+				if($("#NPassword").val()==$("#VPassword").val()) {
+					var data = {
+						oldpassword: $("#OPassword").val(),
+						newpassword: $("#NPassword").val()
+					};
+					userio.post(JSON.stringify(data),null,"/changepassword");
+				} else {
+					$("#changePasswordErrorMessage").html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
+				}
+			},
+			Cancel: function() {
+				$("#changePasswordDialog").dialog("close");
+			}
+		}
+	});
+	
+	$("#changeProfileDialog").dialog({
+		resizable: false,
+		modal: true,
+		autoOpen: false,
+		closeOnEscape: false,
+		beforeClose: function( event, ui ) {
+			
+		},
+		buttons: {
+			"Change Profile": function() {
+				alert("profile change not working yet...");
+			},
+			Cancel: function() {
+				$("#changeProfileDialog").dialog("close");
+			}
+		}
+	});
+	
+	function doPasswordVerify() {
+		var value = $("#NPassword").val();
+		var verify = $("#VPassword").val();
+		if(value.length > 0 && verify.length > 0) {
+			if(value == verify) {
+				$("#NPassword").removeClass("RedBorder");
+				$("#NPassword").addClass("GreenBorder");
+				$("#VPassword").removeClass("RedBorder");
+				$("#VPassword").addClass("GreenBorder");
+			} else {
+				$("#NPassword").removeClass("GreenBorder");
+				$("#NPassword").addClass("RedBorder");
+				$("#VPassword").removeClass("GreenBorder");
+				$("#VPassword").addClass("RedBorder");
+			}
+		} else {
+			$("#NPassword").removeClass("RedBorder");
+			$("#NPassword").removeClass("GreenBorder");
+			$("#VPassword").removeClass("RedBorder");
+			$("#VPassword").removeClass("GreenBorder");
+		}
+	}
+	
+	$("#NPassword").keyup(doPasswordVerify);
+	$("#VPassword").keyup(doPasswordVerify);
+	
 	$( "#dfSignInLink" ).click(function() {
 		doSignIn();
 	});
@@ -539,40 +651,127 @@ $(document).ready(function() {
 				&copy;<script>document.write(new Date().getFullYear());</script> DreamFactory&trade;, All Rights Reserved.
 			</div>
 		</div>
+		
 		<div id="loginDialog" title="Please Log In..." class="cTxtLeft">
 			<div>
 				<div id="loginErrorMessage">Please enter your User Name and Password below to sign in;</div>
 				<div class="cM1">
-					<div class="cLeft cW3333 cTxtRight dfTxtBold">
+					<div class="cLeft cW33 cTxtRight dfTxtBold">
 						<span class="cM1">Username:&nbsp;</span>
 					</div>
-					<div class="cLeft cW6666">
-						<input type="text" size="25" class="ui-corner-all" name="UserName" id="UserName" value=""/>
+					<div class="cLeft cW66">
+						<input type="text" class="cW98" name="UserName" id="UserName" value=""/>
 					</div>
 					<div class="cClear"><!-- --></div>
 				</div>
 				<div class="cM1">
-					<div class="cLeft cW3333 cTxtRight dfTxtBold">
+					<div class="cLeft cW33 cTxtRight dfTxtBold">
 						<span class="cM1">Password:&nbsp;</span>
 					</div>
-					<div class="cLeft cW6666">
-						<input type="password" size="25" class="ui-corner-all" name="Password" id="Password" value=""/>
+					<div class="cLeft cW66">
+						<input type="password" class="cW98" name="Password" id="Password" value=""/>
 					</div>
 					<div class="cClear"><!-- --></div>
 				</div>
 			</div>
 		</div>
+		
 		<div id="logoffDialog" title="Log Out" class="cTxtLeft">
 			<p>
 				Are you sure you want to log out of the application? All unsaved work will
 				be lost!
 			</p>
 		</div>
-		<div id="errorDialog" title="An Error Has Occured..." class="cTxtLeft">
-			<p class="ui-state-error ui-corner-all cP1">
-				<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-				<span id="errorMsg"><!--  --></span>
-			</p>
+		
+		<div id="changePasswordDialog" title="Change Password" class="cTxtLeft">
+			<div>
+				<div id="changePasswordErrorMessage"></div>
+				<div class="cM1">
+					<div class="cLeft cW33 cTxtRight dfTxtBold">
+						<span class="cM1">Old&nbsp;Password:&nbsp;</span>
+					</div>
+					<div class="cLeft cW66">
+						<input type="password" class=" cW98" id="OPassword" value=""/>
+					</div>
+					<div class="cClear"><!-- --></div>
+				</div>
+				<div class="cM1">
+					<div class="cLeft cW33 cTxtRight dfTxtBold">
+						<span class="cM1">New&nbsp;Password:&nbsp;</span>
+					</div>
+					<div class="cLeft cW66">
+						<input type="password" class="cW98" id="NPassword" value=""/>
+					</div>
+					<div class="cClear"><!-- --></div>
+				</div>
+				<div class="cM1">
+					<div class="cLeft cW33 cTxtRight dfTxtBold">
+						<span class="cM1">Verify:&nbsp;</span>
+					</div>
+					<div class="cLeft cW66">
+						<input type="password" class="cW98" id="VPassword" value=""/>
+					</div>
+					<div class="cClear"><!-- --></div>
+				</div>
+			</div>
 		</div>
+		
+		<div id="changeProfileDialog" title="User Profile" class="cTxtLeft">
+			<div>
+				<div id="changeProfileErrorMessage"></div>
+				
+				<div class="cM1">
+					<div class="cLeft cW25 formLabel" align="right">
+						<strong>Full Name:&nbsp;</strong>
+					</div>
+					<div class="cLeft cW75">
+						<input type="text" class="cW98 ONKEYUP" id="fullname" value=""/>
+					</div>
+					<div class="cClear"><!--  --></div>
+				</div>
+				
+				<div class="cM1">
+					<div class="cLeft cW25 formLabel" align="right">
+						<strong>First Name:&nbsp;</strong>
+					</div>
+					<div class="cLeft cW75">
+						<input type="text" class="cW98 ONKEYUP" id="firstname" value=""/>
+					</div>
+					<div class="cClear"><!--  --></div>
+				</div>
+				
+				<div class="cM1">
+					<div class="cLeft cW25 formLabel" align="right">
+						<strong>Last Name:&nbsp;</strong>
+					</div>
+					<div class="cLeft cW75">
+						<input type="text" class="cW98 ONKEYUP" id="lastname" value=""/>
+					</div>
+					<div class="cClear"><!--  --></div>
+				</div>
+				
+				<div class="cM1">
+					<div class="cLeft cW25 formLabel" align="right">
+						<strong>Email:&nbsp;</strong>
+					</div>
+					<div class="cLeft cW75">
+						<input type="text" class="cW98 ONKEYUP" id="email" value=""/>
+					</div>
+					<div class="cClear"><!--  --></div>
+				</div>
+				
+				<div class="cM1">
+					<div class="cLeft cW25 formLabel" align="right">
+						<strong>Telephone:&nbsp;</strong>
+					</div>
+					<div class="cLeft cW75">
+						<input type="text" class="cW98 ONKEYUP" id="phone" value=""/>
+					</div>
+					<div class="cClear"><!--  --></div>
+				</div>
+				
+			</div>
+		</div>
+		
 	</body>
 </html>
