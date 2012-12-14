@@ -111,22 +111,37 @@
 											</div>
 										</div>
 										<div>
-											<div id="SCHEMA_SCROLLER" style="height:75px;border-top:0px;" class="scrollablePane ui-widget ui-state-default ui-corner-bottom whitebg" align="center">
+											<div id="SCHEMA_SCROLLER" style="height:60px;border-top:0px;" class="scrollablePane ui-widget ui-state-default ui-corner-bottom whitebg" align="center">
 												<div id="SCHEMA_ID_LIST" class="" align="left"></div>
 											</div>
 										</div>
 									</div>
 								</div>
+								<div class="cClear"><!--  --></div>
 							</div>
 							
-							<div class="">
+							<div class="cTM1">
 								<div class="cLeft cW25 formLabel" align="right">
 									<strong>Target&nbsp;Devices:&nbsp;</strong>
 								</div>
 								<div class="cLeft cW75">
-									<input type="checkbox" id="cell" value="true" onchange="makeClearable()"/>CellPhone
-									<input type="checkbox" id="tablet" value="true" onchange="makeClearable()"/>Tablet
-									<input type="checkbox" id="desktop" value="true" onchange="makeClearable()"/>Desktop
+									<div>
+										<div class="confinedPane cClear ui-widget ui-state-default ui-corner-top " align="left">
+											<div>
+												<input type="checkbox" id="deviceTarget" value="true" onchange="makeSelectable(this);makeClearable()"/>Enable Device Targets
+											</div>
+										</div>
+										<div>
+											<div id="" style="height:60px;border-top:0px;" class="scrollablePane ui-widget ui-state-default ui-corner-bottom whitebg" align="center">
+												<div id="" class="" align="left">
+													<input type="checkbox" id="cell" value="true" onchange="makeClearable()"/>CellPhone<br/>
+													<input type="checkbox" id="tablet" value="true" onchange="makeClearable()"/>Tablet<br/>
+													<input type="checkbox" id="desktop" value="true" onchange="makeClearable()"/>Desktop<br/>
+													<input type="checkbox" id="plugin" value="true" onchange="makeClearable()"/>Plugin&nbsp;Required
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="cClear" style="height:10px;"><!--  --></div>
 							</div>
@@ -135,7 +150,7 @@
 								<div class="cLeft cW25 formLabel" align="right">
 									<strong>File&nbsp;Manager:&nbsp;</strong>
 								</div>
-								<div class="cLeft cW75">
+								<div class="cLeft cW50">
 									<button id="export" class="cRight">Export Application</button>
 									<button id="filemanager">Open FileManager</button>
 								</div>

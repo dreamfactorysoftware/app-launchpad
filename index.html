@@ -4,7 +4,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 		<link rel="shortcut icon" href="favicon.ico"/>
-		<title>LaunchPad v0.3.59</title>
+		<title>LaunchPad v0.5.00</title>
 		
 		<!-- Standard CSS -->
 		<link rel="stylesheet" href="themes/df-default/jquery-ui-1.9.1.custom.css" type="text/css" />
@@ -94,15 +94,12 @@ $(document).ready(function() {
 			$('#dfControl1').append('[&nbsp;<a id="dfProfileLnk" class="dfPointer" title="Change Your Profile">Profile</a>&nbsp;|&nbsp;<a id="dfPasswordLnk" class="dfPointer" title="Change Your Password">Password</a>&nbsp;]');
 			$( "#dfSignOutLink" ).click(function() {$( "#logoffDialog" ).dialog("open");});
 			$( "#dfProfileLnk" ).click(function() {
-				
 				if(User) {
-					
 					$("#fullname").val(User.FullName);
-					//$("#firstname").val(User.FirstName);
-					//$("#lastname").val(User.LastName);
+					$("#firstname").val(User.FirstName);
+					$("#lastname").val(User.LastName);
 					$("#email").val(User.Email);
-					//$("#phone").val(User.Phone);
-					
+					$("#phone").val(User.Phone);
 					$("#changeProfileDialog").dialog("open");
 				}
 			});
@@ -198,11 +195,9 @@ $(document).ready(function() {
 				if(request) {
 					switch(request.action) {
 						case DFRequestActions.UPDATE:
-							
 							if(request.url.indexOf("/changepassword") != -1) {
 								$("#changePasswordDialog").dialog("close");
 							}
-							
 							break;
 						default:
 							if(json.UserName) {
@@ -210,6 +205,9 @@ $(document).ready(function() {
 								appGrpio.retrieve({order:"Name"});
 								showSignInControls(false);
 								$('#Password').val("");
+							} else if(json.status) {
+								$("#changeProfileDialog").dialog("close");
+								$("#changePasswordDialog").dialog("close");
 							} else {
 								showSignInControls(true);
 								doSignIn();
@@ -585,7 +583,30 @@ $(document).ready(function() {
 		},
 		buttons: {
 			"Change Profile": function() {
-				alert("profile change not working yet...");
+				User.FullName = $("#fullname").val();
+				User.FirstName = $("#firstname").val();
+				User.LastName = $("#lastname").val();
+				User.Email = $("#email").val();
+				User.Phone = $("#phone").val();
+				
+				delete User.Id;
+				delete User.UserName;
+				delete User.Password;
+				delete User.IsSysAdmin;
+				delete User.ConfirmCode;
+				delete User.CreatedDate;
+				delete User.LastModifiedDate;
+				delete User.CreatedById;
+				delete User.LastModifiedById;
+				delete User.SecurityQuestion;
+				delete User.SecurityAnswer;
+				delete User.Role;
+				delete User.ticket;
+				delete User.ticket_expiry;
+				delete User.session_id;
+				
+				userio.post(JSON.stringify(User),null,"/changeprofile");
+				
 			},
 			Cancel: function() {
 				$("#changeProfileDialog").dialog("close");

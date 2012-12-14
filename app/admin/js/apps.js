@@ -7,6 +7,21 @@ function makeClearable() {
 	$("#save").button({ disabled: false });
 }
 
+
+function makeSelectable(that) {
+	if($(that).prop("checked")) {
+		$("#cell").removeAttr('disabled');
+		$("#tablet").removeAttr('disabled');
+		$("#desktop").removeAttr('disabled');
+		$("#plugin").removeAttr('disabled');
+	} else {
+		$("#cell").prop('checked',false).attr('disabled', 'disabled');
+		$("#tablet").prop('checked',false).attr('disabled', 'disabled');
+		$("#desktop").prop('checked',false).attr('disabled', 'disabled');
+		$("#plugin").prop('checked',false).attr('disabled', 'disabled');
+	}
+}
+
 $(document).ready(function() {
 		
 	var isPageDirty = false;
@@ -101,9 +116,15 @@ $(document).ready(function() {
 			$('#delete').button({ disabled: false });
 			$('#clear').button({ disabled: false });
 			
-			$("#cell").prop('checked',app.cell=="true");
-			$("#tablet").prop('checked',app.tablet=="true");
-			$("#desktop").prop('checked',app.desktop=="true");
+
+			$("#deviceTarget").prop('checked',app.FilterByDevice=="true");
+			
+			$("#cell").prop('checked',app.FilterPhone=="true");
+			$("#tablet").prop('checked',app.FilterTablet=="true");
+			$("#desktop").prop('checked',app.FilterDesktop=="true");
+			$("#plugin").prop('checked',app.RequiresPlugin=="true");
+			
+			$("#deviceTarget").trigger("onchange");
 			
 		} else {
 			if(current_apps) {
@@ -124,10 +145,9 @@ $(document).ready(function() {
 			$('#delete').button({ disabled: true });
 			$('#clear').button({ disabled: true });
 			
-
-			$("#cell").prop('checked',false);
-			$("#tablet").prop('checked',false);
-			$("#desktop").prop('checked',false);
+			$("#deviceTarget").prop('checked',false);
+			$("#deviceTarget").trigger("onchange");
+			
 		}
 		
 		selectSchemas(app);
@@ -202,23 +222,35 @@ $(document).ready(function() {
 		} else {
 			app.IsUrlExternal = "false";
 		}
-		
-		if($("#cell").prop('checked')) {
-			app.cell = "true";
+
+		if($("#deviceTarget").prop('checked')) {
+			app.FilterByDevice = "true";
 		} else {
-			app.cell = "false";
+			app.FilterByDevice = "false";
+		}
+
+		if($("#cell").prop('checked')) {
+			app.FilterPhone = "true";
+		} else {
+			app.FilterPhone = "false";
 		}
 
 		if($("#tablet").prop('checked')) {
-			app.tablet = "true";
+			app.FilterTablet = "true";
 		} else {
-			app.tablet = "false";
+			app.FilterTablet = "false";
 		}
 
 		if($("#desktop").prop('checked')) {
-			app.desktop = "true";
+			app.FilterDesktop = "true";
 		} else {
-			app.desktop = "false";
+			app.FilterDesktop = "false";
+		}
+
+		if($("#plugin").prop('checked')) {
+			app.RequiresPlugin = "true";
+		} else {
+			app.RequiresPlugin = "false";
 		}
 		
 		app.Schemas = getSelectSchemas();
@@ -296,6 +328,8 @@ $(document).ready(function() {
 	if(CommonUtilities.getQueryParameter('selectedApp')) {
 		reselectApp = true;
 	}
+	
+	$("#deviceTarget").trigger("onchange");
 	
 	$("#import").button({icons: {primary: "ui-icon-circle-arrow-n"}}).click(function(){
 		$("#uploadFileInput").trigger("click");
