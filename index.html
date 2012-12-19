@@ -4,7 +4,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 		<link rel="shortcut icon" href="favicon.ico"/>
-		<title>LaunchPad v0.5.00</title>
+		<title>LaunchPad v0.5.10</title>
 		
 		<!-- Standard CSS -->
 		<link rel="stylesheet" href="themes/df-default/jquery-ui-1.9.1.custom.css" type="text/css" />
@@ -37,7 +37,7 @@ function relogin() {
 var appGrpio = null;
 
 function refresh() {
-	if(appGrpio) appGrpio.retrieve({order:"Name"});
+	if(appGrpio) appGrpio.retrieve({order:"name"});
 }
 
 $(document).ready(function() {
@@ -58,9 +58,9 @@ $(document).ready(function() {
 	var singleApp = false;
 
 	function resizeUi() {
-		var o_size = $(window).height()-(($(".dfHeader").outerHeight()+$(".dfFooter").outerHeight())*1.4);
+		var o_size = $(window).height()-(($(".dfHeader").outerHeight()+$(".dfFooter").outerHeight())+40);
 		$("#appSelector").css('height', o_size);
-		$(".ui-tabs-panel").css('height', o_size); 
+		$(".ui-tabs-panel").css('height', o_size-30); 
 	};
 	
 	var resizeTimer = null;
@@ -89,17 +89,17 @@ $(document).ready(function() {
 			$('#dfControl1').html('Please [<a id="dfSignInLink" class="dfPointer dfTxtHeader3">Log In</a>]');
 			$( "#dfSignInLink" ).click(function() {$( "#loginDialog" ).dialog("open");});
 		} else {
-			$('#dfControl1').html('Welcome! <span class="dfTxtHeader3">'+User.FullName+'</span> [<a id="dfSignOutLink" class="dfPointer" title="End Your Session Now"> Log Out </a>]');
+			$('#dfControl1').html('Welcome! <span class="dfTxtHeader3">'+User.full_name+'</span> [<a id="dfSignOutLink" class="dfPointer" title="End Your Session Now"> Log Out </a>]');
 			$('#dfControl1').append('<br/>');
 			$('#dfControl1').append('[&nbsp;<a id="dfProfileLnk" class="dfPointer" title="Change Your Profile">Profile</a>&nbsp;|&nbsp;<a id="dfPasswordLnk" class="dfPointer" title="Change Your Password">Password</a>&nbsp;]');
 			$( "#dfSignOutLink" ).click(function() {$( "#logoffDialog" ).dialog("open");});
 			$( "#dfProfileLnk" ).click(function() {
 				if(User) {
-					$("#fullname").val(User.FullName);
-					$("#firstname").val(User.FirstName);
-					$("#lastname").val(User.LastName);
-					$("#email").val(User.Email);
-					$("#phone").val(User.Phone);
+					$("#fullname").val(User.full_name);
+					$("#firstname").val(User.first_name);
+					$("#lastname").val(User.last_name);
+					$("#email").val(User.email);
+					$("#phone").val(User.phone);
 					$("#changeProfileDialog").dialog("open");
 				}
 			});
@@ -144,7 +144,7 @@ $(document).ready(function() {
 	
 	var appio = new DFRequest({
 		service: 'System',
-		resource: '/App',
+		resource: '/app',
 		success: function(json,request) {
 			if(!parseErrors(json,reportError)) {
 				Apps = CommonUtilities.flattenResponse(json);
@@ -160,7 +160,7 @@ $(document).ready(function() {
 	
 	appGrpio = new DFRequest({
 		service: 'System',
-		resource: '/AppGroup',
+		resource: '/app_group',
 		success: function(json,request) {
 			if(!parseErrors(json,reportError)) {
 				AppGrps = CommonUtilities.flattenResponse(json);
@@ -200,9 +200,9 @@ $(document).ready(function() {
 							}
 							break;
 						default:
-							if(json.UserName) {
+							if(json.username) {
 								User = json;
-								appGrpio.retrieve({order:"Name"});
+								appGrpio.retrieve({order:"name"});
 								showSignInControls(false);
 								$('#Password').val("");
 							} else if(json.status) {
@@ -230,12 +230,12 @@ $(document).ready(function() {
 		singleApp = true;
 		getCurrentTicket({
 			success: function(ticket) {
-				var url = app.Url;
-				if(!(app.IsUrlExternal=="true")) {
+				var url = app.url;
+				if(!(app.is_url_external=="true")) {
 					if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
 						url = '/'+url;
 					}
-					url = getCurrentServer()+'/apps/'+app.Name+url;
+					url = getCurrentServer()+'/apps/'+app.name+url;
 				}
 				if(url.indexOf('?') != -1) {
 					if(url.substr(-1) === "&" ) {
@@ -246,7 +246,7 @@ $(document).ready(function() {
 				} else {
 					url += '?svr='+escape(getCurrentServer())+'&';
 				}
-				url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
+				url += 'app='+escape(app.name)+'&ticket='+escape(ticket)+'&';
 				$('#dfContent').html('<div id="appSelector" class="cW100"><iframe webkitallowfullscreen="true" mozallowfullscreen="true" src="'+url+'" width="100%" height="100%" id="SINGLE_APP" border="0" frameborder="0"></iframe></div>');
 				resizeUi();
 			}
@@ -318,8 +318,6 @@ $(document).ready(function() {
 		User.ticket = ticket;
 	}
 	
-	
-	
 	function getTicketExpires() {
 		return User.ticket_expiry;
 	}
@@ -368,8 +366,8 @@ $(document).ready(function() {
 	function addTab(app) {
 		getCurrentTicket({
 			success: function(ticket) {
-				var url = app.Url;
-				if(!(app.IsUrlExternal=="true")) {
+				var url = app.url;
+				if(!(app.is_url_external=="true")) {
 					if(url && (url.indexOf('/') > 0 || url.indexOf('/') == -1)) {
 						url = '/'+url;
 					}
@@ -385,13 +383,13 @@ $(document).ready(function() {
 					url += '?svr='+escape(getCurrentServer())+'&';
 				}
 				url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
-				tab_content = createDisplay("disp" + app.Id,url,app.Description);
-				addTabFunctions($tabs.tabs( "add", "#tabs-" + app.Id, app.Label ));
+				tab_content = createDisplay("disp" + app.id,url,app.description);
+				addTabFunctions($tabs.tabs( "add", "#tabs-" + app.id, app.label ));
 				$tabs.tabs( "option", "selected", $('#appSelector ul a[href="#tabs-' + app.Id+'"]').parent().index() );
 				resizeUi();
 			},
 			error: function(msg,faultString) {
-				$('.btn'+app.Id).button( "option", "icons", {secondary:'ui-icon-play'} );
+				$('.btn'+app.id).button( "option", "icons", {secondary:'ui-icon-play'} );
 				$().dfui('sessionExpired',faultString);
 			}
 		});
@@ -413,8 +411,8 @@ $(document).ready(function() {
 	
 	function icon(app) {
 		var ico = '';
-		if(app.IsUrlExternal=="true") {
-			var appUrl = app.Url;
+		if(app.is_url_external=="true") {
+			var appUrl = app.url;
 			var tmp = appUrl.substring(appUrl.lastIndexOf('//')+2);
 			if(tmp.indexOf('/') != -1) {
 				tmp = tmp.substring(0,tmp.lastIndexOf('/'));
@@ -422,22 +420,25 @@ $(document).ready(function() {
 			tmp = appUrl.substring(0,appUrl.lastIndexOf('//')+2)+tmp;
 			ico = tmp+'/favicon.ico';
 		} else {
-			ico = getCurrentServer()+'/apps/'+app.Name+'/favicon.ico';
+			ico = getCurrentServer()+'/apps/'+app.name+'/favicon.ico';
 		}
-		return '<img src="'+ico+'" onerror="this.style.display=\'none\'" class="cLeft" width="16" height="16" border="0"/>';
+		
+		// this.style.display=\'none\'
+		//$(this).parent().remove($(this))
+		return '<img src="'+ico+'" onerror="this.style.display=\'none\';this.onerror=\'\';this.src=\'about:blank\'" class="cLeft" width="16" height="16" border="0"/>';
 	}
 	
 	function setup() {
 		var display = $("#navigation");
 		for(var i in AppGrps) {
-			display.append('<h3><a href="#">'+AppGrps[i].Name+'</a></h3>');
+			display.append('<h3><a href="#">'+AppGrps[i].name+'</a></h3>');
 			var appsList = $('<div></div>');
 			
-			var apps = getAppsFor( AppGrps[i].Id);
+			var apps = getAppsFor( AppGrps[i].id);
 			
 			for(var j in apps) {
-				if(apps[j].Name == "LaunchPad") continue;
-				appsList.append(makeNavButton(apps[j].Id,icon(apps[j]),apps[j].Label));
+				if(apps[j].name == "LaunchPad") continue;
+				appsList.append(makeNavButton(apps[j].id,icon(apps[j]),apps[j].label));
 			}
 			
 			appsList.append('<br/>');
@@ -449,8 +450,8 @@ $(document).ready(function() {
 		display.append('<h3><a href="#">All Applications</a></h3>');
 		var appsList = $('<div></div>');
 		for(var j in Apps) {
-			if(Apps[j].Name == "LaunchPad") continue;
-			appsList.append(makeNavButton(Apps[j].Id,icon(Apps[j]),Apps[j].Label));
+			if(Apps[j].name == "LaunchPad") continue;
+			appsList.append(makeNavButton(Apps[j].id,icon(Apps[j]),Apps[j].label));
 		}
 		appsList.append('<br/>');
 		display.append(appsList);
@@ -583,24 +584,24 @@ $(document).ready(function() {
 		},
 		buttons: {
 			"Change Profile": function() {
-				User.FullName = $("#fullname").val();
-				User.FirstName = $("#firstname").val();
-				User.LastName = $("#lastname").val();
-				User.Email = $("#email").val();
-				User.Phone = $("#phone").val();
+				User.full_name = $("#fullname").val();
+				User.first_name = $("#firstname").val();
+				User.last_name = $("#lastname").val();
+				User.email = $("#email").val();
+				User.phone = $("#phone").val();
 				
-				delete User.Id;
-				delete User.UserName;
-				delete User.Password;
-				delete User.IsSysAdmin;
-				delete User.ConfirmCode;
-				delete User.CreatedDate;
-				delete User.LastModifiedDate;
-				delete User.CreatedById;
-				delete User.LastModifiedById;
-				delete User.SecurityQuestion;
-				delete User.SecurityAnswer;
-				delete User.Role;
+				delete User.id;
+				delete User.username;
+				delete User.password;
+				delete User.is_sys_admin;
+				delete User.confirm_code;
+				delete User.created_date;
+				delete User.last_modified_date;
+				delete User.created_by_id;
+				delete User.last_modified_by_id;
+				delete User.security_question;
+				delete User.security_answer;
+				delete User.role;
 				delete User.ticket;
 				delete User.ticket_expiry;
 				delete User.session_id;

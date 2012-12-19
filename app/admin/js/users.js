@@ -28,7 +28,7 @@ $(document).ready(function() {
 	function renderUsers(container,users) {
 		for(var i = 0; i < users.length; i++) {
 			if(!users[i]) continue;
-			makeUserButton(i,users[i].FullName,container);
+			makeUserButton(i,users[i].full_name,container);
 			if(selected_user_id > -1 && parseInt(users[i].Id) == selected_user_id) {
 				selected_user = i;
 				selected_user_id = -1;
@@ -47,7 +47,7 @@ $(document).ready(function() {
 	function selectCurrentUser() {
 		if(selectUser && current_users) {
 			for(var i in current_users) {
-				if(current_users[i].FullName == selectUser.FullName && current_users[i].LastName == selectUser.LastName && current_users[i].FirstName == selectUser.FirstName) {
+				if(current_users[i].full_name == selectUser.full_name && current_users[i].last_name == selectUser.last_name && current_users[i].first_name == selectUser.first_name) {
 					$('#USER_'+i).button( "option", "icons", {primary: 'ui-icon-seek-next', secondary:'ui-icon-seek-next'} );
 					showUser(current_users[i]);
 					return;
@@ -65,22 +65,22 @@ $(document).ready(function() {
 	function showUser(user) {
 		selectUser = user;
 		if(user) {
-			$('input:text[name=username]').val(user.UserName);
-			$('input:text[name=fullname]').val(user.FullName);
-			$('input:text[name=lastname]').val(user.LastName);
-			$('input:text[name=firstname]').val(user.FirstName);
-			$('input:text[name=email]').val(user.Email);
-			$('input:text[name=phone]').val(user.Phone);
-			if(user.IsActive == 'true') {
+			$('input:text[name=username]').val(user.username);
+			$('input:text[name=fullname]').val(user.full_name);
+			$('input:text[name=lastname]').val(user.last_name);
+			$('input:text[name=firstname]').val(user.first_name);
+			$('input:text[name=email]').val(user.email);
+			$('input:text[name=phone]').val(user.phone);
+			if(user.is_active == 'true') {
 				$('input[name="isactive"]')[0].checked = true;
 			} else {
 				$('input[name="isactive"]')[1].checked = true;
 			}
 			
-			if(user.IsSysAdmin == 'true') {
+			if(user.is_sys_admin == 'true') {
 				$("#roleSelector").val("*");
 			} else {
-				$("#roleSelector").val(user.RoleIds);
+				$("#roleSelector").val(user.role_ids);
 			}
 			
 			$("#save").button({ disabled: true });
@@ -129,7 +129,7 @@ $(document).ready(function() {
 	var dfio = new DFRequest({
 		app: "admin",
 		service: "System",
-		resource: "/User",
+		resource: "/user",
 		type: DFRequestType.POST,
 		success: function(json,request) {
 			if(!parseErrors(json,errorHandler)) {
@@ -141,8 +141,8 @@ $(document).ready(function() {
 						case DFRequestActions.CREATE:
 							var userReturn = CommonUtilities.flattenResponse(json);
 							if(userReturn.length > 0) {
-								if(userReturn[0].Id) {
-									selectUser.Id = userReturn[0].Id;
+								if(userReturn[0].id) {
+									selectUser.id = userReturn[0].id;
 								}
 							}
 							current_users.splice(0, 0, selectUser);
@@ -150,7 +150,7 @@ $(document).ready(function() {
 							break;
 						case DFRequestActions.DELETE:
 							for(var i in current_users) {
-								if(current_users[i].Id == selectUser.Id) {
+								if(current_users[i].id == selectUser.id) {
 									current_users.splice(i,1);
 									$("#usersList").dfSearchWidget("refresh");
 									break;
@@ -174,9 +174,9 @@ $(document).ready(function() {
 	var roleio = new DFRequest({
 		app: 'admin',
 		service: 'System',
-		resource: '/Role',
+		resource: '/role',
 		type: DFRequestType.POST,
-		params: {fields: "Id,Name"},
+		params: {fields: "id,name"},
 		success: function(json,request) {
 			if(!parseErrors(json,errorHandler)) {
 				if(request) {
@@ -185,7 +185,7 @@ $(document).ready(function() {
 					rs.html($("<option/>").attr("value","").text("[ No Role Selected ]"));
 					rs.append($("<option/>").attr("value","*").text("System Administrator"));
 					for(var i in roles) {
-						rs.append($("<option/>").attr("value",roles[i].Id).text(roles[i].Name));
+						rs.append($("<option/>").attr("value",roles[i].id).text(roles[i].name));
 					}
 				}
 			}
@@ -197,7 +197,7 @@ $(document).ready(function() {
 	 * @param obj
 	 */
 	function pullFormData(obj) {
-		obj.UserName  = $('input:text[name=username]').val();
+		obj.username  = $('input:text[name=username]').val();
 		
 		var pword = $.trim($('#Password').val());
 		var vword = $.trim($('#VPassword').val());
@@ -211,26 +211,26 @@ $(document).ready(function() {
 		$('#Password').val("").trigger("keyup");
 		$('#VPassword').val("").trigger("keyup");
 		
-		obj.FullName  = $('input:text[name=fullname]').val();
-		obj.LastName  = $('input:text[name=lastname]').val();
-		obj.FirstName = $('input:text[name=firstname]').val();
-		obj.Email     = $('input:text[name=email]').val();
-		obj.Phone     = $('input:text[name=phone]').val();
+		obj.full_name  = $('input:text[name=fullname]').val();
+		obj.last_name  = $('input:text[name=lastname]').val();
+		obj.first_name = $('input:text[name=firstname]').val();
+		obj.email     = $('input:text[name=email]').val();
+		obj.phone     = $('input:text[name=phone]').val();
 		
 		if($('input[name="isactive"]')[1].checked) {
-			obj.IsActive = 'false';
+			obj.is_active = 'false';
 		} else {
-			obj.IsActive = 'true';
+			obj.is_active = 'true';
 		}
 		
 		var roleId = $("#roleSelector").val();
 		
 		if(roleId == "*") {
-			obj.IsSysAdmin = 'true';
-			obj.RoleIds = null;
+			obj.is_sys_admin = 'true';
+			obj.role_ids = null;
 		} else {
-			obj.IsSysAdmin = 'false';
-			obj.RoleIds = roleId;
+			obj.is_sys_admin = 'false';
+			obj.role_ids = roleId;
 		}
 		
 	}
@@ -241,9 +241,9 @@ $(document).ready(function() {
 	function deleteUser(confirmed) {
 		if(selectUser) {
 			if(confirmed) {
-				dfio.deletes(selectUser.Id);
+				dfio.deletes(selectUser.id);
 			} else {
-				$( "#deleteUser" ).html(selectUser.FullName);
+				$( "#deleteUser" ).html(selectUser.full_name);
 				$( "#confirmDeleteUserDialog" ).dialog('open');
 			}
 		}
@@ -266,10 +266,10 @@ $(document).ready(function() {
 		try {
 			if(selectUser) {
 				pullFormData(selectUser);
-				delete selectUser.CreatedById;
-				delete selectUser.CreatedDate;
-				delete selectUser.LastModifiedById;
-				delete selectUser.LastModifiedDate;
+				delete selectUser.created_by_id;
+				delete selectUser.created_date;
+				delete selectUser.last_modified_by_id;
+				delete selectUser.last_modified_date;
 				dfio.update(selectUser);
 			} else {
 				var user = {};
@@ -304,10 +304,10 @@ $(document).ready(function() {
 	$("#usersList").dfSearchWidget({
 		app: "admin",
 		service: "System",
-		resource: "/User",
+		resource: "/user",
 		offsetHeight: 25,
 		filter: function(name,val){
-			if(!name) name = "FullName";
+			if(!name) name = "full_name";
 			return {
 				filter: name+" LIKE '%"+val+"%'"
 			};
@@ -315,15 +315,15 @@ $(document).ready(function() {
 		orderBy: [
 			{
 				label: "[Sort By]",
-				value: "Id"
+				value: "id"
 			},
 			{
 				label: "First Name",
-				value: "FirstName"
+				value: "first_name"
 			},
 			{
 				label: "Last Name",
-				value: "LastName"
+				value: "last_name"
 			},
 			{
 				label: "Last Modified",
