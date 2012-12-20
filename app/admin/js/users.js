@@ -80,7 +80,7 @@ $(document).ready(function() {
 			if(user.is_sys_admin == 'true') {
 				$("#roleSelector").val("*");
 			} else {
-				$("#roleSelector").val(user.role_ids);
+				$("#roleSelector").val(user.role_id);
 			}
 			
 			$("#save").button({ disabled: true });
@@ -227,10 +227,10 @@ $(document).ready(function() {
 		
 		if(roleId == "*") {
 			obj.is_sys_admin = 'true';
-			obj.role_ids = null;
+			obj.role_id = null;
 		} else {
 			obj.is_sys_admin = 'false';
-			obj.role_ids = roleId;
+			obj.role_id = roleId;
 		}
 		
 	}

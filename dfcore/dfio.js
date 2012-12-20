@@ -201,7 +201,7 @@ function DFRequest(opts) {
 	/**
 	 * This method is intended to be used internally. Never access this directly.
 	 */
-	this.prepareRequest = function(params,path,service) {
+	this.prepareRequest = function(params,path,service,success) {
 		/**
 		 * Create a copy of our template because fast user interaction
 		 * and the asynchronous nature of these calls can cause race
@@ -219,7 +219,12 @@ function DFRequest(opts) {
 		}
 		
 		if(this_request.success) { // wrap call with our own management
-			var custom_success = this_request.success; // make static reference
+			var custom_success = null;
+			if(success) {
+				custom_success = success;
+			} else {
+				custom_success = this_request.success; // make static reference
+			}
 			this_request.success = function(data) {
 				if(custom_success) custom_success(data,this_request);
 			};
@@ -283,6 +288,7 @@ function DFRequest(opts) {
 	 */
 	this.retrieve = function(params,path,def) {
 		if(!def) def = this.prepareRequest(params,path);
+		if(path) def.resource = path;
 		def.type = DFRequestType.GET;
 		def.action = DFRequestActions.RETRIEVE;
 		jQuery.ajax(def);

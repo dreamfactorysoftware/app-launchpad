@@ -40,24 +40,26 @@ function getIcon(file) {
 	}
 }
 
+function errorHandler(errs,data){
+	var str = '';
+	if(errs.length > 1) {
+		'The following errors occured;\n';
+		for(var i in errs) {
+			str += '\n\t'+(i+1)+'. '+errs[i];
+		}
+	} else {
+		str += 'The following error occured; '+errs[0];
+	}
+	alert(str+="\n\n");
+}
+
 var fileio = new DFRequest({
 	app: CommonUtilities.getQueryParameter('hostApp'),
 	service: "APP",
 	resource: "/"+CommonUtilities.getQueryParameter('path')+"/",
 	success: function(json,request) {
 		try {document.getSelection().removeAllRanges();}catch(e){/* silent! */};
-		if(!parseErrors(json,function(errs,data){
-			var str = '';
-			if(errs.length > 1) {
-				'The following errors occured;\n';
-				for(var i in errs) {
-					str += '\n\t'+(i+1)+'. '+errs[i];
-				}
-			} else {
-				str += 'The following error occured; '+errs[0];
-			}
-			alert(str+="\n\n");
-		})) {
+		if(!parseErrors(json,errorHandler)) {
 			printLocation();
 			if(json.folder && json.folder.length > 0 && json.folder[0].name == '.') {
 				buildListingUI(json);
@@ -228,18 +230,7 @@ function checkResults(iframe) {
 	if(str && str.length > 0) {
 		try {
 			str = JSON.parse(str);
-			var result = parseErrors(str,function(errs,data){
-				var str = '';
-				if(errs.length > 1) {
-					'The following errors occured;\n';
-					for(var i in errs) {
-						str += '\n\t'+(i+1)+'. '+errs[i];
-					}
-				} else {
-					str += 'The following error occured; '+errs[0];
-				}
-				alert(str+="\n\n");
-			});
+			var result = parseErrors(str,errorHandler);
 			if(result == undefined) {
 				listDirectory();
 			}

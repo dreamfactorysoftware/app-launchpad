@@ -34,8 +34,8 @@ $(document).ready(function() {
 	 */
 	function renderRoles(container,roles) {
 		for(var i in roles) {
-			makeRoleButton(i,roles[i].Name,container);
-			if(selected_role_id > -1 && parseInt(roles[i].Id) == selected_role_id) {
+			makeRoleButton(i,roles[i].name,container);
+			if(selected_role_id > -1 && parseInt(roles[i].id) == selected_role_id) {
 				selected_role = i;
 				selected_role_id = -1;
 			}
@@ -68,7 +68,7 @@ $(document).ready(function() {
 	function selectCurrentRole() {
 		if(selectRole && current_roles) {
 			for(var i in current_roles) {
-				if(current_roles[i].Name == selectRole.Name) {
+				if(current_roles[i].name == selectRole.name) {
 					$('#ROLE_'+i).button( "option", "icons", {primary: "ui-icon-seek-next", secondary:"ui-icon-seek-next"} );
 					showRole(current_roles[i]);
 					return;
@@ -86,8 +86,8 @@ $(document).ready(function() {
 	function showRole(role) {
 		selectRole = role;
 		if(role) {
-			$('#rName').val(role.Name);
-			$('#rDescription').val(role.Description);
+			$('#rName').val(role.name);
+			$('#rDescription').val(role.description);
 			$('#save').button({ disabled: true });
 			$('#delete').button({ disabled: false });
 			$('#clear').button({ disabled: false });
@@ -119,7 +119,7 @@ $(document).ready(function() {
 	var roleio = new DFRequest({
 		app: 'admin',
 		service: 'System',
-		resource: '/Role',
+		resource: '/role',
 		type: DFRequestType.POST,
 		success: function(json,request) {
 			if(!parseErrors(json,errorHandler)) {
@@ -151,7 +151,7 @@ $(document).ready(function() {
 	var appio = new DFRequest({
 		app:  "admin",
 		service: "System",
-		resource: "/App",
+		resource: "/app",
 		success: function(json) {
 			if(!parseErrors(json,errorHandler)) {
 				current_apps = CommonUtilities.flattenResponse(json);
@@ -167,10 +167,10 @@ $(document).ready(function() {
 	function deleteRole(confirmed) {
 		if(selectRole) {
 			if(confirmed) {
-				roleio.deletes(selectRole.Id);
+				roleio.deletes(selectRole.id);
 				showRole();
 			} else {
-				$( "#deleteRole" ).html(selectRole.Name);
+				$( "#deleteRole" ).html(selectRole.name);
 				$( "#confirmDeleteRoleDialog" ).dialog('open');
 			}
 		}
@@ -185,7 +185,7 @@ $(document).ready(function() {
 		var label = $("#serviceId option:selected").text();
 		var $that = $(".SERVICE_ITEM");
 		if(selectRole) {
-			index = selectRole.Services.length;
+			index = selectRole.services.length;
 		} else {
 			index = $that.length;
 		}
@@ -247,7 +247,7 @@ $(document).ready(function() {
 		var con = $('#APP_ID_LIST');
 		con.html('');
 		for(var i in apps) {
-			con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].Id+'" value="'+apps[i].Id+'" class="APP_CBX"/>'+apps[i].Label+'</div>');
+			con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].id+'" value="'+apps[i].id+'" class="APP_CBX"/>'+apps[i].label+'</div>');
 		}
 		
 		$(".APP_CBX").change(makeClearable);
@@ -261,8 +261,8 @@ $(document).ready(function() {
 		$(".APP_CBX").each(function(){
 			$(this).prop('checked',false);
 		});
-		if(role && role.AppIds) {
-			var tmp = role.AppIds.split(",");
+		if(role && role.app_ids) {
+			var tmp = role.app_ids.split(",");
 			for(var i in tmp) {
 				var str = $.trim(tmp[i]);
 				if(str.length > 0) {
@@ -279,10 +279,10 @@ $(document).ready(function() {
 	 * @param role
 	 */
 	function processForm(role) {
-		role.Name = $('#rName').val();
-		role.Description = $('#rDescription').val();
-		role.Services = getServices();
-		role.AppIds = getSelectAppIds();
+		role.name = $('#rName').val();
+		role.description = $('#rDescription').val();
+		role.services = getServices();
+		role.app_ids = getSelectAppIds();
 	}
 	
 	/**
@@ -383,8 +383,8 @@ $(document).ready(function() {
 		$("#serviceSelect").val("*").trigger("onchange");
 		$("#SERVICE_ID_LIST").html("");
 		if(role) {
-			for(var i in role.Services ) {
-				$("#SERVICE_ID_LIST").append(makeServiceComponentLine(i,role.Services[i]));
+			for(var i in role.services ) {
+				$("#SERVICE_ID_LIST").append(makeServiceComponentLine(i,role.services[i]));
 				
 				$("#Create_"+i).change(makeClearable);
 				$("#Read_"+i).change(makeClearable);
@@ -545,7 +545,7 @@ $(document).ready(function() {
 	$("#rolesList").dfSearchWidget({
 		app: "admin",
 		service: "System",
-		resource: "/Role",
+		resource: "/role",
 		offsetHeight: 25,
 		noSearchTerm: true,
 		renderer: function(container,roles) {
