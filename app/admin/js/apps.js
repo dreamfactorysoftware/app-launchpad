@@ -48,8 +48,8 @@ $(document).ready(function() {
 	function renderApps(container,apps) {
 		for(var i = 0; i < apps.length; i++) {
 			if(!apps[i]) continue;
-			makeAppButton(i,apps[i].Label,container);
-			if(selected_app_id > -1 && parseInt(apps[i].Id) == selected_app_id) {
+			makeAppButton(i,apps[i].label,container);
+			if(selected_app_id > -1 && parseInt(apps[i].id) == selected_app_id) {
 				selected_user = i;
 				selected_app_id = -1;
 			}
@@ -67,7 +67,7 @@ $(document).ready(function() {
 	function selectCurrentApp() {
 		if(selectApp && current_apps) {
 			for(var i in current_apps) {
-				if(current_apps[i].Name == selectApp) {
+				if(current_apps[i].name == selectApp) {
 					$('#APP_'+i).button( "option", "icons", {primary: "ui-icon-seek-next", secondary:"ui-icon-seek-next"} );
 					showApp(current_apps[i]);
 					return;
@@ -91,22 +91,22 @@ $(document).ready(function() {
 		}
 		
 		if(app) {
-			$('input:text[name=Name]').val(app.Name);
-			$('input:text[name=Label]').val(app.Label);
-			$('input:text[name=Description]').val(app.Description);
-			$('input:text[name=Url]').val(app.Url);
-			if(app.IsActive == "true") {
+			$('input:text[name=Name]').val(app.name);
+			$('input:text[name=Label]').val(app.label);
+			$('input:text[name=Description]').val(app.description);
+			$('input:text[name=Url]').val(app.url);
+			if(app.is_active == "true") {
 				$('input[name="IsActive"]')[0].checked = true;
 			} else {
 				$('input[name="IsActive"]')[1].checked = true;
 			}
-			if(app.IsUrlExternal == "true") {
+			if(app.is_url_external == "true") {
 				$('input[name="IsUrlExternal"]')[0].checked = true;
 			} else {
 				$('input[name="IsUrlExternal"]')[1].checked = true;
 			}
 			$("#save").button({ disabled: true });
-			if(app.IsUrlExternal == "true") {
+			if(app.is_url_external == "true") {
 				$("#filemanager").button({ disabled: true });
 			} else {
 				$("#filemanager").button({ disabled: false });
@@ -117,12 +117,12 @@ $(document).ready(function() {
 			$('#clear').button({ disabled: false });
 			
 
-			$("#deviceTarget").prop('checked',app.FilterByDevice=="true");
+			$("#deviceTarget").prop('checked',app.filter_by_device=="true");
 			
-			$("#cell").prop('checked',app.FilterPhone=="true");
-			$("#tablet").prop('checked',app.FilterTablet=="true");
-			$("#desktop").prop('checked',app.FilterDesktop=="true");
-			$("#plugin").prop('checked',app.RequiresPlugin=="true");
+			$("#cell").prop('checked',app.filter_phone=="true");
+			$("#tablet").prop('checked',app.filter_tablet=="true");
+			$("#desktop").prop('checked',app.filter_desktop=="true");
+			$("#plugin").prop('checked',app.requires_plugin=="true");
 			
 			$("#deviceTarget").trigger("onchange");
 			
@@ -159,7 +159,7 @@ $(document).ready(function() {
 	var appio = new DFRequest({
 		app: "admin",
 		service: "System",
-		resource: "/App",
+		resource: "/app",
 		success: function(json,request) {
 			if(!parseErrors(json,errorHandler)) {
 				if(request) {
@@ -193,10 +193,10 @@ $(document).ready(function() {
 	function deleteApp(confirmed) {
 		if(selectApp) {
 			if(confirmed) {
-				appio.deletes(selectApp.Id);
+				appio.deletes(selectApp.id);
 				showApp();
 			} else {
-				$( "#deleteApp" ).html(selectApp.Label);
+				$( "#deleteApp" ).html(selectApp.label);
 				$( "#confirmDeleteAppDialog" ).dialog('open');
 			}
 		}
@@ -207,53 +207,53 @@ $(document).ready(function() {
 	 * @param app
 	 */
 	function getForm(app) {
-		app.Name = $('input:text[name=Name]').val();
-		app.Label = $('input:text[name=Label]').val();
-		app.Description = $('input:text[name=Description]').val();
-		app.Url = $('input:text[name=Url]').val();
+		app.name = $('input:text[name=Name]').val();
+		app.label = $('input:text[name=Label]').val();
+		app.description = $('input:text[name=Description]').val();
+		app.url = $('input:text[name=Url]').val();
 		
 		if($('input[name="IsActive"]')[0].checked) {
-			app.IsActive = "true";
+			app.is_active = "true";
 		} else {
-			app.IsActive = "false";
+			app.is_active = "false";
 		}
 		if($('input[name="IsUrlExternal"]')[0].checked) {
-			app.IsUrlExternal = "true";
+			app.is_url_external = "true";
 		} else {
-			app.IsUrlExternal = "false";
+			app.is_url_external = "false";
 		}
 
 		if($("#deviceTarget").prop('checked')) {
-			app.FilterByDevice = "true";
+			app.filter_by_device = "true";
 		} else {
-			app.FilterByDevice = "false";
+			app.filter_by_device = "false";
 		}
 
 		if($("#cell").prop('checked')) {
-			app.FilterPhone = "true";
+			app.filter_phone = "true";
 		} else {
-			app.FilterPhone = "false";
+			app.filter_phone = "false";
 		}
 
 		if($("#tablet").prop('checked')) {
-			app.FilterTablet = "true";
+			app.filter_tablet = "true";
 		} else {
-			app.FilterTablet = "false";
+			app.filter_tablet = "false";
 		}
 
 		if($("#desktop").prop('checked')) {
-			app.FilterDesktop = "true";
+			app.filter_desktop = "true";
 		} else {
-			app.FilterDesktop = "false";
+			app.filter_desktop = "false";
 		}
 
 		if($("#plugin").prop('checked')) {
-			app.RequiresPlugin = "true";
+			app.requires_plugin = "true";
 		} else {
-			app.RequiresPlugin = "false";
+			app.requires_plugin = "false";
 		}
 		
-		app.Schemas = getSelectSchemas();
+		app.schemas = getSelectSchemas();
 	}
 	
 	/**
@@ -275,8 +275,8 @@ $(document).ready(function() {
 		$(".SCHEMA_CBX").each(function(){
 			$(this).prop('checked',false);
 		});
-		if(app && app.Schemas) {
-			var tmp = app.Schemas.split(",");
+		if(app && app.schemas) {
+			var tmp = app.schemas.split(",");
 			for(var i in tmp) {
 				var str = $.trim(tmp[i]);
 				if(str.length > 0) {
@@ -302,6 +302,7 @@ $(document).ready(function() {
 		var con = $('#SCHEMA_ID_LIST');
 		con.html('');
 		for(var i in schema) {
+			if(schema[i].name == undefined) continue;
 			con.append('<div><input type="checkbox" name="SCHEMA_ID_'+schema[i].name+'" value="'+schema[i].name+'" class="SCHEMA_CBX" onchange="makeClearable()"/>'+schema[i].label+'</div>');
 		}
 	}
@@ -312,7 +313,7 @@ $(document).ready(function() {
 	var schemas = new DFRequest({
 		app: "admin",
 		service: "DB",
-		resource: "/Schema",
+		resource: "/schema",
 		type: DFRequestType.POST,
 		success: function(json,request) {
 			if(!parseErrors(json,errorHandler)) {
@@ -336,7 +337,7 @@ $(document).ready(function() {
 	});
 	
 	$("#export").button({icons: {primary: "ui-icon-circle-arrow-s"}}).click(function(){
-		$("#uploadFileIframe").attr("src","/REST/admin/APP/"+selectApp.Name+"/?export=true&");
+		$("#uploadFileIframe").attr("src","/REST/admin/APP/"+selectApp.name+"/?export=true&");
 	});
 	
 	$("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function(){
@@ -346,19 +347,19 @@ $(document).ready(function() {
 	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
 		if(selectApp) {
 			getForm(selectApp);
-			var t = selectApp.Name;
-			delete selectApp.Name;
-			delete selectApp.CreatedById;
-			delete selectApp.CreatedDate;
-			delete selectApp.LastModifiedById;
-			delete selectApp.LastModifiedDate;
+			var t = selectApp.name;
+			delete selectApp.name;
+			delete selectApp.created_by_id;
+			delete selectApp.created_date;
+			delete selectApp.last_modified_by_id;
+			delete selectApp.last_modified_date;
 			appio.update(selectApp);
 			selectApp = t;
 		} else {
 			var app = {};
 			getForm(app);
 			appio.create(app);
-			selectApp = app.Name;
+			selectApp = app.name;
 		}
 	});
 	
@@ -367,7 +368,7 @@ $(document).ready(function() {
 	});
 	
 	$("#filemanager").button({icons: {primary: "ui-icon-folder-collapsed"}}).click(function(){
-		window.location = ('../filemanager/index.html?hostApp=admin&path='+selectApp.Name+'&returnUrl='+escape(window.location.href.substring(0,window.location.href.indexOf('?'))+'?selectedApp='+selectApp.Name));
+		window.location = ('../filemanager/index.html?hostApp=admin&path='+selectApp.name+'&returnUrl='+escape(window.location.href.substring(0,window.location.href.indexOf('?'))+'?selectedApp='+selectApp.name));
 	});
 	
 	$( "#confirmDeleteAppDialog" ).dialog({
@@ -411,12 +412,12 @@ $(document).ready(function() {
 	$("#appsList").dfSearchWidget({
 		app: 'admin',
 		service: "System",
-		resource: '/App',
+		resource: '/app',
 		offsetHeight: 25,
 		noSearchTerm: true,
 		renderer: function(container,apps) {
 			for(var i in apps) {
-				if(reselectApp && apps[i].Name == CommonUtilities.getQueryParameter('selectedApp')) {
+				if(reselectApp && apps[i].name == CommonUtilities.getQueryParameter('selectedApp')) {
 					selectApp = apps[i];
 				}
 			}

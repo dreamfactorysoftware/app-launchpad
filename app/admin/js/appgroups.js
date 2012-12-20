@@ -15,8 +15,8 @@ function makeAppGrpButton(id,name,container) {
 function renderApps(container,appGrp) {
 	for(var i = 0; i < appGrp.length; i++) {
 		if(!appGrp[i]) continue;
-		makeAppGrpButton(i,appGrp[i].Name,container);
-		if(selected_app_grp_id > -1 && parseInt(appGrp[i].Id) == selected_app_grp_id) {
+		makeAppGrpButton(i,appGrp[i].name,container);
+		if(selected_app_grp_id > -1 && parseInt(appGrp[i].id) == selected_app_grp_id) {
 			selected_app_grp_id = -1;
 		}
 	}
@@ -33,7 +33,7 @@ function renderApps(container,appGrp) {
 function selectCurrentRole() {
 	if(selectAppGrp && current_app_grps) {
 		for(var i in current_app_grps) {
-			if(current_app_grps[i].Name == selectAppGrp.Name) {
+			if(current_app_grps[i].name == selectAppGrp.name) {
 				$('#APP_GRP_'+i).button( "option", "icons", {primary: "ui-icon-seek-next", secondary:"ui-icon-seek-next"} );
 				showAppGrp(current_app_grps[i]);
 				return;
@@ -51,8 +51,8 @@ function selectCurrentRole() {
 function showAppGrp(appGrp) {
 	selectAppGrp = appGrp;
 	if(appGrp) {
-		$('input:text[name=Name]').val(appGrp.Name);
-		$('input:text[name=Description]').val(appGrp.Description);
+		$('input:text[name=Name]').val(appGrp.name);
+		$('input:text[name=Description]').val(appGrp.description);
 		$("#save").button({ disabled: true });
 		$('#delete').button({ disabled: false });
 		$('#clear').button({ disabled: false });
@@ -93,7 +93,7 @@ function makeClearable() {
 var appgrpio = new DFRequest({
 	app: 'admin',
 	service: "System",
-	resource: '/AppGroup',
+	resource: '/app_group',
 	type: DFRequestType.POST,
 	success: function(json,request) {
 		if(!parseErrors(json,errorHandler)) {
@@ -125,10 +125,10 @@ var appgrpio = new DFRequest({
 function deleteAppGrp(confirmed) {
 	if(selectAppGrp) {
 		if(confirmed) {
-			appgrpio.deletes(selectAppGrp.Id);
+			appgrpio.deletes(selectAppGrp.id);
 			showAppGrp();
 		} else {
-			$( "#deleteAppGrp" ).html(selectAppGrp.Name);
+			$( "#deleteAppGrp" ).html(selectAppGrp.name);
 			$( "#confirmDeleteAppGrpDialog" ).dialog('open');
 		}
 	}
@@ -140,7 +140,7 @@ function deleteAppGrp(confirmed) {
 var appio = new DFRequest({
 	app:  "admin",
 	service: "System",
-	resource: "/App",
+	resource: "/app",
 	success: function(json) {
 		if(!parseErrors(json,errorHandler)) {
 			current_apps = CommonUtilities.flattenResponse(json);
@@ -157,7 +157,7 @@ function showApps(apps) {
 	var con = $('#APP_ID_LIST');
 	con.html('');
 	for(var i in apps) {
-		con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].Id+'" value="'+apps[i].Id+'" data-groups="'+apps[i].AppGroupIds+'" class="APP_CBX" onchange="makeClearable()"/>'+apps[i].Label+'</div>');
+		con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].id+'" value="'+apps[i].id+'" data-groups="'+apps[i].app_group_ids+'" class="APP_CBX" onchange="makeClearable()"/>'+apps[i].label+'</div>');
 	}
 }
 
@@ -174,7 +174,7 @@ function selectApps(grp) {
 			for(var i in atmp) {
 				var value = $.trim(atmp[i]);
 				if(value) {
-					if(value == grp.Id) {						
+					if(value == grp.id) {						
 						selected = true;
 						break;
 					}
@@ -213,9 +213,9 @@ function getSelectAppIds() {
 }
 
 function getForm(grp) {
-	grp.Name = $('input:text[name=Name]').val();
-	grp.Description = $('input:text[name=Description]').val();
-	grp.AppIds = getSelectAppIds();
+	grp.name = $('input:text[name=Name]').val();
+	grp.description = $('input:text[name=Description]').val();
+	grp.app_ids = getSelectAppIds();
 }
 
 $(document).ready(function() {
@@ -231,10 +231,10 @@ $(document).ready(function() {
 	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
 		if(selectAppGrp) {
 			getForm(selectAppGrp);
-			delete selectAppGrp.CreatedById;
-			delete selectAppGrp.CreatedDate;
-			delete selectAppGrp.LastModifiedById;
-			delete selectAppGrp.LastModifiedDate;
+			delete selectAppGrp.created_by_id;
+			delete selectAppGrp.created_date;
+			delete selectAppGrp.last_modified_by_id;
+			delete selectAppGrp.last_modified_date;
 			appgrpio.update(selectAppGrp);
 		} else {
 			var appGrp = {};
@@ -269,7 +269,7 @@ $(document).ready(function() {
 	$("#appGrpList").dfSearchWidget({
 		app: 'admin',
 		service: "System",
-		resource: '/AppGroup',
+		resource: '/app_group',
 		offsetHeight: 25,
 		noSearchTerm: true,
 		renderer: function(container,apps) {
@@ -280,7 +280,7 @@ $(document).ready(function() {
 				selectCurrentRole();
 				return apps.length;
 			} else {
-				renderApps(container,users);
+				renderApps(container,apps);
 				container.append('<i>End Of List</i>');
 				resizeUi();
 				showAppGrp();

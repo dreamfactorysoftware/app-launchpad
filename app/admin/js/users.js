@@ -327,7 +327,7 @@ $(document).ready(function() {
 			},
 			{
 				label: "Last Modified",
-				value: "LastModifiedDate"
+				value: "last_modified_date"
 			}
 		],
 		renderer: function(container,users) {

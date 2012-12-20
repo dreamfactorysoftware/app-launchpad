@@ -2,9 +2,9 @@
  * 
  */
 function resizeUi() {
-    var h = $(window).height();
+	var h = $(window).height();
     $("#main_content").css('height', h );
-   $("#fileManagerPanel").css('height', h-10);
+    $("#fileManagerPanel").css('height', h-10);
 };
 
 var resizeTimer = null;
@@ -71,10 +71,6 @@ var fileio = new DFRequest({
 				fileio.retrieve();
 			}
 		}
-	},
-	error: function(d1,d2) {
-		$('#errorMsg').html(d1.statusText+" "+(d2 ? d2 : ''));
-		$('#errorDialog').dialog('open');
 	}
 });
 

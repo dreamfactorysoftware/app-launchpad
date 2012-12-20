@@ -247,6 +247,7 @@ $(document).ready(function() {
 		var con = $('#APP_ID_LIST');
 		con.html('');
 		for(var i in apps) {
+			if(apps[i].id == undefined) continue;
 			con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].id+'" value="'+apps[i].id+'" class="APP_CBX"/>'+apps[i].label+'</div>');
 		}
 		
@@ -480,6 +481,7 @@ $(document).ready(function() {
 			$(this).prop('checked',select);
 		});
 	});
+	
 	$("#serviceSelect").change(function(srv) {
 		var $this = $(this);
 		var index = parseInt($this.data("index"));
@@ -498,9 +500,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	
-	
-	
 	$("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function(){
 		deleteRole();
 	});
@@ -508,10 +507,10 @@ $(document).ready(function() {
 	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
 		if(selectRole) {
 			processForm(selectRole);
-			delete selectRole.CreatedById;
-			delete selectRole.CreatedDate;
-			delete selectRole.LastModifiedById;
-			delete selectRole.LastModifiedDate;
+			delete selectRole.created_by_id;
+			delete selectRole.created_date;
+			delete selectRole.last_modified_by_id;
+			delete selectRole.last_modified_date;
 			roleio.update(selectRole);
 		} else {
 			var role = {};

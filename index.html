@@ -21,7 +21,11 @@
 		
 		<!-- LaunchPad JS -->
 		<script src="js/base64/base64.js"></script>
-		
+		<style>
+.IconError {
+    background-image: url('favicon.ico') !important;
+}
+		</style>
 		<script>
 
 /**
@@ -164,7 +168,7 @@ $(document).ready(function() {
 		success: function(json,request) {
 			if(!parseErrors(json,reportError)) {
 				AppGrps = CommonUtilities.flattenResponse(json);
-				appio.retrieve({order:"Label"});
+				appio.retrieve({order:"label"});
 			}
 		}
 	});
@@ -172,7 +176,7 @@ $(document).ready(function() {
 	function getAppsFor(appGrpId) {
 		var tmp = [];
 		for(var i in Apps) {
-			if(Apps[i].AppGroupIds && Apps[i].AppGroupIds.length>0&& Apps[i].AppGroupIds.indexOf(","+appGrpId+",") != -1) {
+			if(Apps[i].app_group_ids && Apps[i].app_group_ids.length>0&& Apps[i].app_group_ids.indexOf(","+appGrpId+",") != -1) {
 				tmp[tmp.length] = Apps[i];
 			}
 		}
@@ -181,7 +185,7 @@ $(document).ready(function() {
 	
 	function getAppById(id) {
 		for(var i in Apps) {
-			if(Apps[i].Id == id) {
+			if(Apps[i].id == id) {
 				return Apps[i];
 			}
 		}
@@ -334,7 +338,7 @@ $(document).ready(function() {
 		var errCallback = opts.error;
 		new DFRequest({
 			service: 'User',
-			resource: '/Ticket',
+			resource: '/ticket',
 			success: function(json) {
 				var err = checkFailure(json);
 				if(err) {
@@ -371,7 +375,7 @@ $(document).ready(function() {
 					if(url && (url.indexOf('/') > 0 || url.indexOf('/') == -1)) {
 						url = '/'+url;
 					}
-					url = getCurrentServer()+'/apps/'+app.Name+url;
+					url = getCurrentServer()+'/apps/'+app.name+url;
 				}
 				if(url.indexOf('?') != -1) {
 					if(url.substr(-1) === "&" ) {
@@ -382,10 +386,10 @@ $(document).ready(function() {
 				} else {
 					url += '?svr='+escape(getCurrentServer())+'&';
 				}
-				url += 'app='+escape(app.Name)+'&ticket='+escape(ticket)+'&';
+				url += 'app='+escape(app.name)+'&ticket='+escape(ticket)+'&';
 				tab_content = createDisplay("disp" + app.id,url,app.description);
 				addTabFunctions($tabs.tabs( "add", "#tabs-" + app.id, app.label ));
-				$tabs.tabs( "option", "selected", $('#appSelector ul a[href="#tabs-' + app.Id+'"]').parent().index() );
+				$tabs.tabs( "option", "selected", $('#appSelector ul a[href="#tabs-' + app.id+'"]').parent().index() );
 				resizeUi();
 			},
 			error: function(msg,faultString) {
@@ -396,7 +400,7 @@ $(document).ready(function() {
 	}
 	
 	function makeNavButton(id,icon,label) {
-		var tmpBtn = $('<button class="appButton btn'+id+'" id="app'+id+'"></button>');
+		var tmpBtn = $('<button class="cTM1 appButton btn'+id+'" id="app'+id+'"></button>');
 		if(label) {
 			if(label.length <= max_chars_image) tmpBtn.append(icon);
 			if(label.length > max_chars_button) label = label.substring(0,max_chars_button);
@@ -423,9 +427,7 @@ $(document).ready(function() {
 			ico = getCurrentServer()+'/apps/'+app.name+'/favicon.ico';
 		}
 		
-		// this.style.display=\'none\'
-		//$(this).parent().remove($(this))
-		return '<img src="'+ico+'" onerror="this.style.display=\'none\';this.onerror=\'\';this.src=\'about:blank\'" class="cLeft" width="16" height="16" border="0"/>';
+		return '';//'<img src="'+ico+'" onerror="" class="cLeft" width="16" height="16" border="0"/>';
 	}
 	
 	function setup() {
@@ -465,9 +467,13 @@ $(document).ready(function() {
 			}
 		}).click(function() {
 			var appId = $(this).attr('id');
+			
 			if(appId && User) {
+				
 				var id = appId.substring(3);
+				
 				var app = getAppById(id);
+				
 				if(app) {
 					if($(this).button( "option", "icons" ).secondary == 'ui-icon-play') {
 						$('.btn'+id).button( "option", "icons", {secondary:'ui-icon-seek-next'} );
@@ -478,7 +484,7 @@ $(document).ready(function() {
 						var $this = $(this);
 						var tx = $this.attr("aria-controls");
 						if(tx && tx.indexOf("tabs-") == 0) {
-							if(tx == "tabs-"+app.Id) {
+							if(tx == "tabs-"+app.id) {
 								$('#appSelector').tabs( "option", "active", xindex );
 							} else {
 								xindex++;

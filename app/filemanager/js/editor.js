@@ -76,10 +76,6 @@ var fileio = new DFRequest({
 		} catch (e) {
 			$("#editor").val(txt);
 		}
-	},
-	error: function(d1,d2) {
-		$('#errorMsg').html(d1.statusText+" "+(d2 ? d2 : ''));
-		$('#errorDialog').dialog('open');
 	}
 });
 

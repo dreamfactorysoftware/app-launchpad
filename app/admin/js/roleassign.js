@@ -21,10 +21,10 @@ $(document).ready(function() {
 			checkbox.attr("type","checkbox");
 			checkbox.addClass(klass);
 			checkbox.data("index",i);
-			checkbox.data("id",users[i].Id);
+			checkbox.data("id",users[i].id);
 			checkbox.click(action);
 			row.append(checkbox);
-			row.append(users[i].FullName);
+			row.append(users[i].full_name);
 			container.append(row);
 		}
 	}
@@ -44,7 +44,7 @@ $(document).ready(function() {
 	var userio = new DFRequest({
 		app: 'admin',
 		service: "System",
-		resource: '/User',
+		resource: '/user',
 		type: DFRequestType.POST,
 		action: DFRequestActions.UPDATE,
 		success: function(json,request) {
@@ -93,8 +93,8 @@ $(document).ready(function() {
 		$(".ROLE_USERS").each(function(){
 			if($(this).prop('checked') == true) {
 				remove_lst[remove_lst.length] = {
-					Id: $(this).data('id'),
-					RoleIds: ""
+					"id": $(this).data('id'),
+					"role_id": ""
 				};
 			}
 		});
@@ -113,8 +113,8 @@ $(document).ready(function() {
 			$(".SEARCH_USERS").each(function(){
 				if($(this).prop('checked') == true) {
 					add_lst[add_lst.length] = {
-						Id: $(this).data('id'),
-						RoleIds: role_id
+						"id": $(this).data('id'),
+						"role_id": role_id
 					};
 				}
 			});
@@ -135,8 +135,8 @@ $(document).ready(function() {
 			var role = roles[i];
 			var rbtn = $('<button class="cW100 cTM1 ROLE_BUTTON"></button>');
 			rbtn.attr("id","RBTN_"+i);
-			rbtn.text(role.Name);
-			rbtn.data("RoleIds",role.Id);
+			rbtn.text(role.name);
+			rbtn.data("RoleIds",role.id);
 			rbtn.data("Index",i);
 			rbtn.button().click(function(){
 				deselectAllRoles();
@@ -166,7 +166,7 @@ $(document).ready(function() {
 	$('#rolesList').dfSearchWidget({
 		app: "admin",
 		service: "System",
-		resource: "/Role",
+		resource: "/role",
 		offsetHeight: 0,
 		noSearchTerm: true,
 		renderer: function(container,roles) {
@@ -174,7 +174,7 @@ $(document).ready(function() {
 				showRoles(container,roles);
 				container.append($('<div style="height:8px;"></div>'));
 			} else {
-				container.append("<div align='center'>&lt;<i>No results for search term...</i>&gt;</div>");
+				container.append("<div align='center'>&lt;<i>No Roles Found</i>&gt;</div>");
 			}
 			resizeUi();
 			
@@ -187,11 +187,11 @@ $(document).ready(function() {
 	$('#usersList').dfSearchWidget({
 		app: "admin",
 		service: "System",
-		resource: "/User",
+		resource: "/user",
 		offsetHeight: 0,
 		noSearchTerm: true,
 		params: {
-			filter: "RoleIds = '-1' AND IsSysAdmin = 'false'"
+			filter: "role_id = '-1' AND is_sys_admin = 'false'"
 		},
 		renderer: function(container,users,request) {
 			$('#URemove').button({ disabled: true });
@@ -199,7 +199,7 @@ $(document).ready(function() {
 				showRoleUsers(container,users);
 				container.append($('<div style="height:8px;"></div>'));
 			} else {
-				if(request.params.filter=="RoleIds = '-1' AND IsSysAdmin = 'false'") {
+				if(request.params.filter=="role_id = '-1' AND is_sys_admin = 'false'") {
 					container.append("<div align='center'>&lt;<i>Select a Role To Begin</i>&gt;</div>");
 				} else {
 					container.append("<div align='center'>&lt;<i>No Users Are Assigned To This Role</i>&gt;</div>");
@@ -212,15 +212,15 @@ $(document).ready(function() {
 	$("#searchUsersList").dfSearchWidget({
 		app: "admin",
 		service: "System",
-		resource: "/User",
+		resource: "/user",
 		offsetHeight: 0,
 		filter: function(name,val){
 			if(!name && !val) {
 				return {
-					filter: "RoleIds = '' AND IsSysAdmin = 'false'"
+					filter: "role_id = '' AND is_sys_admin = 'false'"
 				};
 			} else {
-				if(!name) name = "FullName";
+				if(!name) name = "full_name";
 				return {
 					filter: name+" LIKE '%"+val+"%'"
 				};
@@ -229,19 +229,19 @@ $(document).ready(function() {
 		orderBy: [
 					{
 						label: "[Sort By]",
-						value: "Id"
+						value: "id"
 					},
 					{
 						label: "First Name",
-						value: "FirstName"
+						value: "first_name"
 					},
 					{
 						label: "Last Name",
-						value: "LastName"
+						value: "last_name"
 					},
 					{
 						label: "Last Modified",
-						value: "LastModifiedDate"
+						value: "last_modified_date"
 					}
 				],
 		renderer: function(container,users) {
