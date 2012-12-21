@@ -146,6 +146,7 @@
 			
 			tsearch.offset = 0;
 			tsearch.limit = $(this).dfSearchWidget("getMaxPerPage");
+			if(tsearch.limit.toString() == "NaN") delete tsearch.limit;
 			if($().dfSearchWidget.activeSearches[id].orderBy) {
 				tsearch.order = $("#orderBy_"+id).val();
 			}
