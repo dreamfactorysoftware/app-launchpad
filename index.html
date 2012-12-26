@@ -235,7 +235,7 @@ $(document).ready(function() {
 		getCurrentTicket({
 			success: function(ticket) {
 				var url = app.url;
-				if(!(app.is_url_external=="true")) {
+				if(!(app.is_url_external)) {
 					if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
 						url = '/'+url;
 					}
@@ -371,7 +371,7 @@ $(document).ready(function() {
 		getCurrentTicket({
 			success: function(ticket) {
 				var url = app.url;
-				if(!(app.is_url_external=="true")) {
+				if(!(app.is_url_external)) {
 					if(url && (url.indexOf('/') > 0 || url.indexOf('/') == -1)) {
 						url = '/'+url;
 					}
@@ -415,7 +415,7 @@ $(document).ready(function() {
 	
 	function icon(app) {
 		var ico = '';
-		if(app.is_url_external=="true") {
+		if(app.is_url_external) {
 			var appUrl = app.url;
 			var tmp = appUrl.substring(appUrl.lastIndexOf('//')+2);
 			if(tmp.indexOf('/') != -1) {

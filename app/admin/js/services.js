@@ -63,7 +63,7 @@ function showService(service) {
 	if(service) {
 		$('input:text[name=Name]').val(service.name);
 		$('input:text[name=Label]').val(service.label);
-		if(service.is_active == 'true') {
+		if(service.is_active) {
 			$('input[name="IsActive"]')[0].checked = true;
 		} else {
 			$('input[name="IsActive"]')[1].checked = true;
@@ -72,7 +72,12 @@ function showService(service) {
 		$("#serviceType").val(service.type);
 		$("#serviceType").trigger('change');
 		
-		$('input:text[name=BaseUrl]').val(service.base_url);
+        $("#storageType").val(service.storage_type);
+   		$("#storageType").trigger('changeStorage');
+        $('input:text[name=StorageName]').val(service.storage_name);
+        $('#Credentials').val(service.credentials);
+
+        $('input:text[name=BaseUrl]').val(service.base_url);
 		$('#HeaderList').val(service.headers);
 		$('#ParamList').val(service.parameters);
 		//$('#active').buttonset('refresh');
@@ -89,6 +94,11 @@ function showService(service) {
 		$("#serviceType").val('');
 		$("#serviceType").trigger('change');
 		
+        $("#storageType").val('');
+   		$("#storageType").trigger('changeStorage');
+        $('input:text[name=StorageName]').val('');
+        $('#Credentials').val('');
+
 		$('input:text[name=BaseUrl]').val('');
 		$('#HeaderList').val('');
 		$('#ParamList').val('');
@@ -117,7 +127,7 @@ function makeClearable() {
 var serviceio = new DFRequest({
 	app: 'admin',
 	service: "System",
-	resource: '/Service',
+	resource: '/service',
 	type: DFRequestType.POST,
 	success: function(json,request) {
 		if(!parseErrors(json,errorHandler)) {
@@ -170,6 +180,9 @@ function getForm(ws) {
 	ws.headers = $('#HeaderList').val();
 	ws.parameters = $('#ParamList').val();
 	ws.is_active = !$('input[name="IsActive"]')[1].checked;
+    ws.storage_name = $('input:text[name=StorageName]').val();
+    ws.storage_type = $("#storageType").val();
+   	ws.credentials = $('#Credentials').val();
 }
 
 $(document).ready(function() {
@@ -218,21 +231,32 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#WebOptions").hide();
-	
+    $("#WebOptions").hide();
+    $("#FileOptions").hide();
+    $("#RemoteFileOptions").hide();
+
 	$('#serviceType').change(function(){
 		switch($(this).val()) {
-			case 'Native':
-				$("#WebOptions").hide();
+			case 'Local File Storage':
+				$("#FileOptions").show();
+                $("#RemoteFileOptions").hide();
+                $("#WebOptions").hide();
 				break;
-			case 'Managed':
-				$("#WebOptions").hide();
-				break;
-			case 'Web':
+            case 'Remote File Storage':
+                $("#FileOptions").show();
+                $("#RemoteFileOptions").show();
+                $("#WebOptions").hide();
+                break;
+			case 'Remote Web Service':
+                $("#FileOptions").hide();
+                $("#RemoteFileOptions").hide();
 				$("#WebOptions").show();
 				break;
+            case 'Native':
 			default:
-				$("#WebOptions").hide();
+                $("#FileOptions").hide();
+                $("#RemoteFileOptions").hide();
+                $("#WebOptions").hide();
 				break;
 		}
 	});

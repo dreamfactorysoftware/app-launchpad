@@ -77,8 +77,11 @@
 									<select class="cW98" onchange="makeClearable()" name="Type" id="serviceType">
 										<option value="">[Please Select A Type]</option>
 										<option value="Native">Native</option>
-										<option value="Managed">Managed</option>
-										<option value="Web">Web</option>
+                                        <option value="Local File Storage">Local File Storage</option>
+                                        <option value="Remote File Storage">Remote File Storage</option>
+                                        <option value="Local SQL DB">Local SQL DB</option>
+                                        <option value="Remote SQL DB">Remote SQL DB</option>
+										<option value="Remote Web Service">Remote Web Service</option>
 									</select>
 								</div>
 								<div class="cClear"><!--  --></div>
@@ -100,7 +103,7 @@
 										<strong>Header List:&nbsp;</strong>
 									</div>
 									<div class="cLeft cW75">
-										<textarea class="cW98" id="HeaderList" id="HeaderList" rows="3" onkeyup="makeClearable()"></textarea>
+										<textarea class="cW98" id="HeaderList" rows="3" onkeyup="makeClearable()"></textarea>
 									</div>
 									<div class="cClear"><!--  --></div>
 								</div>
@@ -110,13 +113,52 @@
 										<strong>Parameter List:&nbsp;</strong>
 									</div>
 									<div class="cLeft cW75">
-										<textarea class="cW98" id="ParamList" id="ParamList" rows="3" onkeyup="makeClearable()"></textarea>
+										<textarea class="cW98" id="ParamList" rows="3" onkeyup="makeClearable()"></textarea>
 									</div>
 									<div class="cClear"><!--  --></div>
 								</div>
 							</div>
 							
-							
+                            <div id="FileOptions">
+                                <div class="cTM1">
+                                    <div class="cLeft cW25 formLabel" align="right">
+                                        <strong>Base Folder Name:&nbsp;</strong>
+                                    </div>
+                                    <div class="cLeft cW75">
+                                        <input type="text" class="cW98" name="StorageName" value="" onkeyup="makeClearable()"/>
+                                    </div>
+                                    <div class="cClear"><!--  --></div>
+                                </div>
+                            </div>
+
+                            <div id="RemoteFileOptions">
+                                <div class="cTM1">
+                                    <div class="cLeft cW25 formLabel" align="right">
+                                        <strong>Storage Type:&nbsp;</strong>
+                                    </div>
+                                    <div class="cLeft cW75">
+                                        <select class="cW98" onchange="makeClearable()" name="StorageType" id="storageType">
+                                            <option value="">[Please Select A Type]</option>
+                                            <option value="Azure Blob">Microsoft Windows Azure Blob</option>
+                                            <option value="AWS S3">Amazon Web Services S3</option>
+                                        </select>
+                                    </div>
+                                    <div class="cClear"><!--  --></div>
+                                </div>
+
+                                <div class="cTM1">
+                                    <div class="cLeft cW25 formLabel" align="right">
+                                        <strong>Credentials:&nbsp;</strong>
+                                    </div>
+                                    <div class="cLeft cW75">
+                                        <textarea class="cW98" id="Credentials" rows="3" onkeyup="makeClearable()"></textarea>
+                                    </div>
+                                    <div class="cClear"><!--  --></div>
+                                </div>
+
+                            </div>
+
+
 							<br/>
 							<br/>
 							<div class="cTM1" align="right">

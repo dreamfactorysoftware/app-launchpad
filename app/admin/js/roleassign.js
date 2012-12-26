@@ -191,7 +191,7 @@ $(document).ready(function() {
 		offsetHeight: 0,
 		noSearchTerm: true,
 		params: {
-			filter: "role_id = '-1' AND is_sys_admin = 'false'"
+			filter: "role_id = '-1' AND is_sys_admin = 0"
 		},
 		renderer: function(container,users,request) {
 			$('#URemove').button({ disabled: true });
@@ -199,7 +199,7 @@ $(document).ready(function() {
 				showRoleUsers(container,users);
 				container.append($('<div style="height:8px;"></div>'));
 			} else {
-				if(request.params.filter=="role_id = '-1' AND is_sys_admin = 'false'") {
+				if(request.params.filter=="role_id = '-1' AND is_sys_admin = 0") {
 					container.append("<div align='center'>&lt;<i>Select a Role To Begin</i>&gt;</div>");
 				} else {
 					container.append("<div align='center'>&lt;<i>No Users Are Assigned To This Role</i>&gt;</div>");
@@ -217,7 +217,7 @@ $(document).ready(function() {
 		filter: function(name,val){
 			if(!name && !val) {
 				return {
-					filter: "role_id = '' AND is_sys_admin = 'false'"
+					filter: "role_id = '' AND is_sys_admin = 0"
 				};
 			} else {
 				if(!name) name = "full_name";

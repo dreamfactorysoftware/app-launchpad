@@ -71,13 +71,13 @@ $(document).ready(function() {
 			$('input:text[name=firstname]').val(user.first_name);
 			$('input:text[name=email]').val(user.email);
 			$('input:text[name=phone]').val(user.phone);
-			if(user.is_active == 'true') {
+			if(user.is_active) {
 				$('input[name="isactive"]')[0].checked = true;
 			} else {
 				$('input[name="isactive"]')[1].checked = true;
 			}
 			
-			if(user.is_sys_admin == 'true') {
+			if(user.is_sys_admin) {
 				$("#roleSelector").val("*");
 			} else {
 				$("#roleSelector").val(user.role_id);
@@ -218,18 +218,18 @@ $(document).ready(function() {
 		obj.phone     = $('input:text[name=phone]').val();
 		
 		if($('input[name="isactive"]')[1].checked) {
-			obj.is_active = 'false';
+			obj.is_active = 0;
 		} else {
-			obj.is_active = 'true';
+			obj.is_active = 1;
 		}
 		
 		var roleId = $("#roleSelector").val();
 		
 		if(roleId == "*") {
-			obj.is_sys_admin = 'true';
+			obj.is_sys_admin = 1;
 			obj.role_id = null;
 		} else {
-			obj.is_sys_admin = 'false';
+			obj.is_sys_admin = 0;
 			obj.role_id = roleId;
 		}
 		

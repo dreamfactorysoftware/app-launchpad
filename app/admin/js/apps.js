@@ -95,18 +95,18 @@ $(document).ready(function() {
 			$('input:text[name=Label]').val(app.label);
 			$('input:text[name=Description]').val(app.description);
 			$('input:text[name=Url]').val(app.url);
-			if(app.is_active == "true") {
+			if(app.is_active) {
 				$('input[name="IsActive"]')[0].checked = true;
 			} else {
 				$('input[name="IsActive"]')[1].checked = true;
 			}
-			if(app.is_url_external == "true") {
+			if(app.is_url_external) {
 				$('input[name="IsUrlExternal"]')[0].checked = true;
 			} else {
 				$('input[name="IsUrlExternal"]')[1].checked = true;
 			}
 			$("#save").button({ disabled: true });
-			if(app.is_url_external == "true") {
+			if(app.is_url_external) {
 				$("#filemanager").button({ disabled: true });
 			} else {
 				$("#filemanager").button({ disabled: false });
@@ -117,12 +117,12 @@ $(document).ready(function() {
 			$('#clear').button({ disabled: false });
 			
 
-			$("#deviceTarget").prop('checked',app.filter_by_device=="true");
+			$("#deviceTarget").prop('checked',app.filter_by_device);
 			
-			$("#cell").prop('checked',app.filter_phone=="true");
-			$("#tablet").prop('checked',app.filter_tablet=="true");
-			$("#desktop").prop('checked',app.filter_desktop=="true");
-			$("#plugin").prop('checked',app.requires_plugin=="true");
+			$("#cell").prop('checked',app.filter_phone);
+			$("#tablet").prop('checked',app.filter_tablet);
+			$("#desktop").prop('checked',app.filter_desktop);
+			$("#plugin").prop('checked',app.requires_plugin);
 			
 			$("#deviceTarget").trigger("onchange");
 			
@@ -213,44 +213,44 @@ $(document).ready(function() {
 		app.url = $('input:text[name=Url]').val();
 		
 		if($('input[name="IsActive"]')[0].checked) {
-			app.is_active = "true";
+			app.is_active = 1;
 		} else {
-			app.is_active = "false";
+			app.is_active = 0;
 		}
 		if($('input[name="IsUrlExternal"]')[0].checked) {
-			app.is_url_external = "true";
+			app.is_url_external = 1;
 		} else {
-			app.is_url_external = "false";
+			app.is_url_external = 0;
 		}
 
 		if($("#deviceTarget").prop('checked')) {
-			app.filter_by_device = "true";
+			app.filter_by_device = 1;
 		} else {
-			app.filter_by_device = "false";
+			app.filter_by_device = 0;
 		}
 
 		if($("#cell").prop('checked')) {
-			app.filter_phone = "true";
+			app.filter_phone = 1;
 		} else {
-			app.filter_phone = "false";
+			app.filter_phone = 0;
 		}
 
 		if($("#tablet").prop('checked')) {
-			app.filter_tablet = "true";
+			app.filter_tablet = 1;
 		} else {
-			app.filter_tablet = "false";
+			app.filter_tablet = 0;
 		}
 
 		if($("#desktop").prop('checked')) {
-			app.filter_desktop = "true";
+			app.filter_desktop = 1;
 		} else {
-			app.filter_desktop = "false";
+			app.filter_desktop = 0;
 		}
 
 		if($("#plugin").prop('checked')) {
-			app.requires_plugin = "true";
+			app.requires_plugin = 1;
 		} else {
-			app.requires_plugin = "false";
+			app.requires_plugin = 0;
 		}
 		
 		app.schemas = getSelectSchemas();

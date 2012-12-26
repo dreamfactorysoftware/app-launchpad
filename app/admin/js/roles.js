@@ -402,17 +402,15 @@ $(document).ready(function() {
 	 * @param index
 	 * @param service
 	 * @param title
-	 * @returns
 	 */
 	function makeCheckBox(index,service,title) {
-		return $('<div class="cLeft cW25"><input type="checkbox" value="true" title="'+title+'" id="'+title+'_'+index+'" '+(service[title] == "true"?"CHECKED":"")+'/></div>');
+		return $('<div class="cLeft cW25"><input type="checkbox" value="true" title="'+title+'" id="'+title+'_'+index+'" '+(service[title]?"CHECKED":"")+'/></div>');
 	}
 	
 	/**
 	 * 
 	 * @param index
 	 * @param service
-	 * @returns
 	 */
 	function makeServiceComponentLine(index,service) {
 		
