@@ -239,7 +239,7 @@ $(document).ready(function() {
 					if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
 						url = '/'+url;
 					}
-					url = getCurrentServer()+'/apps/'+app.name+url;
+					url = getCurrentServer()+'/app/'+app.name+url;
 				}
 				if(url.indexOf('?') != -1) {
 					if(url.substr(-1) === "&" ) {
@@ -375,7 +375,7 @@ $(document).ready(function() {
 					if(url && (url.indexOf('/') > 0 || url.indexOf('/') == -1)) {
 						url = '/'+url;
 					}
-					url = getCurrentServer()+'/apps/'+app.name+url;
+					url = getCurrentServer()+'/app/'+app.name+url;
 				}
 				if(url.indexOf('?') != -1) {
 					if(url.substr(-1) === "&" ) {
@@ -424,7 +424,7 @@ $(document).ready(function() {
 			tmp = appUrl.substring(0,appUrl.lastIndexOf('//')+2)+tmp;
 			ico = tmp+'/favicon.ico';
 		} else {
-			ico = getCurrentServer()+'/apps/'+app.name+'/favicon.ico';
+			ico = getCurrentServer()+'/app/'+app.name+'/favicon.ico';
 		}
 		
 		return '';//'<img src="'+ico+'" onerror="" class="cLeft" width="16" height="16" border="0"/>';
