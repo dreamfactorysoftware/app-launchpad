@@ -330,7 +330,7 @@ $(document).ready(function() {
 		success: function(json) {
 			if(services.length > 0) {
 			} else {
-				services = json.service;
+				services = json.resource;
 				var selectSrv = $("#serviceSelect");
 				for(var i in services) {
 					var myServiceName = services[i].name;
@@ -404,7 +404,7 @@ $(document).ready(function() {
 	 * @param title
 	 */
 	function makeCheckBox(index,service,title) {
-		return $('<div class="cLeft cW25"><input type="checkbox" value="true" title="'+title+'" id="'+title+'_'+index+'" '+(service[title]?"CHECKED":"")+'/></div>');
+		return $('<div class="cLeft cW25"><input type="checkbox" value="true" title="'+title+'" id="'+title+'_'+index+'" '+(service[title.toLowerCase()]?"CHECKED":"")+'/></div>');
 	}
 	
 	/**

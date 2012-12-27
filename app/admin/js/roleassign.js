@@ -146,7 +146,7 @@ $(document).ready(function() {
 				var index = $(this).data("Index");
 				var name = $(this).text();
 				$().dfSearchWidget.activeSearches["usersList"].params = {
-					filter: "RoleIds = '"+id+"'"
+					filter: "role_id = '"+id+"'"
 				};
 				$("#usersList").dfSearchWidget("go");
 			});
@@ -158,7 +158,7 @@ $(document).ready(function() {
 	$("#Refresh").button({icons: {primary: "ui-icon-refresh"}}).click(function(){
 		$("#rolesList").dfSearchWidget("go");
 		$().dfSearchWidget.activeSearches["usersList"].params = {
-			filter: "RoleIds = '-1'"
+			filter: "role_id = '-1'"
 		};
 		$('#usersList').dfSearchWidget("go");
 	});
