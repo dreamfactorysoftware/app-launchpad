@@ -337,7 +337,7 @@ $(document).ready(function() {
 	});
 	
 	$("#export").button({icons: {primary: "ui-icon-circle-arrow-s"}}).click(function(){
-		$("#uploadFileIframe").attr("src","/REST/APP/"+selectApp.name+"/?export=true&");
+		$("#uploadFileIframe").attr("src","/REST/APP/"+selectApp.name+"/?export=true&app_name=admin");
 	});
 	
 	$("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function(){
