@@ -185,8 +185,9 @@
 				<div class="cClear"><!--  --></div>
 				
 				<div id="uploadFileHidden" style="display:none;">
-					<form id="uploadFileForm" method="POST" enctype="multipart/form-data" target="uploadFileIframe" action="/REST/admin/APP/">
-						<input type="hidden" name="import" value="true"/>
+					<form id="uploadFileForm" method="POST" enctype="multipart/form-data" target="uploadFileIframe" action="/REST/APP/">
+						<input type="hidden" name="app_name" value="admin"/>
+                        <input type="hidden" name="import" value="true"/>
 						<input id="uploadFileInput" type="file" name="files" onchange="this.form.submit()"/>
 					</form>
 					<iframe id="uploadFileIframe" name="uploadFileIframe" src="about:blank" width="100%" height="70px"></iframe>
