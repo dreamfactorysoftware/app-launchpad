@@ -404,7 +404,7 @@ $(document).ready(function() {
 	 * @param title
 	 */
 	function makeCheckBox(index,service,title) {
-		return $('<div class="cLeft cW25"><input type="checkbox" value="true" title="'+title+'" id="'+title+'_'+index+'" '+(service[title.toLowerCase()]?"CHECKED":"")+'/></div>');
+		return $('<div class="cLeft cW25"><input type="checkbox" value="true" title="'+title+'" id="'+title+'_'+index+'" '+(service[title] == "true"?"CHECKED":"")+'/></div>');
 	}
 	
 	/**
