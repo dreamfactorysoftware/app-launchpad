@@ -61,7 +61,7 @@ var fileio = new DFRequest({
 		try {document.getSelection().removeAllRanges();}catch(e){/* silent! */};
 		if(!parseErrors(json,errorHandler)) {
 			printLocation();
-			if(json.folder && json.folder.length > 0 && json.folder[0].name == '.') {
+			if(json.folder && json.folder.length > 0 && json.folder[0].name) {
 				buildListingUI(json);
 			} else if(json.file && json.file[0] && json.file[0].lastModified) {
 				buildListingUI(json);
