@@ -118,7 +118,7 @@ $(document).ready(function() {
 		if($('#UserName').val() && $('#Password').val()) {
 			$( "#loginDialog" ).dialog("close");
 			$('#dfControl1').html('<i>Logging In, Please Wait...</i>');
-			userio.post(JSON.stringify({UserName: $('#UserName').val(),Password:base64_encode($('#Password').val())}), null, "/Login");
+			userio.post(JSON.stringify({UserName: $('#UserName').val(),Password: $('#Password').val()}), null, "/login");
 		} else {
 			$("#loginErrorMessage").html('<b>You must enter UserName and Password to continue</b><br/><br/>');
 		}
@@ -193,7 +193,7 @@ $(document).ready(function() {
 	
 	var userio = new DFRequest({
 		service: 'User',
-		resource: '/Session',
+		resource: '/session',
 		success: function(json,request) {
 			if(!parseErrors(json,reportError)) {
 				if(request) {
@@ -529,7 +529,7 @@ $(document).ready(function() {
 		buttons: {
 			"Log Off": function() {
 				User = null;
-				userio.post(null,null,"/Logout");
+				userio.post(null,null,"/logout");
 				showSignInControls(true);
 				$(this).dialog( "close" );
 				showContent(false);
