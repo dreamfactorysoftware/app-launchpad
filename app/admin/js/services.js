@@ -163,7 +163,7 @@ function deleteService(confirmed) {
 			showService();
 		} else {
 			$( "#deleteService" ).html(selectService.label);
-			$( "#confirmDeleteUserDialog" ).dialog('open');
+			$( "#confirmDeleteServiceDialog" ).dialog('open');
 		}
 	}
 }
@@ -216,7 +216,7 @@ $(document).ready(function() {
 		showService();
 	});
 	
-	$( "#confirmDeleteUserDialog" ).dialog({
+	$( "#confirmDeleteServiceDialog" ).dialog({
 		resizable: false,
 		modal: true,
 		autoOpen: false,
