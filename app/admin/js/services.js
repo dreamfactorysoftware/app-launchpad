@@ -159,7 +159,7 @@ var serviceio = new DFRequest({
 function deleteService(confirmed) {
 	if(selectService) {
 		if(confirmed) {
-			serviceio.deletes(selectService.Id);
+			serviceio.deletes(selectService.id);
 			showService();
 		} else {
 			$( "#deleteService" ).html(selectService.label);
