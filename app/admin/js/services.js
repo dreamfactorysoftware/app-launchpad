@@ -1,46 +1,234 @@
 /**
  * services.js
  */
-var isPageDirty = false;
-var selected_service_id = -1;
+
 var current_service = null;
 var selectService = null;
 
-/**
- * 
- * @param id
- * @param name
- * @param container
- */
+$(document).ready(function() {
+
+    // set actions for button activation
+    $(".ONKEYUP").keyup(makeClearable);
+    $(".ONCHANGE").change(makeClearable);
+
+    // highlight services tab
+    makeAdminNav('services');
+
+    // new button
+    $("#new").button({icons: {primary: "ui-icon-document"}}).click(function() {
+
+        showService(null);
+    });
+
+    // save button
+    $("#save").button({icons: {primary: "ui-icon-disk"}}).click(function() {
+
+        try {
+            if(selectService) {
+                updateService();
+            } else {
+                createService();
+            }
+        } catch (e) {
+            alert(e);
+        }
+    });
+
+    // delete button
+    $("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function() {
+
+        if (selectService) {
+            $( "#deleteService" ).html(selectService.label);
+            $( "#confirmDeleteServiceDialog" ).dialog('open');
+        }
+    });
+
+    // delete service confirmation dialog
+    $( "#confirmDeleteServiceDialog" ).dialog({
+        resizable: false,
+        modal: true,
+        autoOpen: false,
+        buttons: {
+            Continue: function() {
+                deleteService();
+                $( this ).dialog( "close" );
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+
+    $("#WebOptions").hide();
+    $("#FileOptions").hide();
+    $("#RemoteFileOptions").hide();
+
+    $('#serviceType').change(function(){
+        switch($(this).val()) {
+            case 'Local File Storage':
+                $("#FileOptions").show();
+                $("#RemoteFileOptions").hide();
+                $("#WebOptions").hide();
+                break;
+            case 'Remote File Storage':
+                $("#FileOptions").show();
+                $("#RemoteFileOptions").show();
+                $("#WebOptions").hide();
+                break;
+            case 'Remote Web Service':
+                $("#FileOptions").hide();
+                $("#RemoteFileOptions").hide();
+                $("#WebOptions").show();
+                break;
+            case 'Native':
+            default:
+                $("#FileOptions").hide();
+                $("#RemoteFileOptions").hide();
+                $("#WebOptions").hide();
+                break;
+        }
+    });
+
+    $("#serviceList").dfSearchWidget({
+        app: "admin",
+        service: "System",
+        resource: "/service",
+        offsetHeight: 25,
+        noSearchTerm: true,
+        renderer: function(container,services) {
+            if(services.length > 0) {
+                current_service = services;
+                renderServices(container,services);
+                resizeUi();
+                selectCurrentService();
+                return services.length;
+            } else {
+                renderServices(container,services);
+                container.append("<i>No services...</i>");
+                resizeUi();
+                showService(null);
+                return 0;
+            }
+        }
+    });
+});
+
+//
+// create service
+//
+function createService() {
+
+    var service = {};
+
+    // get data from form
+    getServiceFormData(service);
+
+    selectService = service;
+
+    // create
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url:'http://' + location.host + '/rest/system/service?app_name=admin',
+        data:CommonUtilities.jsonRecords(service),
+        cache:false,
+        processData: false,
+        success:function (response) {
+            if(!parseErrors(response, errorHandler)) {
+                $("#serviceList").dfSearchWidget('go');
+            }
+            $("#save").button({ disabled: true });
+        },
+        error:function (response) {
+
+        }
+    });
+}
+
+//
+// update service
+//
+function updateService() {
+
+    // get data from form
+    getServiceFormData(selectService);
+
+    // remove non-updateable fields
+    delete selectService.created_by_id;
+    delete selectService.created_date;
+    delete selectService.last_modified_by_id;
+    delete selectService.last_modified_date;
+
+    // update
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url:'http://' + location.host + '/rest/system/service?app_name=admin&method=MERGE',
+        data:CommonUtilities.jsonRecords(selectService),
+        cache:false,
+        processData: false,
+        success:function (response) {
+            if(!parseErrors(response, errorHandler)) {
+                $("#serviceList").dfSearchWidget('go');
+            }
+            $("#save").button({ disabled: true });
+        },
+        error:function (response) {
+
+        }
+    });
+}
+
+//
+// delete service
+//
+function deleteService() {
+
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url:'http://' + location.host + '/rest/system/service/' + selectService.id + "?app_name=admin&method=DELETE",
+        cache:false,
+        processData: false,
+        success:function (response) {
+            if(!parseErrors(response, errorHandler)) {
+                $("#serviceList").dfSearchWidget('go');
+                showService(null);
+            }
+            $("#save").button({ disabled: true });
+        },
+        error:function (response) {
+
+        }
+    });
+}
+
+function makeClearable() {
+
+    $('#new').button({ disabled: false });
+    $("#save").button({ disabled: false });
+}
+
 function makeServiceButton(id,name,container) {
+
 	container.append($('<button id="SERV_'+id+'" class="service_button selector_btn cW100"><span id="DFServiceLabel_'+id+'">'+name+'</span></button>'));
 }
 
-/**
- * 
- * @param container
- * @param services
- */
 function renderServices(container,services) {
+
 	for(var i = 0; i < services.length; i++) {
 		if(!services[i]) continue;
 		makeServiceButton(i,services[i].label,container);
-		if(selected_service_id > -1 && parseInt(services[i].Id) == selected_service_id) {
-			selected_user = i;
-			selected_service_id = -1;
-		}
 	}
 	$('.service_button').button({icons: {primary: "ui-icon-star"}}).click(function(){
-		showService(null); // clear user selection
+		showService(null); // clear service selection
 		$(this).button( "option", "icons", {primary: 'ui-icon-seek-next', secondary:'ui-icon-seek-next'} );
 		showService(current_service[parseInt($(this).attr('id').substring('SERV_'.length))]);
 	});
 }
 
-/**
- * 
- */
 function selectCurrentService() {
+
 	if(selectService && current_service) {
 		for(var i in current_service) {
 			if(current_service[i].name == selectService.name) {
@@ -50,15 +238,12 @@ function selectCurrentService() {
 			}
 		}
 	} else {
-		showService();
+		showService(null);
 	}
 }
 
-/**
- * 
- * @param service
- */
 function showService(service) {
+
 	selectService = service;
 	if(service) {
 		$('input:text[name=Name]').val(service.name);
@@ -108,71 +293,16 @@ function showService(service) {
 	}
 	if(service) {
 		$('#delete').button({ disabled: false });
-		$('#clear').button({ disabled: false });
+		$('#new').button({ disabled: false });
 	} else {
 		$('#delete').button({ disabled: true });
-		$('#clear').button({ disabled: true });
+		$('#new').button({ disabled: true });
 	}
 	
 }
 
-/**
- * 
- */
-function makeClearable() {
-	$('#clear').button({ disabled: false });
-	$("#save").button({ disabled: false });
-}
+function getServiceFormData(ws) {
 
-var serviceio = new DFRequest({
-	app: 'admin',
-	service: "System",
-	resource: '/service',
-	type: DFRequestType.POST,
-	success: function(json,request) {
-		if(!parseErrors(json,errorHandler)) {
-			if(request) {
-				switch(request.action) {
-					case DFRequestActions.UPDATE:
-						$("#serviceList").dfSearchWidget('go');
-						break;
-					case DFRequestActions.CREATE:
-						$("#serviceList").dfSearchWidget('go');
-						break;
-					case DFRequestActions.DELETE:
-						$("#serviceList").dfSearchWidget('go');
-						break;
-					default:
-						// maybe refresh?
-						break;
-				}
-			}
-		}
-		$("#save").button({ disabled: true });
-	}
-});
-
-/**
- * 
- * @param confirmed
- */
-function deleteService(confirmed) {
-	if(selectService) {
-		if(confirmed) {
-			serviceio.deletes(selectService.id);
-			showService();
-		} else {
-			$( "#deleteService" ).html(selectService.label);
-			$( "#confirmDeleteServiceDialog" ).dialog('open');
-		}
-	}
-}
-
-/**
- * 
- * @param ws
- */
-function getForm(ws) {
 	ws.name = $('input:text[name=Name]').val();
 	ws.label = $('input:text[name=Label]').val();
 	ws.type = $("#serviceType").val();
@@ -184,103 +314,3 @@ function getForm(ws) {
     ws.storage_type = $("#storageType").val();
    	ws.credentials = $('#Credentials').val();
 }
-
-$(document).ready(function() {
-	
-	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
-	
-	makeAdminNav('services');
-	
-	$("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function(){
-		deleteService();
-	});
-	
-	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
-		if(selectService) {
-			getForm(selectService);
-			delete selectService.created_by_id;
-			delete selectService.created_date;
-			delete selectService.last_modified_by_id;
-			delete selectService.last_modified_date;
-			serviceio.update(selectService);
-		} else {
-			var service = {};
-			getForm(service);
-			serviceio.create(service);
-			selectService = service;
-			selectService = service;
-		}
-	});
-	
-	$("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
-		showService();
-	});
-	
-	$( "#confirmDeleteServiceDialog" ).dialog({
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		buttons: {
-			Continue: function() {
-				deleteService(true);
-				$( this ).dialog( "close" );
-			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
-	
-    $("#WebOptions").hide();
-    $("#FileOptions").hide();
-    $("#RemoteFileOptions").hide();
-
-	$('#serviceType').change(function(){
-		switch($(this).val()) {
-			case 'Local File Storage':
-				$("#FileOptions").show();
-                $("#RemoteFileOptions").hide();
-                $("#WebOptions").hide();
-				break;
-            case 'Remote File Storage':
-                $("#FileOptions").show();
-                $("#RemoteFileOptions").show();
-                $("#WebOptions").hide();
-                break;
-			case 'Remote Web Service':
-                $("#FileOptions").hide();
-                $("#RemoteFileOptions").hide();
-				$("#WebOptions").show();
-				break;
-            case 'Native':
-			default:
-                $("#FileOptions").hide();
-                $("#RemoteFileOptions").hide();
-                $("#WebOptions").hide();
-				break;
-		}
-	});
-
-	$("#serviceList").dfSearchWidget({
-		app: "admin",
-		service: "System",
-		resource: "/service",
-		offsetHeight: 25,
-		noSearchTerm: true,
-		renderer: function(container,services) {
-			if(services.length > 0) {
-				current_service = services;
-				renderServices(container,services);
-				resizeUi();
-				selectCurrentService();
-				return services.length;
-			} else {
-				renderServices(container,services);
-				container.append("<i>End Of List</i>");
-				resizeUi();
-				showService();
-				return 0;
-			}
-		}
-	});
-});

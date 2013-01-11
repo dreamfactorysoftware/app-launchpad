@@ -3,10 +3,9 @@
  */
 
 function makeClearable() {
-	$('#clear').button({ disabled: false });
+	$('#new').button({ disabled: false });
 	$("#save").button({ disabled: false });
 }
-
 
 function makeSelectable(that) {
 	if($(that).prop("checked")) {
@@ -114,7 +113,7 @@ $(document).ready(function() {
 			hideImport();
 			$("#export").button({ disabled: false });
 			$('#delete').button({ disabled: false });
-			$('#clear').button({ disabled: false });
+			$('#new').button({ disabled: false });
 			
 
 			$("#deviceTarget").prop('checked',app.filter_by_device);
@@ -143,7 +142,7 @@ $(document).ready(function() {
 			$("#filemanager").button({ disabled: true });
 			$("#export").button({ disabled: true });
 			$('#delete').button({ disabled: true });
-			$('#clear').button({ disabled: true });
+			$('#new').button({ disabled: true });
 			
 			$("#deviceTarget").prop('checked',false);
 			$("#deviceTarget").trigger("onchange");
@@ -166,15 +165,12 @@ $(document).ready(function() {
 					switch(request.action) {
 						case DFRequestActions.UPDATE:
 							$("#appsList").dfSearchWidget('go');
-							updateLaunchPad("Do you want to update LaunchPad now with the changes?");
 							break;
 						case DFRequestActions.CREATE:
 							$("#appsList").dfSearchWidget('go');
-							updateLaunchPad("Do you want to update LaunchPad now with the new Application?");
 							break;
 						case DFRequestActions.DELETE:
 							$("#appsList").dfSearchWidget('go');
-							updateLaunchPad("Do you want to update LaunchPad now without the Application?");
 							break;
 						default:
 							// maybe refresh?
@@ -363,7 +359,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
+	$("#new").button({icons: {primary: "ui-icon-document"}}).click(function(){
 		showApp();
 	});
 	
@@ -429,7 +425,7 @@ $(document).ready(function() {
 				return apps.length;
 			} else {
 				renderApps(container,users);
-				container.append('<i>End Of List</i>');
+				container.append('<i>No Apps...</i>');
 				resizeUi();
 				showApp();
 				return 0;

@@ -306,7 +306,7 @@ $(document).ready(function() {
 			} else {
 				current_apps = [];
 				renderApps(container,apps);
-				container.append('<i>End Of List</i>');
+				container.append('<i>No Apps...</i>');
 				resizeUi();
 				return 0;
 			}
@@ -330,7 +330,7 @@ $(document).ready(function() {
 			} else {
 				current_grps = [];
 				renderAppGrps(container,app_grps);
-				container.append('<i>End Of List</i>');
+				container.append('<i>No app groups...</i>');
 				return 0;
 			}
 			doRefresh();

@@ -64,17 +64,3 @@ function errorHandler(errs,data) {
 	}
 	alert(str+="\n\n");
 }
-
-
-/**
- * 
- */
-function updateLaunchPad(msg) {
-	if(top.parent.refresh) {
-		if(confirm(msg)) {
-			top.parent.refresh();
-		} else {
-			alert("You will have to refresh LaunchPad manually to view any changes you have made.");
-		}
-	}
-}

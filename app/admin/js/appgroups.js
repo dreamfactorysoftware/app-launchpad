@@ -1,260 +1,59 @@
 /**
  * appgroups.js
  */
-var isPageDirty = false;
-	
-var selected_app_grp_id = -1;
+
 var current_app_grps = null;
-var current_apps = null;
 var selectAppGrp = null;
-
-function makeAppGrpButton(id,name,container) {
-	container.append($('<button id="APP_GRP_'+id+'" class="app_grp_button selector_btn cW100"><span id="DFUserLabel_'+id+'">'+name+'</span></button>'));
-}
-
-function renderApps(container,appGrp) {
-	for(var i = 0; i < appGrp.length; i++) {
-		if(!appGrp[i]) continue;
-		makeAppGrpButton(i,appGrp[i].name,container);
-		if(selected_app_grp_id > -1 && parseInt(appGrp[i].id) == selected_app_grp_id) {
-			selected_app_grp_id = -1;
-		}
-	}
-	$('.app_grp_button').button({icons: {primary: "ui-icon-star"}}).click(function(){
-		showAppGrp(); // clear user selection
-		$(this).button( "option", "icons", {primary: 'ui-icon-seek-next', secondary:'ui-icon-seek-next'} );
-		showAppGrp(current_app_grps[parseInt($(this).attr('id').substring('APP_GRP_'.length))]);
-	});
-}
-
-/**
- * 
- */
-function selectCurrentRole() {
-	if(selectAppGrp && current_app_grps) {
-		for(var i in current_app_grps) {
-			if(current_app_grps[i].name == selectAppGrp.name) {
-				$('#APP_GRP_'+i).button( "option", "icons", {primary: "ui-icon-seek-next", secondary:"ui-icon-seek-next"} );
-				showAppGrp(current_app_grps[i]);
-				return;
-			}
-		}
-	} else {
-		showAppGrp();
-	}
-}
-
-/**
- * 
- * @param appGrp
- */
-function showAppGrp(appGrp) {
-	selectAppGrp = appGrp;
-	if(appGrp) {
-		$('input:text[name=Name]').val(appGrp.name);
-		$('input:text[name=Description]').val(appGrp.description);
-		$("#save").button({ disabled: true });
-		$('#delete').button({ disabled: false });
-		$('#clear').button({ disabled: false });
-	} else {
-		if(current_app_grps) {
-			for(var i in current_app_grps) {
-				$('#APP_GRP_'+i).button( "option", "icons", {primary: 'ui-icon-star', secondary:''} );
-			}
-		}
-		$('input:text[name=Name]').val('');
-		$('input:text[name=Description]').val('');
-		$('#save').button({ disabled: false });
-		$('#delete').button({ disabled: true });
-		$('#clear').button({ disabled: true });
-	}
-	selectApps(appGrp);
-}
-
-/**
- * Select all applications
- * @param cb
- */
-function selectAllApps(cb) {
-	var select = $(cb).prop('checked');
-	$(".APP_CBX").each(function(){
-		$(this).prop('checked',select);
-	});
-}
-
-/**
- * 
- */
-function makeClearable() {
-	$('#clear').button({ disabled: false });
-	$("#save").button({ disabled: false });
-}
-
-var appgrpio = new DFRequest({
-	app: 'admin',
-	service: "System",
-	resource: '/app_group',
-	type: DFRequestType.POST,
-	success: function(json,request) {
-		if(!parseErrors(json,errorHandler)) {
-			if(request) {
-				switch(request.action) {
-					case DFRequestActions.UPDATE:
-						$("#appGrpList").dfSearchWidget('go');
-						updateLaunchPad("Do you want to update LaunchPad now with the changes?");
-						break;
-					case DFRequestActions.CREATE:
-						$("#appGrpList").dfSearchWidget('go');
-						updateLaunchPad("Do you want to update LaunchPad now with new Application Group?");
-						break;
-					case DFRequestActions.DELETE:
-						$("#appGrpList").dfSearchWidget('go');
-						updateLaunchPad("Do you want to update LaunchPad now without the Application Group?");
-						break;
-					default:
-						// maybe refresh?
-						break;
-				}
-			}
-		}
-		$("#save").button({ disabled: true });
-		$('#savingDialog').dialog('close');
-	}
-});
-
-function deleteAppGrp(confirmed) {
-	if(selectAppGrp) {
-		if(confirmed) {
-			appgrpio.deletes(selectAppGrp.id);
-			showAppGrp();
-		} else {
-			$( "#deleteAppGrp" ).html(selectAppGrp.name);
-			$( "#confirmDeleteAppGrpDialog" ).dialog('open');
-		}
-	}
-}
-
-/**
- * The Application IO object
- */
-var appio = new DFRequest({
-	app:  "admin",
-	service: "System",
-	resource: "/app",
-	success: function(json) {
-		if(!parseErrors(json,errorHandler)) {
-			current_apps = CommonUtilities.flattenResponse(json);
-			showApps(current_apps);
-		}
-	}
-});
-
-/**
- * 
- * @param apps
- */
-function showApps(apps) {
-	var con = $('#APP_ID_LIST');
-	con.html('');
-	for(var i in apps) {
-		con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].id+'" value="'+apps[i].id+'" data-groups="'+apps[i].app_group_ids+'" class="APP_CBX" onchange="makeClearable()"/>'+apps[i].label+'</div>');
-	}
-}
-
-/**
- * Select apps for this role...
- * @param role
- */
-function selectApps(grp) {
-	$(".APP_CBX").each(function(){
-		var tmp = $(this).data("groups");
-		var selected = false;
-		if(tmp && grp) {
-			var atmp = tmp.split(",");
-			for(var i in atmp) {
-				var value = $.trim(atmp[i]);
-				if(value) {
-					if(value == grp.id) {						
-						selected = true;
-						break;
-					}
-				}
-			}
-		}
-		$(this).prop('checked',selected);
-	});
-}
-
-/**
- * Select all applications
- * @param cb
- */
-function selectAllApps(cb) {
-	var select = $(cb).prop('checked');
-	$(".APP_CBX").each(function(){
-		$(this).prop('checked',select);
-	});
-}
-
-/**
- * 
- * @returns {String}
- */
-function getSelectAppIds() {
-	var str = "";
-	$(".APP_CBX").each(function(){
-		if($(this).prop('checked')) {
-			if(str.length == 0) str += ",";
-			str += $(this).val();
-			str += ",";
-		}
-	});
-	return str;
-}
-
-function getForm(grp) {
-	grp.name = $('input:text[name=Name]').val();
-	grp.description = $('input:text[name=Description]').val();
-	grp.app_ids = getSelectAppIds();
-}
+var current_apps = null;
 
 $(document).ready(function() {
-	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
-	makeAdminNav('appgroups');
-	appio.retrieve();
-	
-	
-	$("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function(){
-		deleteAppGrp();
-	});
-	
-	$("#save").button({icons: {primary: "ui-icon-disk"}}).click(function(){
-		if(selectAppGrp) {
-			getForm(selectAppGrp);
-			delete selectAppGrp.created_by_id;
-			delete selectAppGrp.created_date;
-			delete selectAppGrp.last_modified_by_id;
-			delete selectAppGrp.last_modified_date;
-			appgrpio.update(selectAppGrp);
-		} else {
-			var appGrp = {};
-			getForm(appGrp);
-			appgrpio.create(appGrp);
-			selectAppGrp = appGrp;
-		}
-	});
-	
-	$("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
-		showAppGrp();
-	});
-	
-	$( "#confirmDeleteAppGrpDialog" ).dialog({
+
+    // set actions for button activation
+    $(".ONKEYUP").keyup(makeClearable);
+    $(".ONCHANGE").change(makeClearable);
+
+    // highlight app groups tab
+    makeAdminNav('appgroups');
+
+    buildAppsList();
+
+    // new app group button
+    $("#new").button({icons: {primary: "ui-icon-document"}}).click(function() {
+
+        showAppGrp(null);
+    });
+
+    // save app group button
+    $("#save").button({icons: {primary: "ui-icon-disk"}}).click(function() {
+
+        try {
+            if(selectAppGrp) {
+                updateAppGrp();
+            } else {
+                createAppGrp();
+            }
+        } catch (e) {
+            alert(e);
+        }
+    });
+
+    // delete app group button
+    $("#delete").button({icons: {primary: "ui-icon-trash"}}).click(function() {
+
+        if (selectAppGrp) {
+            $( "#deleteAppGrp" ).html(selectAppGrp.label);
+            $( "#confirmDeleteAppGrpDialog" ).dialog('open');
+        }
+    });
+
+    // delete app group confirmation dialog
+    $( "#confirmDeleteAppGrpDialog" ).dialog({
 		resizable: false,
 		modal: true,
 		autoOpen: false,
 		buttons: {
 			Continue: function() {
-				deleteAppGrp(true);
+				deleteAppGrp();
 				$( this ).dialog( "close" );
 			},
 			Cancel: function() {
@@ -262,10 +61,10 @@ $(document).ready(function() {
 			}
 		}
 	});
-	
+
 	$("#AppType").buttonset();
 	$("#active").buttonset();
-	
+
 	$("#appGrpList").dfSearchWidget({
 		app: 'admin',
 		service: "System",
@@ -275,17 +74,260 @@ $(document).ready(function() {
 		renderer: function(container,apps) {
 			if(apps.length > 0) {
 				current_app_grps = apps;
-				renderApps(container,apps);
+				renderAppGrps(container,apps);
 				resizeUi();
-				selectCurrentRole();
+				selectCurrentAppGrp();
 				return apps.length;
 			} else {
-				renderApps(container,apps);
-				container.append('<i>End Of List</i>');
+                renderAppGrps(container,apps);
+				container.append('<i>No App groups...</i>');
 				resizeUi();
-				showAppGrp();
+				showAppGrp(null);
 				return 0;
 			}
 		}
 	});
 });
+
+//
+// create app group
+//
+function createAppGrp() {
+
+    var appGrp = {};
+
+    // get data from form
+    getAppGrpFormData(appGrp);
+
+    selectAppGrp = appGrp;
+
+    // create
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url:'http://' + location.host + '/rest/system/app_group?app_name=admin',
+        data:CommonUtilities.jsonRecords(selectAppGrp),
+        cache:false,
+        processData: false,
+        success:function (response) {
+            if(!parseErrors(response, errorHandler)) {
+                $("#appGrpList").dfSearchWidget('go');
+            }
+            $("#save").button({ disabled: true });
+            $('#savingDialog').dialog('close');
+        },
+        error:function (response) {
+
+        }
+    });
+}
+
+//
+// update app group
+//
+function updateAppGrp() {
+
+    // get data from form
+    getAppGrpFormData(selectAppGrp);
+
+    // remove non-updateable fields
+    delete selectAppGrp.created_by_id;
+    delete selectAppGrp.created_date;
+    delete selectAppGrp.last_modified_by_id;
+    delete selectAppGrp.last_modified_date;
+
+    // update
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url:'http://' + location.host + '/rest/system/app_group?app_name=admin&method=MERGE',
+        data:CommonUtilities.jsonRecords(selectAppGrp),
+        cache:false,
+        processData: false,
+        success:function (response) {
+            if(!parseErrors(response, errorHandler)) {
+                $("#appGrpList").dfSearchWidget('go');
+            }
+            $("#save").button({ disabled: true });
+            $('#savingDialog').dialog('close');
+        },
+        error:function (response) {
+
+        }
+    });
+}
+
+//
+// Delete app group
+//
+function deleteAppGrp() {
+
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url:'http://' + location.host + '/rest/system/app_group/' + selectAppGrp.id + '?app_name=admin&method=DELETE',
+        cache:false,
+        processData: false,
+        success:function (response) {
+            if(!parseErrors(response, errorHandler)) {
+                $("#appGrpList").dfSearchWidget('go');
+            }
+            $("#save").button({ disabled: true });
+            $('#savingDialog').dialog('close');
+        },
+        error:function (response) {
+
+        }
+    });
+}
+
+function makeClearable() {
+
+    $('#new').button({ disabled: false });
+    $("#save").button({ disabled: false });
+}
+
+//
+// Build the list of applications to select from.
+//
+function buildAppsList() {
+
+    $.ajax({
+        dataType:'json',
+        url:'http://' + location.host + '/rest/system/app',
+        data:'app_name=admin&method=GET',
+        cache:false,
+        success:function (response) {
+            if(!parseErrors(response)) {
+                current_apps = CommonUtilities.flattenResponse(response);
+                showApps(current_apps);
+            }
+        },
+        error:function (response) {
+
+        }
+    });
+}
+
+function makeAppGrpButton(id,name,container) {
+
+    container.append($('<button id="APP_GRP_'+id+'" class="app_grp_button selector_btn cW100"><span id="DFAppGrpLabel_'+id+'">'+name+'</span></button>'));
+}
+
+function renderAppGrps(container,appGrp) {
+
+    for(var i = 0; i < appGrp.length; i++) {
+        if(!appGrp[i]) continue;
+        makeAppGrpButton(i,appGrp[i].name,container);
+    }
+    $('.app_grp_button').button({icons: {primary: "ui-icon-star"}}).click(function(){
+        showAppGrp(null); // clear app group selection
+        $(this).button( "option", "icons", {primary: 'ui-icon-seek-next', secondary:'ui-icon-seek-next'} );
+        showAppGrp(current_app_grps[parseInt($(this).attr('id').substring('APP_GRP_'.length))]);
+    });
+}
+
+function selectCurrentAppGrp() {
+
+    if(selectAppGrp && current_app_grps) {
+        for(var i in current_app_grps) {
+            if(current_app_grps[i].name == selectAppGrp.name) {
+                $('#APP_GRP_'+i).button( "option", "icons", {primary: "ui-icon-seek-next", secondary:"ui-icon-seek-next"} );
+                showAppGrp(current_app_grps[i]);
+                return;
+            }
+        }
+    } else {
+        showAppGrp(null);
+    }
+}
+
+function showAppGrp(appGrp) {
+
+    selectAppGrp = appGrp;
+    if(appGrp) {
+        $('input:text[name=Name]').val(appGrp.name);
+        $('input:text[name=Description]').val(appGrp.description);
+        $("#save").button({ disabled: true });
+        $('#delete').button({ disabled: false });
+        $('#new').button({ disabled: false });
+    } else {
+        if(current_app_grps) {
+            for(var i in current_app_grps) {
+                $('#APP_GRP_'+i).button( "option", "icons", {primary: 'ui-icon-star', secondary:''} );
+            }
+        }
+        $('input:text[name=Name]').val('');
+        $('input:text[name=Description]').val('');
+        $('#save').button({ disabled: false });
+        $('#delete').button({ disabled: true });
+        $('#new').button({ disabled: true });
+    }
+    selectApps(appGrp);
+}
+
+function selectAllApps(cb) {
+
+    var select = $(cb).prop('checked');
+    $(".APP_CBX").each(function(){
+        $(this).prop('checked',select);
+    });
+}
+
+function showApps(apps) {
+
+    var con = $('#APP_ID_LIST');
+    con.html('');
+    for(var i in apps) {
+        con.append('<div><input type="checkbox" name="APP_ID_'+apps[i].id+'" value="'+apps[i].id+'" data-groups="'+apps[i].app_group_ids+'" class="APP_CBX" onchange="makeClearable()"/>'+apps[i].label+'</div>');
+    }
+}
+
+function selectApps(grp) {
+
+    $(".APP_CBX").each(function(){
+        var tmp = $(this).data("groups");
+        var selected = false;
+        if(tmp && grp) {
+            var atmp = tmp.split(",");
+            for(var i in atmp) {
+                var value = $.trim(atmp[i]);
+                if(value) {
+                    if(value == grp.id) {
+                        selected = true;
+                        break;
+                    }
+                }
+            }
+        }
+        $(this).prop('checked',selected);
+    });
+}
+
+function selectAllApps(cb) {
+
+    var select = $(cb).prop('checked');
+    $(".APP_CBX").each(function(){
+        $(this).prop('checked',select);
+    });
+}
+
+function getSelectAppIds() {
+
+    var str = "";
+    $(".APP_CBX").each(function(){
+        if($(this).prop('checked')) {
+            if(str.length == 0) str += ",";
+            str += $(this).val();
+            str += ",";
+        }
+    });
+    return str;
+}
+
+function getAppGrpFormData(grp) {
+
+    grp.name = $('input:text[name=Name]').val();
+    grp.description = $('input:text[name=Description]').val();
+    grp.app_ids = getSelectAppIds();
+}
