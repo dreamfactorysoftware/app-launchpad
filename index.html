@@ -1,805 +1,191 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-		<link rel="shortcut icon" href="favicon.ico"/>
-		<title>LaunchPad v0.5.10</title>
-		
-		<!-- Standard CSS -->
-		<link rel="stylesheet" href="themes/df-default/jquery-ui-1.9.1.custom.css" type="text/css" />
-		<link rel="stylesheet" href="css/layout.css" type="text/css" />
-		
-		<!-- jQuery Imports -->
-		<script src="jQuery/jquery-1.8.2.min.js"></script>
-		<script src="jQuery/jquery-ui-1.9.1.custom.min.js"></script>
-		<script src="jQuery/plugins/jquery.blockUI.js"></script>
-		
-		<!-- DF Imports -->
-		<script src="dfcore/dfio.js"></script>
-		<script src="dfcore/dferr.js"></script>
-		
-		<!-- LaunchPad JS -->
-		<script src="js/base64/base64.js"></script>
-		<style>
-.IconError {
-    background-image: url('favicon.ico') !important;
-}
-		</style>
-		<script>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <title>LaunchPad v0.5.10</title>
 
-/**
- * Used to reset page when an invalid session is detected
- * or refresh page when changes have been made to LaunchPad
- * data. 
- * 
- */
-function relogin() {
-	window.location = window.location;
-}
+    <!-- Standard CSS -->
+    <link rel="stylesheet" href="css/custom-theme/jquery-ui-1.8.16.custom.css" type="text/css"/>
+    <link rel="stylesheet" href="css/layout.css" type="text/css"/>
+    <link rel="stylesheet" href="/lib/web-core/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css"/>
 
-var appGrpio = null;
+    <!-- jQuery Imports -->
+    <script src="jQuery/jquery-1.8.2.min.js"></script>
+    <script src="jQuery/jquery-ui-1.9.1.custom.min.js"></script>
+    <!-- replace Block with bootstrap modal -->
+    <script src="jQuery/plugins/jquery.blockUI.js"></script>
 
-function refresh() {
-	if(appGrpio) appGrpio.retrieve({order:"name"});
-}
+    <!-- DF Imports REMOVE THESE-->
+    <script src="dfcore/dfio.js"></script>
+    <script src="dfcore/dferr.js"></script>
 
-$(document).ready(function() {
-	
-	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
-	
-	var User = null;
-	var AppGrps = null;
-	var Apps = null;
-	
-	var tab_counter = 0;
-	var tab_content = '';
-	var $tabs = null;
-	
-	var max_chars_image = 13;
-	var max_chars_button = 20;
-	
-	var singleApp = false;
-
-	function resizeUi() {
-		var o_size = $(window).height()-(($(".dfHeader").outerHeight()+$(".dfFooter").outerHeight())+40);
-		$("#appSelector").css('height', o_size);
-		$(".ui-tabs-panel").css('height', o_size-30); 
-	};
-	
-	var resizeTimer = null;
-	
-	$(window).bind('resize', function() {
-	    if (resizeTimer) clearTimeout(resizeTimer);
-	    resizeTimer = setTimeout(resizeUi, 100);
-	});
-	
-	function relogin() {
-		showContent(false);
-		showSignInControls(true);
-		doSignIn();
-	}
-	
-	function refresh() {
-		appGrpio.retrieve({order:"Name"});
-	}
-	
-	function doSignIn() {
-		$( "#loginDialog" ).dialog("open");
-	}
-	
-	function showSignInControls(show) {
-		if(show) {
-			$('#dfControl1').html('Please [<a id="dfSignInLink" class="dfPointer dfTxtHeader3">Log In</a>]');
-			$( "#dfSignInLink" ).click(function() {$( "#loginDialog" ).dialog("open");});
-		} else {
-			$('#dfControl1').html('Welcome! <span class="dfTxtHeader3">'+User.full_name+'</span> [<a id="dfSignOutLink" class="dfPointer" title="End Your Session Now"> Log Out </a>]');
-			$('#dfControl1').append('<br/>');
-			$('#dfControl1').append('[&nbsp;<a id="dfProfileLnk" class="dfPointer" title="Change Your Profile">Profile</a>&nbsp;|&nbsp;<a id="dfPasswordLnk" class="dfPointer" title="Change Your Password">Password</a>&nbsp;]');
-			$( "#dfSignOutLink" ).click(function() {$( "#logoffDialog" ).dialog("open");});
-			$( "#dfProfileLnk" ).click(function() {
-				if(User) {
-					$("#fullname").val(User.full_name);
-					$("#firstname").val(User.first_name);
-					$("#lastname").val(User.last_name);
-					$("#email").val(User.email);
-					$("#phone").val(User.phone);
-					$("#changeProfileDialog").dialog("open");
-				}
-			});
-			$( "#dfPasswordLnk" ).click(function() {
-				$("#changePasswordDialog").dialog("open");
-			});
-		}
-	}
-	
-	function performSignIn() {
-		
-		if($('#UserName').val() && $('#Password').val()) {
-			$( "#loginDialog" ).dialog("close");
-			$('#dfControl1').html('<i>Logging In, Please Wait...</i>');
-			userio.post(JSON.stringify({UserName: $('#UserName').val(),Password: $('#Password').val()}), null, "/login");
-		} else {
-			$("#loginErrorMessage").html('<b>You must enter UserName and Password to continue</b><br/><br/>');
-		}
-		
-	}
-	
-	function doSignOut() {
-		$("#logoffDialog").dialog("open");
-	}
-	
-	function reportError(errorMsg,data) {
-		var str = errorMsg.toString();
-		if(str.toLowerCase().indexOf("error logging in") != -1 || str.toLowerCase().indexOf("error generating session") != -1 || str.toLowerCase().indexOf("invalidparam") != -1) {
-			$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
-			relogin();
-		} else if(str.toUpperCase().indexOf("[INVALIDSESSION]") != -1) {
-			// is this a ticket that is expired?
-			$("#changePasswordDialog").dialog("close");
-			$("#changeProfileDialog").dialog("close");
-			relogin();
-		} else {
-			// write to both areas just in case we are not where we think we are...
-			$("#changePasswordErrorMessage").html('<b>'+str+'</b><br/><br/>');
-			$("#loginErrorMessage").html('<b>'+str+'</b><br/><br/>');
-		}
-	}
-	
-	var appio = new DFRequest({
-		service: 'System',
-		resource: '/app',
-		success: function(json,request) {
-			if(!parseErrors(json,reportError)) {
-				Apps = CommonUtilities.flattenResponse(json);
-				if(Apps.length > 1) {
-					initTabs();
-					addDefaultTab();
-				} else {
-					showApp(Apps[0]);
-				}
-			}
-		}
-	});
-	
-	appGrpio = new DFRequest({
-		service: 'System',
-		resource: '/app_group',
-		success: function(json,request) {
-			if(!parseErrors(json,reportError)) {
-				AppGrps = CommonUtilities.flattenResponse(json);
-				appio.retrieve({order:"label"});
-			}
-		}
-	});
-	
-	function getAppsFor(appGrpId) {
-		var tmp = [];
-		for(var i in Apps) {
-			if(Apps[i].app_group_ids && Apps[i].app_group_ids.length>0&& Apps[i].app_group_ids.indexOf(","+appGrpId+",") != -1) {
-				tmp[tmp.length] = Apps[i];
-			}
-		}
-		return tmp;
-	}
-	
-	function getAppById(id) {
-		for(var i in Apps) {
-			if(Apps[i].id == id) {
-				return Apps[i];
-			}
-		}
-	}
-	
-	var userio = new DFRequest({
-		service: 'User',
-		resource: '/session',
-		success: function(json,request) {
-			if(!parseErrors(json,reportError)) {
-				if(request) {
-					switch(request.action) {
-						case DFRequestActions.UPDATE:
-							if(request.url.indexOf("/changepassword") != -1) {
-								$("#changePasswordDialog").dialog("close");
-							}
-							break;
-						default:
-							if(json.username) {
-								User = json;
-								appGrpio.retrieve({order:"name"});
-								showSignInControls(false);
-								$('#Password').val("");
-							} else if(json.status) {
-								$("#changeProfileDialog").dialog("close");
-								$("#changePasswordDialog").dialog("close");
-							} else {
-								showSignInControls(true);
-								doSignIn();
-							}
-							break;
-					}
-				}
-			}
-		}
-	});
-	
-	var tabOptions = {
-		tabTemplate: "<li><span class='cRight dfPointer ui-icon ui-icon-close'>Remove Tab</span><a href='#{href}'>#{label}</a></li>",
-		add: function( event, ui ) {
-			if(tab_content) $( ui.panel ).append(tab_content);
-		}
-	};
-	
-	function showApp(app) {
-		singleApp = true;
-		getCurrentTicket({
-			success: function(ticket) {
-				var url = app.url;
-				if(!(app.is_url_external)) {
-					if(url.indexOf('/') > 0 || url.indexOf('/') == -1) {
-						url = '/'+url;
-					}
-					url = getCurrentServer()+'/app/'+app.name+url;
-				}
-				if(url.indexOf('?') != -1) {
-					if(url.substr(-1) === "&" ) {
-						url += 'svr='+escape(getCurrentServer())+'&';
-					} else {
-						url += '&svr='+escape(getCurrentServer())+'&';
-					}
-				} else {
-					url += '?svr='+escape(getCurrentServer())+'&';
-				}
-				url += 'app='+escape(app.name)+'&ticket='+escape(ticket)+'&';
-				$('#dfContent').html('<div id="appSelector" class="cW100"><iframe webkitallowfullscreen="true" mozallowfullscreen="true" src="'+url+'" width="100%" height="100%" id="SINGLE_APP" border="0" frameborder="0"></iframe></div>');
-				resizeUi();
-			}
-		});
-	}
-	
-	function initTabs() {
-		$('#dfContent').html('<div id="leftControl" class="cLeft"><div id="navigation"></div></div><div id="rightContent"><div class="cLeft cW100"><div id="appSelector" class="cW100"><ul></ul></div></div></div>');
-		$tabs = $( "#appSelector").tabs(tabOptions);
-		$('#leftControl').html('<div id="navigation"></div>');
-		setup();
-	}
-	
-	function createDisplay(id,href,longdesc) {
-		var tmp = '<iframe webkitallowfullscreen="true" mozallowfullscreen="true" class="displayFrame" frameborder="0" marginheight="0" marginwidth="0" ';
-		if(id) tmp += 'name="'+id+'"';
-		if(href) tmp += 'src="'+href+'" ';
-		if(longdesc) tmp += 'longdesc="'+longdesc+'" ';
-		tmp += '></iframe>';
-		return tmp;
-	}
-	
-	function addTabFunctions(tab) {
-		$("span",tab).unbind('click');
-		$("span",tab).click(function() {
-			var $parent = $( this ).parent();
-			var index = $( "li", $tabs ).index( $parent );
-			$parent.find('a').each(function(){
-				var id = parseInt($(this).attr('href').substring('#tabs-'.length));
-				$('.btn'+id).button( "option", "icons", {secondary:'ui-icon-play'} );
-			});
-			$tabs.tabs( "remove", index );
-			if($( "#appSelector span.ui-icon-close" ).length < 1) addDefaultTab();
-		});
-	}
-	
-	
-	function addDefaultTab() {
-		tab_content = createDisplay('DEFAULT_TAB','defaulttab.html','Default Tab');;
-		addTabFunctions($tabs.tabs( "add", "#tabs-DEFAULT",'Welcome!'));
-		resizeUi();
-	}
-	
-	function clearTabs() {
-		$('#rightContent').load('<div class="cLeft cW100"><div id="appSelector" class="cW100"><ul></ul></div></div>');
-	}
-	
-	function destroySpace() {
-		$('#dfContent').load("splash.html");
-	}
-	
-	function showContent(sw) {
-		if(sw) {
-			$('#leftControl').fadeIn(250);
-			$('#rightContent').fadeIn(250);
-			$( "#leftControl" ).show( 'fade', 1500 );
-			$( "#rightContent" ).show( 'fade', 3500 );
-		} else {
-			$( "#leftControl" ).hide( 'fade', 2000 );
-			$( "#rightContent" ).hide( 'fade', 2000 ,function(){destroySpace();});
-		}
-	}
-	
-	function getTicket() {
-		return User.ticket;
-	}
-	
-	function setTicket(ticket) {
-		User.ticket = ticket;
-	}
-	
-	function getTicketExpires() {
-		return User.ticket_expiry;
-	}
-	
-	function hasTicketExpired() {
-		var future = new Number(User.ticket_expiry*1000);
-		var now = new Date().getTime();
-		if(future-now >= 0) return false;
-		return true;
-	}
-	
-	function refreshTicket(opts) {
-		var callback = opts.success;
-		var errCallback = opts.error;
-		new DFRequest({
-			service: 'User',
-			resource: '/ticket',
-			success: function(json) {
-				var err = checkFailure(json);
-				if(err) {
-					doSignIn();
-				} else {
-					User.ticket = json.ticket;
-					User.ticket_expiry = json.ticket_expiry;
-					if(callback) callback(json.ticket);
-				}
-			},
-			error: function (msg) {
-				if(errCallback) {
-					errCallback(msg);
-				} else {
-					throw(msg);
-				}
-			}
-		}).retrieve();
-	}
-	
-	function getCurrentTicket(opts) {
-		if(hasTicketExpired()) {
-			refreshTicket(opts);
-		} else {
-			opts.success(getTicket());
-		}
-	}
-	
-	function addTab(app) {
-		getCurrentTicket({
-			success: function(ticket) {
-				var url = app.url;
-				if(!(app.is_url_external)) {
-					if(url && (url.indexOf('/') > 0 || url.indexOf('/') == -1)) {
-						url = '/'+url;
-					}
-					url = getCurrentServer()+'/app/'+app.name+url;
-				}
-				if(url.indexOf('?') != -1) {
-					if(url.substr(-1) === "&" ) {
-						url += 'svr='+escape(getCurrentServer())+'&';
-					} else {
-						url += '&svr='+escape(getCurrentServer())+'&';
-					}
-				} else {
-					url += '?svr='+escape(getCurrentServer())+'&';
-				}
-				url += 'app='+escape(app.name)+'&ticket='+escape(ticket)+'&';
-				tab_content = createDisplay("disp" + app.id,url,app.description);
-				addTabFunctions($tabs.tabs( "add", "#tabs-" + app.id, app.label ));
-				$tabs.tabs( "option", "selected", $('#appSelector ul a[href="#tabs-' + app.id+'"]').parent().index() );
-				resizeUi();
-			},
-			error: function(msg,faultString) {
-				$('.btn'+app.id).button( "option", "icons", {secondary:'ui-icon-play'} );
-				$().dfui('sessionExpired',faultString);
-			}
-		});
-	}
-	
-	function makeNavButton(id,icon,label) {
-		var tmpBtn = $('<button class="cTM1 appButton btn'+id+'" id="app'+id+'"></button>');
-		if(label) {
-			if(label.length <= max_chars_image) tmpBtn.append(icon);
-			if(label.length > max_chars_button) label = label.substring(0,max_chars_button);
-			label = label.replace(/ /g,'&nbsp;');
-			tmpBtn.append(label);
-		} else {
-			tmpBtn.append(icon);
-			tmpBtn.append("No Label");
-		}
-		return tmpBtn;
-	}
-	
-	function icon(app) {
-		var ico = '';
-		if(app.is_url_external) {
-			var appUrl = app.url;
-			var tmp = appUrl.substring(appUrl.lastIndexOf('//')+2);
-			if(tmp.indexOf('/') != -1) {
-				tmp = tmp.substring(0,tmp.lastIndexOf('/'));
-			}
-			tmp = appUrl.substring(0,appUrl.lastIndexOf('//')+2)+tmp;
-			ico = tmp+'/favicon.ico';
-		} else {
-			ico = getCurrentServer()+'/app/'+app.name+'/favicon.ico';
-		}
-		
-		return '';//'<img src="'+ico+'" onerror="" class="cLeft" width="16" height="16" border="0"/>';
-	}
-	
-	function setup() {
-		var display = $("#navigation");
-		for(var i in AppGrps) {
-			display.append('<h3><a href="#">'+AppGrps[i].name+'</a></h3>');
-			var appsList = $('<div></div>');
-			
-			var apps = getAppsFor( AppGrps[i].id);
-			
-			for(var j in apps) {
-				if(apps[j].name == "LaunchPad") continue;
-				appsList.append(makeNavButton(apps[j].id,icon(apps[j]),apps[j].label));
-			}
-			
-			appsList.append('<br/>');
-			display.append(appsList);
-			
-		}
-		
-		/* all apps group*/
-		display.append('<h3><a href="#">All Applications</a></h3>');
-		var appsList = $('<div></div>');
-		for(var j in Apps) {
-			if(Apps[j].name == "LaunchPad") continue;
-			appsList.append(makeNavButton(Apps[j].id,icon(Apps[j]),Apps[j].label));
-		}
-		appsList.append('<br/>');
-		display.append(appsList);
-		
-		display.accordion({ autoHeight: false });
-		
-		$( ".appButton" ).button({
-			text: true,
-			icons: {
-				secondary: 'ui-icon-play'
-			}
-		}).click(function() {
-			var appId = $(this).attr('id');
-			
-			if(appId && User) {
-				
-				var id = appId.substring(3);
-				
-				var app = getAppById(id);
-				
-				if(app) {
-					if($(this).button( "option", "icons" ).secondary == 'ui-icon-play') {
-						$('.btn'+id).button( "option", "icons", {secondary:'ui-icon-seek-next'} );
-						addTab(app);
-					}
-					var xindex = 0;
-					$('[role*="tab"]').each(function(){
-						var $this = $(this);
-						var tx = $this.attr("aria-controls");
-						if(tx && tx.indexOf("tabs-") == 0) {
-							if(tx == "tabs-"+app.id) {
-								$('#appSelector').tabs( "option", "active", xindex );
-							} else {
-								xindex++;
-							}
-						}
-					});
-				}
-			}
-		});
-	}
-
-	$('#UserName').keydown(function (e){
-		if(e.keyCode == 13){
-			$('#Password').focus();
-		}
-	});
-
-	$('#Password').keydown(function (e){
-		if(e.keyCode == 13){
-			performSignIn();
-		}
-	});
-	
-	$('#loginDialog').dialog({
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		buttons: {
-			"Sign In": function() {
-				performSignIn();
-			},
-			Cancel: function() {
-				window.history.back();
-			}
-		}
-	});
-	
-	$('#logoffDialog').dialog({
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		buttons: {
-			"Log Off": function() {
-				User = null;
-				userio.post(null,null,"/logout");
-				showSignInControls(true);
-				$(this).dialog( "close" );
-				showContent(false);
-			},
-			Cancel: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
-	
-	$("#errorDialog").dialog({
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		closeOnEscape: false,
-		buttons: {	}
-	});
-	
-	$("#changePasswordDialog").dialog({
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		closeOnEscape: false,
-		beforeClose: function( event, ui ) {
-			$("#OldPassword").val("");
-			$("#NPassword").val("");
-			$("#VPassword").val("");
-			$("#NPassword").removeClass("RedBorder");
-			$("#NPassword").removeClass("GreenBorder");
-			$("#VPassword").removeClass("RedBorder");
-			$("#VPassword").removeClass("GreenBorder");
-		},
-		buttons: {
-			"Change Password": function() {
-				if($("#NPassword").val()==$("#VPassword").val()) {
-					var data = {
-						oldpassword: $("#OPassword").val(),
-						newpassword: $("#NPassword").val()
-					};
-					userio.post(JSON.stringify(data),null,"/changepassword");
-				} else {
-					$("#changePasswordErrorMessage").html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
-				}
-			},
-			Cancel: function() {
-				$("#changePasswordDialog").dialog("close");
-			}
-		}
-	});
-	
-	$("#changeProfileDialog").dialog({
-		resizable: false,
-		modal: true,
-		autoOpen: false,
-		closeOnEscape: false,
-		beforeClose: function( event, ui ) {
-			
-		},
-		buttons: {
-			"Change Profile": function() {
-				User.full_name = $("#fullname").val();
-				User.first_name = $("#firstname").val();
-				User.last_name = $("#lastname").val();
-				User.email = $("#email").val();
-				User.phone = $("#phone").val();
-				
-				delete User.id;
-				delete User.username;
-				delete User.password;
-				delete User.is_sys_admin;
-				delete User.confirm_code;
-				delete User.created_date;
-				delete User.last_modified_date;
-				delete User.created_by_id;
-				delete User.last_modified_by_id;
-				delete User.security_question;
-				delete User.security_answer;
-				delete User.role;
-				delete User.ticket;
-				delete User.ticket_expiry;
-				delete User.session_id;
-				
-				userio.post(JSON.stringify(User),null,"/changeprofile");
-				
-			},
-			Cancel: function() {
-				$("#changeProfileDialog").dialog("close");
-			}
-		}
-	});
-	
-	function doPasswordVerify() {
-		var value = $("#NPassword").val();
-		var verify = $("#VPassword").val();
-		if(value.length > 0 && verify.length > 0) {
-			if(value == verify) {
-				$("#NPassword").removeClass("RedBorder");
-				$("#NPassword").addClass("GreenBorder");
-				$("#VPassword").removeClass("RedBorder");
-				$("#VPassword").addClass("GreenBorder");
-			} else {
-				$("#NPassword").removeClass("GreenBorder");
-				$("#NPassword").addClass("RedBorder");
-				$("#VPassword").removeClass("GreenBorder");
-				$("#VPassword").addClass("RedBorder");
-			}
-		} else {
-			$("#NPassword").removeClass("RedBorder");
-			$("#NPassword").removeClass("GreenBorder");
-			$("#VPassword").removeClass("RedBorder");
-			$("#VPassword").removeClass("GreenBorder");
-		}
-	}
-	
-	$("#NPassword").keyup(doPasswordVerify);
-	$("#VPassword").keyup(doPasswordVerify);
-	
-	$( "#dfSignInLink" ).click(function() {
-		doSignIn();
-	});
-	
-	destroySpace();
-	userio.retrieve();
-	
-});
+    <!-- LaunchPad JS *** USE ENCRYPTION *** -->
+    <script src="js/base64/base64.js"></script>
 
 
-		</script>
-		
-		<!-- Initialize the system and start the application -->
-	</head>
-	<body>
-		<div id="main_content">
-			<div class="cTxtLeft dfHeader ui-corner-all" id="status">
-				<div id="LOGO" class="cLeft cW50"><img src="gfx/logos/logo.png" border="0"/></div>
-				<div class="cLeft cW50 cTxtRight" id="dfControl1">
-					Please [<a id="dfSignInLink" class="dfPointer dfTxtHeader3">Log In</a>] To Continue!
-				</div>
-				<div class="cLeft cW50 cTxtRight" id="dfControl2"></div>
-				<div class="cLeft cW50 cTxtRight" id="dfControl3"></div>
-				<div class="cLeft cW50 cTxtRight" id="dfControl4"></div>
-				<div class="cClear"><!-- --></div>
-			</div>
-			<div class="cTxtLeft" id="dfContent"></div>
-			<div class="cClear"><!-- --></div>
-			<div class="dfTxtSmallBold cP1 dfFooter" align="center">
-				&copy;<script>document.write(new Date().getFullYear());</script> DreamFactory&trade;, All Rights Reserved.
-			</div>
-		</div>
-		
-		<div id="loginDialog" title="Please Log In..." class="cTxtLeft">
-			<div>
-				<div id="loginErrorMessage">Please enter your User Name and Password below to sign in;</div>
-				<div class="cM1">
-					<div class="cLeft cW33 cTxtRight dfTxtBold">
-						<span class="cM1">Username:&nbsp;</span>
-					</div>
-					<div class="cLeft cW66">
-						<input type="text" class="cW98" name="UserName" id="UserName" value=""/>
-					</div>
-					<div class="cClear"><!-- --></div>
-				</div>
-				<div class="cM1">
-					<div class="cLeft cW33 cTxtRight dfTxtBold">
-						<span class="cM1">Password:&nbsp;</span>
-					</div>
-					<div class="cLeft cW66">
-						<input type="password" class="cW98" name="Password" id="Password" value=""/>
-					</div>
-					<div class="cClear"><!-- --></div>
-				</div>
-			</div>
-		</div>
-		
-		<div id="logoffDialog" title="Log Out" class="cTxtLeft">
-			<p>
-				Are you sure you want to log out of the application? All unsaved work will
-				be lost!
-			</p>
-		</div>
-		
-		<div id="changePasswordDialog" title="Change Password" class="cTxtLeft">
-			<div>
-				<div id="changePasswordErrorMessage"></div>
-				<div class="cM1">
-					<div class="cLeft cW33 cTxtRight dfTxtBold">
-						<span class="cM1">Old&nbsp;Password:&nbsp;</span>
-					</div>
-					<div class="cLeft cW66">
-						<input type="password" class=" cW98" id="OPassword" value=""/>
-					</div>
-					<div class="cClear"><!-- --></div>
-				</div>
-				<div class="cM1">
-					<div class="cLeft cW33 cTxtRight dfTxtBold">
-						<span class="cM1">New&nbsp;Password:&nbsp;</span>
-					</div>
-					<div class="cLeft cW66">
-						<input type="password" class="cW98" id="NPassword" value=""/>
-					</div>
-					<div class="cClear"><!-- --></div>
-				</div>
-				<div class="cM1">
-					<div class="cLeft cW33 cTxtRight dfTxtBold">
-						<span class="cM1">Verify:&nbsp;</span>
-					</div>
-					<div class="cLeft cW66">
-						<input type="password" class="cW98" id="VPassword" value=""/>
-					</div>
-					<div class="cClear"><!-- --></div>
-				</div>
-			</div>
-		</div>
-		
-		<div id="changeProfileDialog" title="User Profile" class="cTxtLeft">
-			<div>
-				<div id="changeProfileErrorMessage"></div>
-				
-				<div class="cM1">
-					<div class="cLeft cW25 formLabel" align="right">
-						<strong>Full Name:&nbsp;</strong>
-					</div>
-					<div class="cLeft cW75">
-						<input type="text" class="cW98 ONKEYUP" id="fullname" value=""/>
-					</div>
-					<div class="cClear"><!--  --></div>
-				</div>
-				
-				<div class="cM1">
-					<div class="cLeft cW25 formLabel" align="right">
-						<strong>First Name:&nbsp;</strong>
-					</div>
-					<div class="cLeft cW75">
-						<input type="text" class="cW98 ONKEYUP" id="firstname" value=""/>
-					</div>
-					<div class="cClear"><!--  --></div>
-				</div>
-				
-				<div class="cM1">
-					<div class="cLeft cW25 formLabel" align="right">
-						<strong>Last Name:&nbsp;</strong>
-					</div>
-					<div class="cLeft cW75">
-						<input type="text" class="cW98 ONKEYUP" id="lastname" value=""/>
-					</div>
-					<div class="cClear"><!--  --></div>
-				</div>
-				
-				<div class="cM1">
-					<div class="cLeft cW25 formLabel" align="right">
-						<strong>Email:&nbsp;</strong>
-					</div>
-					<div class="cLeft cW75">
-						<input type="text" class="cW98 ONKEYUP" id="email" value=""/>
-					</div>
-					<div class="cClear"><!--  --></div>
-				</div>
-				
-				<div class="cM1">
-					<div class="cLeft cW25 formLabel" align="right">
-						<strong>Telephone:&nbsp;</strong>
-					</div>
-					<div class="cLeft cW75">
-						<input type="text" class="cW98 ONKEYUP" id="phone" value=""/>
-					</div>
-					<div class="cClear"><!--  --></div>
-				</div>
-				
-			</div>
-		</div>
-		
-	</body>
+    <!-- Initialize the system and start the application -->
+</head>
+<body style="margin:10px;">
+<div id="error-container" class="alert alert-error"></div>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <div class="pull-left df-logo"><img src="img/logo.png"></div>
+            <div class="pull-right" id="dfControl1">
+                Please [<a id="dfSignInLink" class="dfPointer dfTxtHeader3">Log In</a>] To Continue!
+            </div>
+            <div id="app-list"></div>
+
+            <!-- Everything you want hidden at 940px or less, place within here -->
+            <div class="nav-collapse collapse">
+                <!-- .nav, .navbar-search, .navbar-form, etc -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="app-container">
+</div>
+
+
+<div id="loginDialog" title="Please Log In..." class="cTxtLeft">
+    <div>
+        <div id="loginErrorMessage">Please enter your User Name and Password below to sign in;</div>
+        <div class="cM1">
+            <div class="cLeft cW33 cTxtRight dfTxtBold">
+                <span class="cM1">Username:&nbsp;</span>
+            </div>
+            <div class="cLeft cW66">
+                <input type="text" class="cW98" name="UserName" id="UserName" value=""/>
+            </div>
+            <div class="cClear"><!-- --></div>
+        </div>
+        <div class="cM1">
+            <div class="cLeft cW33 cTxtRight dfTxtBold">
+                <span class="cM1">Password:&nbsp;</span>
+            </div>
+            <div class="cLeft cW66">
+                <input type="password" class="cW98" name="Password" id="Password" value=""/>
+            </div>
+            <div class="cClear"><!-- --></div>
+        </div>
+    </div>
+</div>
+
+<div id="logoffDialog" title="Log Out" class="cTxtLeft">
+    <p>
+        Are you sure you want to log out of the application? All unsaved work will
+        be lost!
+    </p>
+</div>
+
+<div id="changePasswordDialog" title="Change Password" class="cTxtLeft">
+    <div>
+        <div id="changePasswordErrorMessage"></div>
+        <div class="cM1">
+            <div class="cLeft cW33 cTxtRight dfTxtBold">
+                <span class="cM1">Old&nbsp;Password:&nbsp;</span>
+            </div>
+            <div class="cLeft cW66">
+                <input type="password" class=" cW98" id="OPassword" value=""/>
+            </div>
+            <div class="cClear"><!-- --></div>
+        </div>
+        <div class="cM1">
+            <div class="cLeft cW33 cTxtRight dfTxtBold">
+                <span class="cM1">New&nbsp;Password:&nbsp;</span>
+            </div>
+            <div class="cLeft cW66">
+                <input type="password" class="cW98" id="NPassword" value=""/>
+            </div>
+            <div class="cClear"><!-- --></div>
+        </div>
+        <div class="cM1">
+            <div class="cLeft cW33 cTxtRight dfTxtBold">
+                <span class="cM1">Verify:&nbsp;</span>
+            </div>
+            <div class="cLeft cW66">
+                <input type="password" class="cW98" id="VPassword" value=""/>
+            </div>
+            <div class="cClear"><!-- --></div>
+        </div>
+    </div>
+</div>
+
+<div id="changeProfileDialog" title="User Profile" class="cTxtLeft">
+    <div>
+        <div id="changeProfileErrorMessage"></div>
+
+        <div class="cM1">
+            <div class="cLeft cW25 formLabel" align="right">
+                <strong>Full Name:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW75">
+                <input type="text" class="cW98 ONKEYUP" id="fullname" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+        <div class="cM1">
+            <div class="cLeft cW25 formLabel" align="right">
+                <strong>First Name:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW75">
+                <input type="text" class="cW98 ONKEYUP" id="firstname" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+        <div class="cM1">
+            <div class="cLeft cW25 formLabel" align="right">
+                <strong>Last Name:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW75">
+                <input type="text" class="cW98 ONKEYUP" id="lastname" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+        <div class="cM1">
+            <div class="cLeft cW25 formLabel" align="right">
+                <strong>Email:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW75">
+                <input type="text" class="cW98 ONKEYUP" id="email" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+        <div class="cM1">
+            <div class="cLeft cW25 formLabel" align="right">
+                <strong>Telephone:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW75">
+                <input type="text" class="cW98 ONKEYUP" id="phone" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+    </div>
+</div>
+
+<script src="/lib/web-core/js/application.js"></script>
+<script src="/lib/web-core/js/bootstrap.min.js"></script>
+<script src="/lib/web-core/js/mustache.js"></script>
+<script src="/lib/web-core/js/templates.js"></script>
+<script src="js/actions.js"></script>
+<script>
+    $(function () {
+        LaunchPad = new DF.Application({
+            "appName":"launchpad",
+            "version":".0001"
+        });
+    });
+
+</script>
+</body>
 </html>
