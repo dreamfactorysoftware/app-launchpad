@@ -82,3 +82,34 @@ div {margin: 0;padding: 0;}
 .cP1 {padding: 1%;}
 .cP2 {padding: 2%;}
 .cP5 {padding: 5%;}
+
+.IconError {
+    background-image: url('../favicon.ico') !important;
+}
+#app-loader, #app-container, #app-loader html{
+    height:100%;
+
+}
+.app-loader{
+    border:0px;
+    width:100%;
+    height:100%;
+}
+html, body{
+    height:100%;
+
+
+
+
+}
+#error-container{
+    position:absolute;
+    display:none;
+}
+.df-logo{
+margin-right:20px;
+margin-top:2px;
+}
+.df-logo img{
+    height:38px;
+}
