@@ -235,19 +235,20 @@ function loadServices() {
 
     $.ajax({
         dataType:'json',
-        url:'http://' + location.host + '/rest',
+        url:'http://' + location.host + '/rest/system/service',
         data:'app_name=admin&method=GET',
         cache:false,
         success:function (response) {
             if(!parseErrors(response)) {
-                if(response.resource) {
-                    services = response.resource;
+                if(response.record) {
+                    services = response.record;
                     var servicesMenu = $("#serviceSelect");
                     for(var i in services) {
-                        var name = services[i].name;
-                        var label = services[i].label;
+                        var name = services[i].fields.name;
+                        var label = services[i].fields.label;
+                        var type = services[i].fields.type;
                         $('<option value="'+name+'">'+label+'</option>').appendTo(servicesMenu);
-                        loadComponents(name);
+                        loadComponents(name, type);
                     }
                 }
             }
@@ -261,11 +262,11 @@ function loadServices() {
 //
 // Load list of components for a service.
 //
-function loadComponents(serviceName) {
+function loadComponents(serviceName, serviceType) {
 
     components[serviceName] = [];
 
-    if (serviceName == "system" || serviceName == "user" || serviceName == "db") {
+    if (serviceType == "Native" || serviceType == "Local SQL DB" || serviceType == "Remote SQL DB") {
         $.ajax({
             dataType:'json',
             url:'http://' + location.host + '/rest/' + serviceName,
