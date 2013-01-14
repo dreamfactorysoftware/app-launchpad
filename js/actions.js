@@ -73,7 +73,7 @@ function refresh() {
 }
 
 $(document).ready(function () {
-
+    $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
     //$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
     var User = null;
