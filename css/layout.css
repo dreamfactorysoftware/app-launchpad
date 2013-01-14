@@ -120,6 +120,7 @@ html, body{
     background-color:orange;
     color:white;
     border:1px solid #999;
+    margin-bottom:0px;
 }
 #app-list-container h4{
     color:#777;
