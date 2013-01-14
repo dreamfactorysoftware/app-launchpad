@@ -363,11 +363,18 @@ function makeServiceList(role) {
     if(role) {
         for(var i in role.services ) {
             $("#SERVICE_ID_LIST").append(makeServiceComponentLine(nextSrvIndex, role.services[i]));
-            $("#create_" + nextSrvIndex).change(makeClearable);
-            $("#read_" + nextSrvIndex).change(makeClearable);
-            $("#update_" + nextSrvIndex).change(makeClearable);
-            $("#delete_" + nextSrvIndex).change(makeClearable);
-            $('#REMOVE_SRV_' + nextSrvIndex).click(removeService);
+
+            // services menu
+            $('#serviceSelect_'+nextSrvIndex).change(serviceChange);
+
+            // checkboxes
+            $("#create_"+nextSrvIndex).change(makeClearable);
+            $("#read_"+nextSrvIndex).change(makeClearable);
+            $("#update_"+nextSrvIndex).change(makeClearable);
+            $("#delete_"+nextSrvIndex).change(makeClearable);
+
+            // delete button
+            $('#REMOVE_SRV_'+nextSrvIndex).click(removeService);
             nextSrvIndex++;
         };
     }
