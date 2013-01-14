@@ -13,9 +13,9 @@ Actions = {
         if (data.length == 1) {
             Actions.showApp(data[0].name, data[0].url, data[0].is_url_external);
             return;
-        }else if(data.length==0){
+        } else if (data.length == 0) {
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
-        return;
+            return;
         }
         LaunchPad.templates.loadTemplate(LaunchPad.templates.navBarDropDownTemplate, Applications, 'app-list');
 
@@ -35,7 +35,24 @@ Actions = {
     },
     showUserInfo:function (user) {
         LaunchPad.templates.loadTemplate(LaunchPad.templates.userInfoTemplate, user, 'dfControl1');
+    },
+    upDateSession:function () {
+        $.ajax({
+            dataType:'json',
+            url:'http://' + location.host + '/rest/User/Session',
+            data:'app_name=launchpad&method=GET',
+            cache:false,
+            success:function (response) {
+                Actions.showUserInfo(response);
+                Actions.getApps(response.apps);
+            }
+
+        });
+
+
+
     }
+
 };
 
 function relogin() {
@@ -154,9 +171,6 @@ $(document).ready(function () {
             $("#loginErrorMessage").html('<b>' + str + '</b><br/><br/>');
         }
     }
-
-
-
 
 
     function getAppsFor(appGrpId) {
@@ -517,8 +531,8 @@ $(document).ready(function () {
         autoOpen:false,
         buttons:{
             "Log Off":function () {
+
                 $('#app-container').empty();
-                $('#app-list').empty();
                 User = null;
                 userio.post(null, null, "/Logout");
                 showSignInControls(true);
