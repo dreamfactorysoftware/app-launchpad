@@ -3,7 +3,7 @@
  */
 
 function makeClearable() {
-    $('#clear').button({ disabled: false });
+    $('#new').button({ disabled: false });
     $("#save").button({ disabled: false });
 }
 
@@ -114,7 +114,7 @@ $(document).ready(function() {
             hideImport();
             $("#export").button({ disabled: false });
             $('#delete').button({ disabled: false });
-            $('#clear').button({ disabled: false });
+            $('#new').button({ disabled: false });
 
 
             $("#deviceTarget").prop('checked',app.filter_by_device);
@@ -143,7 +143,7 @@ $(document).ready(function() {
             $("#filemanager").button({ disabled: true });
             $("#export").button({ disabled: true });
             $('#delete').button({ disabled: true });
-            $('#clear').button({ disabled: true });
+            $('#new').button({ disabled: true });
 
             $("#deviceTarget").prop('checked',false);
             $("#deviceTarget").trigger("onchange");
@@ -366,7 +366,7 @@ $(document).ready(function() {
         }
     });
 
-    $("#clear").button({icons: {primary: "ui-icon-document"}}).click(function(){
+    $("#new").button({icons: {primary: "ui-icon-document"}}).click(function(){
         showApp();
     });
 
