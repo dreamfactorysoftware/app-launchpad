@@ -517,6 +517,8 @@ $(document).ready(function () {
         autoOpen:false,
         buttons:{
             "Log Off":function () {
+                $('#app-container').empty();
+                $('#app-list').empty();
                 User = null;
                 userio.post(null, null, "/Logout");
                 showSignInControls(true);
