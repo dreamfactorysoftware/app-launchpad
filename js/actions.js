@@ -18,10 +18,13 @@ Actions = {
             return;
         }
         LaunchPad.templates.loadTemplate(LaunchPad.templates.navBarDropDownTemplate, Applications, 'app-list');
+        LaunchPad.templates.loadTemplate(LaunchPad.templates.appIconTemplate, Applications, 'app-list-container');
 
 
     },
+
     showApp:function (name, url, type) {
+        $('#app-list-container').hide();
         $('iframe').hide();
         if ($("#" + name).length > 0) {
             $("#" + name).show();
@@ -120,6 +123,7 @@ $(document).ready(function () {
         } else {
             Actions.showUserInfo(User);
             Actions.getApps(User.apps);
+            $('#app-list-container').show();
             $("#dfSignOutLink").click(function () {
                 $("#logoffDialog").dialog("open");
             });
@@ -533,6 +537,7 @@ $(document).ready(function () {
             "Log Off":function () {
 
                 $('#app-container').empty();
+                $('#app-list-container').empty();
                 User = null;
                 userio.post(null, null, "/Logout");
                 showSignInControls(true);

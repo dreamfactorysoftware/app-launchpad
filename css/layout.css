@@ -107,9 +107,23 @@ html, body{
     display:none;
 }
 .df-logo{
-margin-right:20px;
-margin-top:2px;
+    margin-right:20px;
+    margin-top:2px;
 }
 .df-logo img{
     height:38px;
+}
+#app-list-container{
+    margin:20px;
+}
+#app-list-container .well{
+    background-color:orange;
+    color:white;
+    border:1px solid #999;
+}
+#app-list-container h4{
+    color:#777;
+}
+#app-list-container .media-body{
+    color:#aaa;
 }
