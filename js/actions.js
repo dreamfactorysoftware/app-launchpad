@@ -7,10 +7,11 @@ Actions = {
     doLayout:function () {
         //this.getApps();
     },
-    getApps:function (data) {
+    getApps:function (data, first) {
         Applications = {Applications:data};
 
         if (data.length == 1) {
+            $('#app-list-container').hide();
             Actions.showApp(data[0].name, data[0].url, data[0].is_url_external);
             return;
         } else if (data.length == 0) {
@@ -18,8 +19,10 @@ Actions = {
             return;
         }
         LaunchPad.templates.loadTemplate(LaunchPad.templates.navBarDropDownTemplate, Applications, 'app-list');
-        LaunchPad.templates.loadTemplate(LaunchPad.templates.appIconTemplate, Applications, 'app-list-container');
 
+        if(first){
+            LaunchPad.templates.loadTemplate(LaunchPad.templates.appIconTemplate, Applications, 'app-list-container');
+        }
 
     },
 
@@ -122,7 +125,7 @@ $(document).ready(function () {
             });
         } else {
             Actions.showUserInfo(User);
-            Actions.getApps(User.apps);
+            Actions.getApps(User.apps, "login");
             $('#app-list-container').show();
             $("#dfSignOutLink").click(function () {
                 $("#logoffDialog").dialog("open");
