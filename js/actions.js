@@ -49,7 +49,7 @@ Actions = {
             data:'app_name=launchpad&method=GET',
             cache:false,
             success:function (response) {
-                Actions.showUserInfo(response);
+                //Actions.showUserInfo(response);
                 Actions.getApps(response.apps);
             }
 
