@@ -73,7 +73,7 @@ function refresh() {
 }
 
 $(document).ready(function () {
-    $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
+
     //$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
     var User = null;
@@ -541,6 +541,7 @@ $(document).ready(function () {
 
                 $('#app-container').empty();
                 $('#app-list-container').empty();
+                $('#app-list').empty();
                 User = null;
                 userio.post(null, null, "/Logout");
                 showSignInControls(true);
