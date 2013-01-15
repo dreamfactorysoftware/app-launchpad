@@ -10,12 +10,15 @@ Actions = {
     getApps:function (data, first) {
         $('#error-container').empty().hide();
         Applications = {Applications:data};
-        console.log(Applications);
-
-        if (data.length == 1) {
+        if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1) {
             $('#app-list-container').hide();
-            Actions.showApp(data[0].name, data[0].url, data[0].is_url_external);
+            Actions.showApp(data.app_groups[0].apps[0].name, data.app_groups[0].apps[0].url, data.app_groups[0].apps[0].is_url_external);
             return;
+        } else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
+            $('#app-list-container').hide();
+            Actions.showApp(data.no_group_apps[0].name, data.no_group_apps[0].url, data.no_group_apps[0].is_url_external);
+            return;
+
         } else if (data.length == 0) {
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
             return;
