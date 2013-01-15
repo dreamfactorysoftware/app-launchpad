@@ -10,7 +10,7 @@ Actions = {
     getApps:function (data, first) {
         $('#error-container').empty().hide();
         Applications = {Applications:data};
-        if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.app_groups.length == 0) {
+        if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
             $('#app-list-container').hide();
             Actions.showApp(data.app_groups[0].apps[0].name, data.app_groups[0].apps[0].url, data.app_groups[0].apps[0].is_url_external);
             return;
