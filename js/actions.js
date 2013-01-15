@@ -55,7 +55,7 @@ Actions = {
             cache:false,
             success:function (response) {
                 //Actions.showUserInfo(response);
-                Actions.getApps(response.apps);
+                Actions.getApps(response);
             }
 
         });
