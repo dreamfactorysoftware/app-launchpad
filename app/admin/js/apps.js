@@ -111,8 +111,8 @@ $(document).ready(function() {
             } else {
                 $("#filemanager").button({ disabled: false });
             }
-            hideImport();
-            $("#export").button({ disabled: false });
+            $("#importapp").button({ disabled: true });
+            $("#exportapp").button({ disabled: false });
             $('#delete').button({ disabled: false });
             $('#new').button({ disabled: false });
 
@@ -139,9 +139,9 @@ $(document).ready(function() {
             $('input[name="IsActive"]')[1].checked = true;
             $('input[name="IsUrlExternal"]')[1].checked = true;
             $('#save').button({ disabled: false });
-            showImport();
+            $("#importapp").button({ disabled: false });
             $("#filemanager").button({ disabled: true });
-            $("#export").button({ disabled: true });
+            $("#exportapp").button({ disabled: true });
             $('#delete').button({ disabled: true });
             $('#new').button({ disabled: true });
 
@@ -258,20 +258,6 @@ $(document).ready(function() {
         app.schemas = getSelectSchemas();
     }
 
-    /**
-     *
-     */
-    function showImport() {
-        $("#fileManagement").show();
-    }
-
-    /**
-     *
-     */
-    function hideImport() {
-        $("#fileManagement").hide();
-    }
-
     function selectSchemas(app) {
         $("#SELECT_ALL_SCHEMAS").prop('checked',false);
         $(".SCHEMA_CBX").each(function(){
@@ -334,11 +320,11 @@ $(document).ready(function() {
 
     $("#deviceTarget").trigger("onchange");
 
-    $("#import").button({icons: {primary: "ui-icon-circle-arrow-n"}}).click(function(){
+    $("#importapp").button({icons: {primary: "ui-icon-circle-arrow-n"}}).click(function(){
         $("#uploadFileInput").trigger("click");
     });
 
-    $("#export").button({icons: {primary: "ui-icon-circle-arrow-s"}}).click(function(){
+    $("#exportapp").button({icons: {primary: "ui-icon-circle-arrow-s"}}).click(function(){
         $("#uploadFileIframe").attr("src","/REST/admin/APP/"+selectApp.name+"/?export=true&");
     });
 
