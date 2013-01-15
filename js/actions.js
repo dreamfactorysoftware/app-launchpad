@@ -8,7 +8,9 @@ Actions = {
         //this.getApps();
     },
     getApps:function (data, first) {
+        $('#error-container').empty().hide();
         Applications = {Applications:data};
+        console.log(Applications);
 
         if (data.length == 1) {
             $('#app-list-container').hide();
@@ -126,7 +128,7 @@ $(document).ready(function () {
             });
         } else {
             Actions.showUserInfo(User);
-            Actions.getApps(User.apps, "login");
+            Actions.getApps(User , "login");
             $('#app-list-container').show();
             $("#dfSignOutLink").click(function () {
                 $("#logoffDialog").dialog("open");
