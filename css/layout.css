@@ -128,3 +128,10 @@ html, body{
 #app-list-container .media-body{
     color:#aaa;
 }
+.no_group a{
+    padding-left:0px!important;
+
+}
+.is_grouped{
+    margin-left:15px;
+}
