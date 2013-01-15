@@ -73,7 +73,8 @@ function refresh() {
 }
 
 $(document).ready(function () {
-
+    $('body').css('height', ($(window).height() - 76) + 'px');
+    //console.log($(window).height());
     //$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
     var User = null;
