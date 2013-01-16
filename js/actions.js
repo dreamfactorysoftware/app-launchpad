@@ -80,6 +80,9 @@ function refresh() {
 $(document).ready(function () {
     $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
     $('body').css('height', ($(window).height() - 76) + 'px');
+    $(window).resize(function() {
+        $('body').css('height', ($(window).height() - 76) + 'px');
+    });
     //console.log($(window).height());
     //$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
