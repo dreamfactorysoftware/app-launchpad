@@ -30,10 +30,21 @@ Actions = {
         }
 
     },
-
+    buildAdminDropDown: function(){
+        LaunchPad.templates.loadTemplate(LaunchPad.templates.adminDropDownTemplate, null, 'admin-container');
+    },
     showApp:function (name, url, type) {
         $('#app-list-container').hide();
         $('iframe').hide();
+        if(name == "admin"){
+            if ($('#admin').length > 0){
+                $('#admin').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).show();
+            }else{
+                $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).appendTo('#app-container');
+            }
+
+            return;
+        }
         if ($("#" + name).length > 0) {
             $("#" + name).show();
             return;
@@ -136,6 +147,9 @@ $(document).ready(function () {
         } else {
             Actions.showUserInfo(User);
             Actions.getApps(User , "login");
+            if(User.is_sys_admin){
+                Actions.buildAdminDropDown();
+            }
             $('#app-list-container').show();
             $("#dfSignOutLink").click(function () {
                 $("#logoffDialog").dialog("open");
@@ -552,6 +566,7 @@ $(document).ready(function () {
                 $('#app-container').empty();
                 $('#app-list-container').empty();
                 $('#app-list').empty();
+                $('#admin-container').empty();
                 User = null;
                 userio.post(null, null, "/Logout");
                 showSignInControls(true);
