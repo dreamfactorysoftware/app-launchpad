@@ -12,35 +12,16 @@
     <link rel="stylesheet" href="/lib/web-core/css/bootstrap.min.css" type="text/css"/>
     <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css"/>
 
-    <!-- jQuery Imports -->
-    <script src="/lib/web-core/js/jquery.js"></script>
-    <script src="/lib/web-core/js/jquery-ui-1.9.2.custom.min.js"></script>
 
-    <!-- DF Imports REMOVE THESE-->
-    <script src="/lib/web-core/js/df.js"></script>
-    <script src="/lib/web-core/js/df-err.js"></script>
 
 
     <!-- Initialize the system and start the application -->
 </head>
 <body style="margin:10px;">
 <div id="error-container" class="alert alert-error"></div>
-<div class="navbar">
-    <div class="navbar-inner">
-        <div class="container">
-            <div class="pull-left df-logo"><img src="img/logo.png"></div>
-            <div class="pull-right" id="dfControl1">
-                Please [<a id="dfSignInLink" class="dfPointer dfTxtHeader3">Log In</a>] To Continue!
-            </div>
-            <div id="app-list"></div>
-            <div id="admin-container"></div>
-            <!-- Everything you want hidden at 940px or less, place within here -->
-            <div class="nav-collapse collapse">
-                <!-- .nav, .navbar-search, .navbar-form, etc -->
-            </div>
+<!-- Navigation -->
+<div id="navbar-container">
 
-        </div>
-    </div>
 </div>
 <div id="app-list-container"></div>
 
@@ -159,6 +140,37 @@
         <div class="cM1">
             <div class="cLeft cW25 formLabel" align="right">
                 <strong>Telephone:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW75">
+                <input type="text" class="cW98 ONKEYUP" id="phone" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+    </div>
+</div>
+<script src="/lib/web-core/js/jquery.js"></script>
+<script src="/lib/web-core/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/lib/web-core/js/df.js"></script>
+<script src="/lib/web-core/js/df-err.js"></script>
+<script src="/lib/web-core/js/application.js"></script>
+<script src="/lib/web-core/js/bootstrap.min.js"></script>
+<script src="/lib/web-core/js/mustache.js"></script>
+<script src="/lib/web-core/js/templates.js"></script>
+<script src="js/actions.js"></script>
+<script>
+    /*$(function () {
+        LaunchPad = new DF.Application({
+            "appName":"launchpad",
+            "version":".0001"
+
+        });
+    });*/
+
+</script>
+</body>
+</html>
+trong>
             </div>
             <div class="cLeft cW75">
                 <input type="text" class="cW98 ONKEYUP" id="phone" value=""/>
