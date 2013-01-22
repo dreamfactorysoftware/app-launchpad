@@ -7,12 +7,9 @@
     <title>LaunchPad v0.5.10</title>
 
     <!-- Standard CSS -->
-    <link rel="stylesheet" href="/lib/web-core/css/custom-theme/jquery-ui-1.8.16.custom.css" type="text/css"/>
     <link rel="stylesheet" href="css/layout.css" type="text/css"/>
     <link rel="stylesheet" href="/lib/web-core/css/bootstrap.min.css" type="text/css"/>
-    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css"/>
-
-
+    <link rel="stylesheet" href="/lib/web-core/css/font-awesome.min.css" type="text/css"/>
 
 
     <!-- Initialize the system and start the application -->
@@ -27,74 +24,12 @@
 
 <div id="app-container">
 </div>
-
-
-<div id="loginDialog" title="Please Log In..." class="cTxtLeft">
-    <div>
-        <div id="loginErrorMessage">Please enter your User Name and Password below to sign in;</div>
-        <div class="cM1">
-            <div class="cLeft cW33 cTxtRight dfTxtBold">
-                <span class="cM1">Username:&nbsp;</span>
-            </div>
-            <div class="cLeft cW66">
-                <input type="text" class="cW98" name="UserName" id="UserName" value=""/>
-            </div>
-            <div class="cClear"><!-- --></div>
-        </div>
-        <div class="cM1">
-            <div class="cLeft cW33 cTxtRight dfTxtBold">
-                <span class="cM1">Password:&nbsp;</span>
-            </div>
-            <div class="cLeft cW66">
-                <input type="password" class="cW98" name="Password" id="Password" value=""/>
-            </div>
-            <div class="cClear"><!-- --></div>
-        </div>
+<div id="changeProfileDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Update Profile</h3>
     </div>
-</div>
-
-<div id="logoffDialog" title="Log Out" class="cTxtLeft">
-    <p>
-        Are you sure you want to log out of the application? All unsaved work will
-        be lost!
-    </p>
-</div>
-
-<div id="changePasswordDialog" title="Change Password" class="cTxtLeft">
-    <div>
-        <div id="changePasswordErrorMessage"></div>
-        <div class="cM1">
-            <div class="cLeft cW33 cTxtRight dfTxtBold">
-                <span class="cM1">Old&nbsp;Password:&nbsp;</span>
-            </div>
-            <div class="cLeft cW66">
-                <input type="password" class=" cW98" id="OPassword" value=""/>
-            </div>
-            <div class="cClear"><!-- --></div>
-        </div>
-        <div class="cM1">
-            <div class="cLeft cW33 cTxtRight dfTxtBold">
-                <span class="cM1">New&nbsp;Password:&nbsp;</span>
-            </div>
-            <div class="cLeft cW66">
-                <input type="password" class="cW98" id="NPassword" value=""/>
-            </div>
-            <div class="cClear"><!-- --></div>
-        </div>
-        <div class="cM1">
-            <div class="cLeft cW33 cTxtRight dfTxtBold">
-                <span class="cM1">Verify:&nbsp;</span>
-            </div>
-            <div class="cLeft cW66">
-                <input type="password" class="cW98" id="VPassword" value=""/>
-            </div>
-            <div class="cClear"><!-- --></div>
-        </div>
-    </div>
-</div>
-
-<div id="changeProfileDialog" title="User Profile" class="cTxtLeft">
-    <div>
+    <div class="modal-body">
         <div id="changeProfileErrorMessage"></div>
 
         <div class="cM1">
@@ -146,14 +81,104 @@
             </div>
             <div class="cClear"><!--  --></div>
         </div>
-
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn btn-primary" onclick="Actions.updateUser()">Save changes</a>
+    </div>
+</div>
+<div class="modal hide fade" id="changePasswordDialog">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Change Password</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            <div id="changePasswordErrorMessage"></div>
+            <div class="cM1">
+                <div class="cLeft cW33 cTxtRight dfTxtBold">
+                    <span class="cM1">Old&nbsp;Password:&nbsp;</span>
+                </div>
+                <div class="cLeft cW66">
+                    <input type="password" class=" cW98" id="OPassword" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
+            </div>
+            <div class="cM1">
+                <div class="cLeft cW33 cTxtRight dfTxtBold">
+                    <span class="cM1">New&nbsp;Password:&nbsp;</span>
+                </div>
+                <div class="cLeft cW66">
+                    <input type="password" class="cW98" id="NPassword" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
+            </div>
+            <div class="cM1">
+                <div class="cLeft cW33 cTxtRight dfTxtBold">
+                    <span class="cM1">Verify:&nbsp;</span>
+                </div>
+                <div class="cLeft cW66">
+                    <input type="password" class="cW98" id="VPassword" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn btn-primary" onclick="Actions.checkPassword()">Save changes</a>
+    </div>
+</div>
+<div id="loginDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Sign In</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            <div id="loginErrorMessage">Please enter your User Name and Password below to sign in;</div>
+            <div class="cM1">
+                <div class="cLeft cW33 cTxtRight dfTxtBold">
+                    <span class="cM1">Username:&nbsp;</span>
+                </div>
+                <div class="cLeft cW66">
+                    <input type="text" class="cW98" name="UserName" id="UserName" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
+            </div>
+            <div class="cM1">
+                <div class="cLeft cW33 cTxtRight dfTxtBold">
+                    <span class="cM1">Password:&nbsp;</span>
+                </div>
+                <div class="cLeft cW66">
+                    <input type="password" class="cW98" name="Password" id="Password" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn btn-primary" onclick="Actions.performSignIn()">Sign In</a>
+    </div>
+</div>
+<div id="logoffDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Sign Out</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            Are you sure you want to sign out of the application? All unsaved work will
+            be lost!
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn btn-primary" onclick="Actions.signOut()">Sign Out</a>
     </div>
 </div>
 <script src="/lib/web-core/js/jquery.js"></script>
-<script src="/lib/web-core/js/jquery-ui-1.9.2.custom.min.js"></script>
-<script src="/lib/web-core/js/df.js"></script>
-<script src="/lib/web-core/js/df-err.js"></script>
-<script src="/lib/web-core/js/application.js"></script>
 <script src="/lib/web-core/js/bootstrap.min.js"></script>
 <script src="/lib/web-core/js/mustache.js"></script>
 <script src="/lib/web-core/js/templates.js"></script>
