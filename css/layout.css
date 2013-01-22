@@ -83,9 +83,7 @@ div {margin: 0;padding: 0;}
 .cP2 {padding: 2%;}
 .cP5 {padding: 5%;}
 
-.IconError {
-    background-image: url('../favicon.ico') !important;
-}
+
 #app-loader, #app-container, #app-loader html{
     height:100%;
 

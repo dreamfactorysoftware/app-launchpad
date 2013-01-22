@@ -90,7 +90,7 @@ Actions = {
             },
             error:function (response) {
                 if (response.status == 401) {
-                    $("#loginDialog").dialog("open");
+                    $("#loginDialog").modal('toggle');
                 }
             }
         });
@@ -101,7 +101,7 @@ Actions = {
     },
     performSignIn:function () {
         if ($('#UserName').val() && $('#Password').val()) {
-            $("#loginDialog").dialog("close");
+            $("#loginDialog").modal('toggle');
             $('#dfControl1').html('<i>Logging In, Please Wait...</i>');
             $.ajax({
                 dataType:'json',
@@ -124,16 +124,22 @@ Actions = {
             $("#loginErrorMessage").html('<b>You must enter UserName and Password to continue</b><br/><br/>');
         }
     },
-    updateUser: function(user){
+    updateUser: function(){
+        NewUser = {};
+               NewUser.display_name = $("#fullname").val();
+                NewUser.first_name = $("#firstname").val();
+                NewUser.last_name = $("#lastname").val();
+                NewUser.email = $("#email").val();
+                NewUser.phone = $("#phone").val();
+
         $.ajax({
             dataType:'json',
             type:'POST',
             url:'http://' + location.host + '/rest/User/change_profile/?method=MERGE&app_name=' + Actions.getAppName() ,
-            data:user,
+            data:JSON.stringify(NewUser),
             cache:false,
             success:function (response) {
-                $("#changeProfileDialog").dialog('close');
-
+                $("#changeProfileDialog").modal('toggle');
             },
             error:function (response) {
 
@@ -149,7 +155,7 @@ Actions = {
             data:pass,
             cache:false,
             success:function (response) {
-                $("#changePasswordDialog").dialog('close');
+                $("#changePasswordDialog").modal('toggle');
             },
             error:function (response) {
 
@@ -168,15 +174,27 @@ Actions = {
                 $('#app-list-container').empty();
                 $('#app-list').empty();
                 $('#admin-container').empty();
-                $("#loginDialog").dialog("open");
+                $("#loginDialog").modal('toggle');
+                $("#logoffDialog").modal('toggle');
                 Actions.clearLogin();
             },
             error:function (response) {
                 if (response.status == 401) {
-                    $("#loginDialog").dialog("open");
+                    $("#loginDialog").modal('toggle');
                 }
             }
         });
+    },
+    checkPassword: function(){
+        if ($("#NPassword").val() == $("#VPassword").val()) {
+            var data = {
+                oldpassword:$("#OPassword").val(),
+                newpassword:$("#NPassword").val()
+            };
+            Actions.updatePassword(JSON.stringify(data));
+        } else {
+            $("#changePasswordErrorMessage").html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
+        }
     }
 };
 $(document).ready(function () {
@@ -187,112 +205,7 @@ $(document).ready(function () {
     $(window).resize(function () {
         $('body').css('height', ($(window).height() - 76) + 'px');
     });
-    $('#UserName').keydown(function (e) {
-        if (e.keyCode == 13) {
-            $('#Password').focus();
-        }
-    });
 
-    $('#Password').keydown(function (e) {
-        if (e.keyCode == 13) {
-            Actions.performSignIn();
-        }
-    });
-
-    $('#loginDialog').dialog({
-        resizable:false,
-        modal:true,
-        autoOpen:false,
-        buttons:{
-            "Sign In":function () {
-                Actions.performSignIn();
-            },
-            Cancel:function () {
-                window.history.back();
-            }
-        }
-    });
-
-    $('#logoffDialog').dialog({
-        resizable:false,
-        modal:true,
-        autoOpen:false,
-        buttons:{
-            "Log Off":function () {
-                Actions.signOut();
-                $(this).dialog("close");
-
-            },
-            Cancel:function () {
-                $(this).dialog("close");
-            }
-        }
-    });
-
-    $("#errorDialog").dialog({
-        resizable:false,
-        modal:true,
-        autoOpen:false,
-        closeOnEscape:false,
-        buttons:{    }
-    });
-
-    $("#changePasswordDialog").dialog({
-        resizable:false,
-        modal:true,
-        autoOpen:false,
-        closeOnEscape:false,
-        beforeClose:function (event, ui) {
-            $("#OldPassword").val("");
-            $("#NPassword").val("");
-            $("#VPassword").val("");
-            $("#NPassword").removeClass("RedBorder");
-            $("#NPassword").removeClass("GreenBorder");
-            $("#VPassword").removeClass("RedBorder");
-            $("#VPassword").removeClass("GreenBorder");
-        },
-        buttons:{
-            "Change Password":function () {
-                if ($("#NPassword").val() == $("#VPassword").val()) {
-                    var data = {
-                        oldpassword:$("#OPassword").val(),
-                        newpassword:$("#NPassword").val()
-                    };
-                    Actions.updatePassword(JSON.stringify(data));
-                } else {
-                    $("#changePasswordErrorMessage").html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
-                }
-            },
-            Cancel:function () {
-                $("#changePasswordDialog").dialog("close");
-            }
-        }
-    });
-
-    $("#changeProfileDialog").dialog({
-        resizable:false,
-        modal:true,
-        autoOpen:false,
-        closeOnEscape:false,
-        beforeClose:function (event, ui) {
-
-        },
-        buttons:{
-            "Change Profile":function () {
-                NewUser = {};
-                NewUser.display_name = $("#fullname").val();
-                NewUser.first_name = $("#firstname").val();
-                NewUser.last_name = $("#lastname").val();
-                NewUser.email = $("#email").val();
-                NewUser.phone = $("#phone").val();
-                Actions.updateUser(JSON.stringify(NewUser));
-
-            },
-            Cancel:function () {
-                $("#changeProfileDialog").dialog("close");
-            }
-        }
-    });
 
     function doPasswordVerify() {
         var value = $("#NPassword").val();
