@@ -43,9 +43,9 @@ Actions = {
         $('iframe').hide();
         if (name == "admin") {
             if ($('#admin').length > 0) {
-                $('#admin').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).show();
+                $('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).show();
             } else {
-                $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).appendTo('#app-container');
+                $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).appendTo('#app-container');
             }
             return;
         }
@@ -101,7 +101,7 @@ Actions = {
     },
     performSignIn:function () {
         if ($('#UserName').val() && $('#Password').val()) {
-            $("#loginDialog").modal('toggle');
+
             $('#dfControl1').html('<i>Logging In, Please Wait...</i>');
             $.ajax({
                 dataType:'json',
@@ -110,6 +110,8 @@ Actions = {
                 data:JSON.stringify({UserName:$('#UserName').val(), Password:$('#Password').val()}),
                 cache:false,
                 success:function (response) {
+                    $('#loginErrorMessage').removeClass('alert-error');
+                    $("#loginDialog").modal('hide');
                     User = response;
                     Actions.showUserInfo(response);
                     Actions.getApps(response);
@@ -118,6 +120,12 @@ Actions = {
                         Actions.buildAdminDropDown();
                     }
                     Actions.fillProfileForm();
+                },
+                error:function (response) {
+                    if (response.status == 401) {
+                        // $("#loginDialog").modal('show');
+                        $('#loginErrorMessage').addClass('alert-error').html("Invalid Login Attempt, Please Try again.")
+                    }
                 }
             });
         } else {
@@ -126,11 +134,11 @@ Actions = {
     },
     updateUser: function(){
         NewUser = {};
-               NewUser.display_name = $("#fullname").val();
-                NewUser.first_name = $("#firstname").val();
-                NewUser.last_name = $("#lastname").val();
-                NewUser.email = $("#email").val();
-                NewUser.phone = $("#phone").val();
+        NewUser.display_name = $("#fullname").val();
+        NewUser.first_name = $("#firstname").val();
+        NewUser.last_name = $("#lastname").val();
+        NewUser.email = $("#email").val();
+        NewUser.phone = $("#phone").val();
 
         $.ajax({
             dataType:'json',
