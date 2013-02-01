@@ -144,7 +144,7 @@ Actions = {
         $.ajax({
             dataType:'json',
             type:'POST',
-            url:'http://' + location.host + '/rest/User/change_profile/?method=MERGE&app_name=' + Actions.getAppName() ,
+            url:'http://' + location.host + '/rest/User/Profile/' + CurrentUserID + '/?method=MERGE&app_name=' + Actions.getAppName() ,
             data:JSON.stringify(NewUser),
             cache:false,
             success:function (response) {
@@ -160,7 +160,7 @@ Actions = {
         $.ajax({
             dataType:'json',
             type:'POST',
-            url:'http://' + location.host + '/rest/User/change_password/?method=MERGE&app_name=' + Actions.getAppName() ,
+            url:'http://' + location.host + '/rest/User/Password/?method=MERGE&app_name=' + Actions.getAppName() ,
             data:pass,
             cache:false,
             success:function (response) {
@@ -198,8 +198,8 @@ Actions = {
     checkPassword: function(){
         if ($("#NPassword").val() == $("#VPassword").val()) {
             var data = {
-                oldpassword:$("#OPassword").val(),
-                newpassword:$("#NPassword").val()
+                old_password:$("#OPassword").val(),
+                new_password:$("#NPassword").val()
             };
             Actions.updatePassword(JSON.stringify(data));
         } else {
