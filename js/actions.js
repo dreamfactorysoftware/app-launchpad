@@ -43,9 +43,9 @@ Actions = {
         $('iframe').hide();
         if (name == "admin") {
             if ($('#admin').length > 0) {
-                $('#admin').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).show();
+                $('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).show();
             } else {
-                $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).appendTo('#app-container');
+                $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).appendTo('#app-container');
             }
             return;
         }
@@ -101,15 +101,17 @@ Actions = {
     },
     performSignIn:function () {
         if ($('#UserName').val() && $('#Password').val()) {
-            $("#loginDialog").modal('toggle');
+
             $('#dfControl1').html('<i>Logging In, Please Wait...</i>');
             $.ajax({
                 dataType:'json',
                 type:'POST',
-                url:'http://' + location.host + '/REST/User/Login/?app_name=launchpad&method=POST',
+                url:'http://' + location.host + '/REST/User/Session/?app_name=launchpad&method=POST',
                 data:JSON.stringify({UserName:$('#UserName').val(), Password:$('#Password').val()}),
                 cache:false,
                 success:function (response) {
+                    $('#loginErrorMessage').removeClass('alert-error');
+                    $("#loginDialog").modal('hide');
                     User = response;
                     Actions.showUserInfo(response);
                     Actions.getApps(response);
@@ -118,6 +120,13 @@ Actions = {
                         Actions.buildAdminDropDown();
                     }
                     Actions.fillProfileForm();
+                },
+                error:function (response, response2) {
+                    if (response.status == 401) {
+                       // $("#loginDialog").modal('show');
+                        //console.log(response.error[0].message);
+                        $('#loginErrorMessage').addClass('alert-error').html("Invalid Login Attempt, Please Try again.")
+                    }
                 }
             });
         } else {
@@ -166,8 +175,8 @@ Actions = {
         $.ajax({
             dataType:'json',
             type:'POST',
-            url:'http://' + location.host + '/rest/User/Logout',
-            data:'app_name=launchpad&method=POST',
+            url:'http://' + location.host + '/rest/User/Session/' + CurrentUserID + '/',
+            data:'app_name=launchpad&method=DELETE',
             cache:false,
             success:function (response) {
                 $('#app-container').empty();
@@ -176,6 +185,7 @@ Actions = {
                 $('#admin-container').empty();
                 $("#loginDialog").modal('toggle');
                 $("#logoffDialog").modal('toggle');
+                $("#dfControl1").html('<a class="btn btn-primary" onclick="$(\'#loginDialog\').modal(\'show\')"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
                 Actions.clearLogin();
             },
             error:function (response) {
