@@ -26,75 +26,95 @@
 </div>
 <div id="changeProfileDialog" class="modal hide fade">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Update Profile</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearProfile()">&times;</button>
+        <h3>Change Profile</h3>
     </div>
     <div class="modal-body">
-        <div id="changeProfileErrorMessage"></div>
+        <div class="alert" id="changeProfileErrorMessage"></div>
 
         <div class="cM1">
-            <div class="cLeft cW25 formLabel" align="right">
-                <strong>Full Name:&nbsp;</strong>
+            <div class="cLeft cW35 formLabel" align="right">
+                <strong>Display Name:&nbsp;</strong>
             </div>
-            <div class="cLeft cW75">
-                <input type="text" class="cW98 ONKEYUP" id="fullname" value=""/>
+            <div class="cLeft cW65">
+                <input type="text" class="cW98 ONKEYUP" id="displayname" value=""/>
             </div>
             <div class="cClear"><!--  --></div>
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW25 formLabel" align="right">
+            <div class="cLeft cW35 formLabel" align="right">
                 <strong>First Name:&nbsp;</strong>
             </div>
-            <div class="cLeft cW75">
+            <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="firstname" value=""/>
             </div>
             <div class="cClear"><!--  --></div>
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW25 formLabel" align="right">
+            <div class="cLeft cW35 formLabel" align="right">
                 <strong>Last Name:&nbsp;</strong>
             </div>
-            <div class="cLeft cW75">
+            <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="lastname" value=""/>
             </div>
             <div class="cClear"><!--  --></div>
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW25 formLabel" align="right">
+            <div class="cLeft cW35 formLabel" align="right">
                 <strong>Email:&nbsp;</strong>
             </div>
-            <div class="cLeft cW75">
+            <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="email" value=""/>
             </div>
             <div class="cClear"><!--  --></div>
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW25 formLabel" align="right">
+            <div class="cLeft cW35 formLabel" align="right">
                 <strong>Telephone:&nbsp;</strong>
             </div>
-            <div class="cLeft cW75">
+            <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="phone" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+        <div class="cM1">
+            <div class="cLeft cW35 formLabel" align="right">
+                <strong>Security Question:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW65">
+                <input type="text" class="cW98 ONKEYUP" id="security_question" value=""/>
+            </div>
+            <div class="cClear"><!--  --></div>
+        </div>
+
+        <div class="cM1">
+            <div class="cLeft cW35 formLabel" align="right">
+                <strong>Security Answer:&nbsp;</strong>
+            </div>
+            <div class="cLeft cW65">
+                <input type="password" class="cW98 ONKEYUP" id="security_answer" value=""/>
             </div>
             <div class="cClear"><!--  --></div>
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
-        <a href="#" class="btn btn-primary" onclick="Actions.updateUser()">Save changes</a>
+        <a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearProfile()">Close</a>
+        <a href="#" class="btn btn-primary" onclick="Actions.updateProfile()">Save changes</a>
     </div>
 </div>
 <div class="modal hide fade" id="changePasswordDialog">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearChangePassword()">&times;</button>
         <h3>Change Password</h3>
     </div>
     <div class="modal-body">
         <div>
-            <div id="changePasswordErrorMessage"></div>
+            <div class="alert" id="changePasswordErrorMessage"></div>
             <div class="cM1">
                 <div class="cLeft cW33 cTxtRight dfTxtBold">
                     <span class="cM1">Old&nbsp;Password:&nbsp;</span>
@@ -125,41 +145,30 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearChangePassword()">Close</a>
         <a href="#" class="btn btn-primary" onclick="Actions.checkPassword()">Save changes</a>
     </div>
 </div>
 <div id="loginDialog" class="modal hide fade">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearSignIn()">&times;</button>
         <h3>Sign In</h3>
     </div>
     <div class="modal-body">
         <div>
-            <div class="alert" id="loginErrorMessage">Please enter your User Name and Password below to sign in;</div>
+            <div class="alert" id="loginErrorMessage"></div>
             <div class="cM1">
-                <div class="cLeft cW33 cTxtRight dfTxtBold">
-                    <span class="cM1">Username:&nbsp;</span>
-                </div>
-                <div class="cLeft cW66">
-                    <input type="text" class="cW98" name="UserName" id="UserName" value=""/>
-                </div>
-                <div class="cClear"><!-- --></div>
+                <input type="text" class="input-large" name="UserName" id="UserName" value="" placeholder="User Name"/>
             </div>
             <div class="cM1">
-                <div class="cLeft cW33 cTxtRight dfTxtBold">
-                    <span class="cM1">Password:&nbsp;</span>
-                </div>
-                <div class="cLeft cW66">
-                    <input type="password" class="cW98" name="Password" id="Password" value=""/>
-                </div>
-                <div class="cClear"><!-- --></div>
+                <input type="password" class="input-large" name="Password" id="Password" value="" placeholder="Password"/>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal">Close</a>
-        <a href="#" class="btn btn-primary" onclick="Actions.performSignIn()">Sign In</a>
+        <a href="#" class="btn cLeft" onclick="Actions.doResetPasswordDialog()">Reset Password...</a>
+        <a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearSignIn()">Close</a>
+        <a href="#" class="btn btn-primary" onclick="Actions.signIn()">Sign In</a>
     </div>
 </div>
 <div id="logoffDialog" class="modal hide fade">
@@ -176,6 +185,37 @@
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Close</a>
         <a href="#" class="btn btn-primary" onclick="Actions.signOut()">Sign Out</a>
+    </div>
+</div>
+<div id="resetPasswordDialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearResetPassword()">&times;</button>
+        <h3>Password Reset</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            <div class="alert" id="resetErrorMessage"></div>
+            <div class="cM1">
+                <div class="cLeft cW98 dfTxtBold">
+                    <span class="cM1">Question:&nbsp;</span>
+                    <span class="cM1" id="Question" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
+            </div>
+            <div class="cM1">
+                <input type="password" class="input-large" name="Answer" id="Answer" value="" placeholder="Answer"/>
+            </div>
+            <div class="cM1">
+                <input type="password" class="input-large" id="NPasswordReset" value="" placeholder="New&nbsp;Password"/>
+            </div>
+            <div class="cM1">
+                <input type="password" class="input-large" id="VPasswordReset" value="" placeholder="Verify&nbsp;Password"/>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearResetPassword()">Close</a>
+        <a href="#" class="btn btn-primary" onclick="Actions.resetPassword()">Submit</a>
     </div>
 </div>
 <script src="/lib/web-core/js/jquery.js"></script>
