@@ -33,9 +33,7 @@
         <div class="alert" id="changeProfileErrorMessage"></div>
 
         <div class="cM1">
-            <div class="cLeft cW35 formLabel" align="right">
-                <strong>Display Name:&nbsp;</strong>
-            </div>
+            <div class="cLeft cW35 formLabel">Display&nbsp;Name:&nbsp;</div>
             <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="displayname" value=""/>
             </div>
@@ -43,9 +41,7 @@
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW35 formLabel" align="right">
-                <strong>First Name:&nbsp;</strong>
-            </div>
+            <div class="cLeft cW35 formLabel">First&nbsp;Name:&nbsp;</div>
             <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="firstname" value=""/>
             </div>
@@ -53,9 +49,7 @@
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW35 formLabel" align="right">
-                <strong>Last Name:&nbsp;</strong>
-            </div>
+            <div class="cLeft cW35 formLabel">Last&nbsp;Name:&nbsp;</div>
             <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="lastname" value=""/>
             </div>
@@ -63,9 +57,7 @@
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW35 formLabel" align="right">
-                <strong>Email:&nbsp;</strong>
-            </div>
+            <div class="cLeft cW35 formLabel">Email:&nbsp;</div>
             <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="email" value=""/>
             </div>
@@ -73,9 +65,7 @@
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW35 formLabel" align="right">
-                <strong>Telephone:&nbsp;</strong>
-            </div>
+            <div class="cLeft cW35 formLabel">Telephone:&nbsp;</div>
             <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="phone" value=""/>
             </div>
@@ -83,9 +73,7 @@
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW35 formLabel" align="right">
-                <strong>Security Question:&nbsp;</strong>
-            </div>
+            <div class="cLeft cW35 formLabel">Security&nbsp;Question:&nbsp;</div>
             <div class="cLeft cW65">
                 <input type="text" class="cW98 ONKEYUP" id="security_question" value=""/>
             </div>
@@ -93,9 +81,7 @@
         </div>
 
         <div class="cM1">
-            <div class="cLeft cW35 formLabel" align="right">
-                <strong>Security Answer:&nbsp;</strong>
-            </div>
+            <div class="cLeft cW35 formLabel">Security&nbsp;Answer:&nbsp;</div>
             <div class="cLeft cW65">
                 <input type="password" class="cW98 ONKEYUP" id="security_answer" value=""/>
             </div>
@@ -116,28 +102,22 @@
         <div>
             <div class="alert" id="changePasswordErrorMessage"></div>
             <div class="cM1">
-                <div class="cLeft cW33 cTxtRight dfTxtBold">
-                    <span class="cM1">Old&nbsp;Password:&nbsp;</span>
-                </div>
-                <div class="cLeft cW66">
+                <div class="cLeft cW35 formLabel">Old&nbsp;Password:&nbsp;</div>
+                <div class="cLeft cW65">
                     <input type="password" class=" cW98" id="OPassword" value=""/>
                 </div>
                 <div class="cClear"><!-- --></div>
             </div>
             <div class="cM1">
-                <div class="cLeft cW33 cTxtRight dfTxtBold">
-                    <span class="cM1">New&nbsp;Password:&nbsp;</span>
-                </div>
-                <div class="cLeft cW66">
+                <div class="cLeft cW35 formLabel">New&nbsp;Password:&nbsp;</div>
+                <div class="cLeft cW65">
                     <input type="password" class="cW98" id="NPassword" value=""/>
                 </div>
                 <div class="cClear"><!-- --></div>
             </div>
             <div class="cM1">
-                <div class="cLeft cW33 cTxtRight dfTxtBold">
-                    <span class="cM1">Verify:&nbsp;</span>
-                </div>
-                <div class="cLeft cW66">
+                <div class="cLeft cW35 formLabel">Verify&nbsp;Password:&nbsp;</div>
+                <div class="cLeft cW65">
                     <input type="password" class="cW98" id="VPassword" value=""/>
                 </div>
                 <div class="cClear"><!-- --></div>
@@ -158,10 +138,18 @@
         <div>
             <div class="alert" id="loginErrorMessage"></div>
             <div class="cM1">
-                <input type="text" class="input-large" name="UserName" id="UserName" value="" placeholder="User Name"/>
+                <div class="cLeft cW35 formLabel">User&nbsp;Name:&nbsp;</div>
+                <div class="cLeft cW65">
+                    <input type="password" class=" cW98" name="UserName" id="UserName" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
             </div>
             <div class="cM1">
-                <input type="password" class="input-large" name="Password" id="Password" value="" placeholder="Password"/>
+                <div class="cLeft cW35 formLabel">Password:&nbsp;</div>
+                <div class="cLeft cW65">
+                    <input type="password" class=" cW98" name="Password" id="Password" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
             </div>
         </div>
     </div>
@@ -196,20 +184,32 @@
         <div>
             <div class="alert" id="resetErrorMessage"></div>
             <div class="cM1">
-                <div class="cLeft cW98 dfTxtBold">
-                    <span class="cM1">Question:&nbsp;</span>
+                <div class="cLeft cW35 fixedLabel">Security&nbsp;Question:&nbsp;</div>
+                <div class="cLeft cW65">
                     <span class="cM1" id="Question" value=""/>
                 </div>
                 <div class="cClear"><!-- --></div>
             </div>
             <div class="cM1">
-                <input type="password" class="input-large" name="Answer" id="Answer" value="" placeholder="Answer"/>
+                <div class="cLeft cW35 formLabel">Security&nbsp;Answer:&nbsp;</div>
+                <div class="cLeft cW65">
+                    <input type="password" class=" cW98" name="Answer" id="Answer" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
             </div>
             <div class="cM1">
-                <input type="password" class="input-large" id="NPasswordReset" value="" placeholder="New&nbsp;Password"/>
+                <div class="cLeft cW35 formLabel">New&nbsp;Password:&nbsp;</div>
+                <div class="cLeft cW65">
+                    <input type="password" class=" cW98" id="NPasswordReset" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
             </div>
             <div class="cM1">
-                <input type="password" class="input-large" id="VPasswordReset" value="" placeholder="Verify&nbsp;Password"/>
+                <div class="cLeft cW35 formLabel">Verify&nbsp;Password:&nbsp;</div>
+                <div class="cLeft cW65">
+                    <input type="password" class=" cW98" id="VPasswordReset" value=""/>
+                </div>
+                <div class="cClear"><!-- --></div>
             </div>
         </div>
     </div>

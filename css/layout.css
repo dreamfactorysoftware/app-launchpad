@@ -133,3 +133,17 @@ html, body{
 .is_grouped{
     margin-left:15px;
 }
+
+.formLabel {
+    position:relative;
+    top:5px;
+    font-weight:bold;
+    text-align:right;
+}
+
+.fixedLabel {
+    position:relative;
+    top:1px;
+    font-weight:bold;
+    text-align:right;
+}
