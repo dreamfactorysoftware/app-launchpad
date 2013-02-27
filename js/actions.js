@@ -40,9 +40,11 @@ Actions = {
         Templates.loadTemplate(Templates.navBarDropDownTemplate, Applications, 'app-list');
         Templates.loadTemplate(Templates.appIconTemplate, Applications, 'app-list-container');
     },
-    buildAdminDropDown:function () {
-
-        Templates.loadTemplate(Templates.adminDropDownTemplate, null, 'admin-container');
+    showAdminIcon:function () {
+        var template = '<a id="adminLink" class="btn btn-inverse" title="Admin Console" onclick="Actions.showApp(\'admin\',\'/public/admin/#/app\',\'0\')">' +
+            '<i class="icon-cog"></i>';
+        //Templates.loadTemplate(Templates.adminDropDownTemplate, null, 'admin-container');
+        $('#dfControl1 .btn-group').append(template);
     },
     showApp:function (name, url, type) {
 
@@ -101,7 +103,7 @@ Actions = {
                 Actions.getApps(response);
                 CurrentUserID = response.id;
                 if (response.is_sys_admin) {
-                    Actions.buildAdminDropDown();
+                    Actions.showAdminIcon();
                 }
             },
             error:function (response) {
@@ -142,7 +144,7 @@ Actions = {
                     Actions.getApps(response);
                     CurrentUserID = response.id;
                     if (response.is_sys_admin) {
-                        Actions.buildAdminDropDown();
+                        Actions.showAdminIcon();
                     }
                 },
                 error:function (response) {
@@ -411,9 +413,9 @@ $(document).ready(function () {
     $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) {
         e.stopPropagation();
     });
-    $('body').css('height', ($(window).height() - 76) + 'px');
+    $('body').css('height', ($(window).height() + 44) + 'px');
     $(window).resize(function () {
-        $('body').css('height', ($(window).height() - 76) + 'px');
+        $('body').css('height', ($(window).height() + 44) + 'px');
     });
 
     function doPasswordVerify() {
