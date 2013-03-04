@@ -1526,6 +1526,7 @@ html, body{
     background: none repeat scroll 0 0 white;
     -webkit-box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
     box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
+    overflow:auto;
 
 }
 #app-list-container table{
