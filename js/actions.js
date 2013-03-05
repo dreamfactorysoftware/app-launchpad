@@ -148,9 +148,7 @@ Actions = {
                     }
                 },
                 error:function (response) {
-                    if (response.status == 401) {
-                        $('#loginErrorMessage').addClass('alert-error').html("Invalid login attempt, please try again.")
-                    }
+                    $("#loginErrorMessage").addClass('alert-error').html(getErrorString(response));
                 }
             });
         } else {
