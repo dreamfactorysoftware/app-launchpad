@@ -56,9 +56,9 @@ Actions = {
         $('iframe').hide();
         if (name == "admin") {
             if ($('#admin').length > 0) {
-                $('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).show();
+                $('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).show();
             } else {
-                $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + url).appendTo('#app-container');
+                $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).appendTo('#app-container');
             }
             return;
         }
@@ -69,7 +69,7 @@ Actions = {
         if (type == 1) {
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', url).appendTo('#app-container');
         } else {
-            $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', 'http://' + location.host + '/app/' + name + url).appendTo('#app-container');
+            $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', CurrentServer + '/app/' + name + url).appendTo('#app-container');
         }
     },
     showUserInfo:function (user) {
@@ -81,7 +81,7 @@ Actions = {
 
         $.ajax({
             dataType:'json',
-            url:'http://' + location.host + '/rest/User/Session',
+            url:CurrentServer + '/rest/User/Session',
             data:'app_name=launchpad&method=GET',
             cache:false,
             success:function (response) {
@@ -98,7 +98,7 @@ Actions = {
 
         $.ajax({
             dataType:'json',
-            url:'http://' + location.host + '/rest/User/Session',
+            url:CurrentServer + '/rest/User/Session',
             data:'app_name=launchpad&method=GET',
             cache:false,
             success:function (response) {
@@ -137,7 +137,7 @@ Actions = {
             $.ajax({
                 dataType:'json',
                 type:'POST',
-                url:'http://' + location.host + '/REST/User/Session/?app_name=launchpad&method=POST',
+                url:CurrentServer + '/REST/User/Session/?app_name=launchpad&method=POST',
                 data:JSON.stringify({UserName:$('#UserName').val(), Password:$('#Password').val()}),
                 cache:false,
                 success:function (response) {
@@ -176,7 +176,7 @@ Actions = {
         }
         $.ajax({
             dataType:'json',
-            url:'http://' + location.host + '/rest/User/Challenge',
+            url:CurrentServer + '/rest/User/Challenge',
             data:'app_name=launchpad&username=' + $('#UserName').val() + '&method=GET',
             cache:false,
             success:function (response) {
@@ -203,7 +203,7 @@ Actions = {
                 $.ajax({
                     dataType:'json',
                     type:'POST',
-                    url:'http://' + location.host + '/REST/User/Challenge/?app_name=launchpad&username=' + $('#UserName').val() + '&method=POST',
+                    url:CurentServer + '/REST/User/Challenge/?app_name=launchpad&username=' + $('#UserName').val() + '&method=POST',
                     data:JSON.stringify({security_answer:$('#Answer').val(), new_password:$('#NPasswordReset').val()}),
                     cache:false,
                     success:function (response) {
@@ -250,7 +250,7 @@ Actions = {
 
         $.ajax({
             dataType:'json',
-            url:'http://' + location.host + '/rest/User/Profile/' + CurrentUserID + '/',
+            url:CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/',
             data: 'method=GET&app_name=' + Actions.getAppName(),
             cache:false,
             success:function (response) {
@@ -307,7 +307,7 @@ Actions = {
         $.ajax({
             dataType:'json',
             type:'POST',
-            url:'http://' + location.host + '/rest/User/Profile/' + CurrentUserID + '/?method=MERGE&app_name=' + Actions.getAppName() ,
+            url:CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/?method=MERGE&app_name=' + Actions.getAppName() ,
             data:JSON.stringify(NewUser),
             cache:false,
             success:function (response) {
@@ -361,7 +361,7 @@ Actions = {
         $.ajax({
             dataType:'json',
             type:'POST',
-            url:'http://' + location.host + '/rest/User/Password/?method=MERGE&app_name=' + Actions.getAppName() ,
+            url:CurrentServer + '/rest/User/Password/?method=MERGE&app_name=' + Actions.getAppName() ,
             data:pass,
             cache:false,
             success:function (response) {
@@ -385,7 +385,7 @@ Actions = {
         $.ajax({
             dataType:'json',
             type:'POST',
-            url:'http://' + location.host + '/rest/User/Session/' + CurrentUserID + '/',
+            url:CurrentServer + '/rest/User/Session/' + CurrentUserID + '/',
             data:'app_name=launchpad&method=DELETE',
             cache:false,
             success:function (response) {
