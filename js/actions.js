@@ -75,7 +75,9 @@ Actions = {
     showUserInfo:function (user) {
 
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
-        Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
+        if(user.username != 'guest'){
+            Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
+        }
     },
     checkSession:function (callback) {
 
