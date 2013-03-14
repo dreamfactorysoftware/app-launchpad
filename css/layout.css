@@ -1489,7 +1489,9 @@ div {margin: 0;padding: 0;}
     position: absolute;
     right: 0;
     top: 44px;
-
+    background-color:white;
+    -webkit-box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
+    box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
 }
 .app-loader{
     border:0px;
