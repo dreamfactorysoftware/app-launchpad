@@ -1,4 +1,4 @@
-Actions = {
+var Actions = {
     getAppName:function () {
 
         var pathArray = window.location.pathname.split('/');
@@ -410,6 +410,9 @@ Actions = {
     showSignInButton:function () {
 
         $("#dfControl1").html('<a class="btn btn-primary" onclick="Actions.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
+    },
+    showStatus: function(message, type){
+        $('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(3000);
     }
 };
 $(document).ready(function () {
