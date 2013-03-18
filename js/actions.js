@@ -304,6 +304,7 @@ var Actions = {
         NewUser.last_name = $("#lastname").val();
         NewUser.email = $("#email").val();
         NewUser.phone = $("#phone").val();
+        NewUser.default_app_id = $("#default_app").val();
         // require question
         var q = $("#security_question").val();
         if (q == '') {
