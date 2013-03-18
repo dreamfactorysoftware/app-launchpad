@@ -17,6 +17,22 @@ var Actions = {
 
         $('#error-container').empty().hide();
         Applications = {Applications:data};
+        AllApps = [];
+        AllApps = data.no_group_apps;
+        data.app_groups.forEach(function(group){
+            //AllApps.concat(group.apps);
+            group.apps.forEach(function(app){
+                AllApps.push(app);
+            });
+        });
+        AllApps.forEach(function(app){
+            var checked = false;
+            if(app.is_default){
+                checked = true;
+            }
+            var option = '<option checked = ' + checked + ' value="' + app.id + '">' + app.name + '</option>';
+            $("#default_app").append(option);
+        });
         if(User.is_sys_admin){
             // if admin and no apps then launch admin app
             if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
