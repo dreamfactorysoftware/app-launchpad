@@ -1,4 +1,4 @@
-var Actions = {
+Actions = {
     getAppName:function () {
 
         var pathArray = window.location.pathname.split('/');
@@ -16,7 +16,25 @@ var Actions = {
     getApps:function (data) {
 
         $('#error-container').empty().hide();
+
         Applications = {Applications:data};
+        AllApps = [];
+        AllApps = data.no_group_apps;
+        data.app_groups.forEach(function(group){
+            //AllApps.concat(group.apps);
+            group.apps.forEach(function(app){
+                AllApps.push(app);
+            });
+        });
+        AllApps.forEach(function(app){
+            var checked = false;
+            if(app.is_default){
+                Actions.showApp(app.api_name, app.url, app.is_url_external);
+                checked = true;
+            }
+            var option = '<option checked = ' + checked + ' value="' + app.id + '">' + app.name + '</option>';
+            $("#default_app").append(option);
+        });
         if(User.is_sys_admin){
             // if admin and no apps then launch admin app
             if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
@@ -260,6 +278,7 @@ var Actions = {
                 Actions.fillProfileForm();
                 $("#changeProfileErrorMessage").removeClass('alert-error').html('Use the form below to change your user profile.');
                 $('#changeProfileDialog').modal('show');
+
             },
             error:function (response) {
 
@@ -288,6 +307,7 @@ var Actions = {
         NewUser.last_name = $("#lastname").val();
         NewUser.email = $("#email").val();
         NewUser.phone = $("#phone").val();
+        NewUser.default_app_id = $("#default_app").val();
         // require question
         var q = $("#security_question").val();
         if (q == '') {
