@@ -432,7 +432,11 @@ Actions = {
         $("#dfControl1").html('<a class="btn btn-primary" onclick="Actions.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
     },
     showStatus: function(message, type){
-        $('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(3000);
+        if (type == "error") {
+            $('#error-container').html(message).removeClass().addClass('alert alert-warning center').show().fadeOut(5000);
+        } else {
+            $('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
+        }
     }
 };
 $(document).ready(function () {
