@@ -97,23 +97,6 @@ Actions = {
             Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
         }
     },
-    checkSession:function (callback) {
-
-        $.ajax({
-            dataType:'json',
-            url:CurrentServer + '/rest/User/Session',
-            data:'app_name=launchpad&method=GET',
-            cache:false,
-            success:function (response) {
-                callback();
-            },
-            error:function (response) {
-                if (response.status == 401) {
-                    Actions.doSignInDialog();
-                }
-            }
-        });
-    },
     updateSession:function () {
 
         $.ajax({
@@ -262,10 +245,6 @@ Actions = {
         $("#security_question").val('');
         $("#security_answer").val('');
     },
-    maybeDoProfileDialog:function () {
-
-        Actions.checkSession(Actions.doProfileDialog);
-    },
     doProfileDialog:function () {
 
         $.ajax({
@@ -281,7 +260,9 @@ Actions = {
 
             },
             error:function (response) {
-
+                if (response.status == 401) {
+                    Actions.doSignInDialog();
+                }
             }
         });
     },
@@ -339,7 +320,12 @@ Actions = {
                 Actions.clearProfile();
             },
             error:function (response) {
-                $("#changeProfileErrorMessage").addClass('alert-error').html('There was an error updating the profile.');
+                if (response.status == 401) {
+                    $("#changeProfileDialog").modal('hide');
+                    Actions.doSignInDialog();
+                } else {
+                    $("#changeProfileErrorMessage").addClass('alert-error').html('There was an error updating the profile.');
+                }
             }
         });
     },
@@ -351,10 +337,6 @@ Actions = {
         $('#OPassword').val('');
         $('#NPassword').val('');
         $('#VPassword').val('');
-    },
-    maybeDoChangePasswordDialog:function () {
-
-        Actions.checkSession(Actions.doChangePasswordDialog);
     },
     doChangePasswordDialog:function () {
 
@@ -391,7 +373,12 @@ Actions = {
                 Actions.clearChangePassword();
             },
             error:function (response) {
-                $("#changePasswordErrorMessage").addClass('alert-error').html('There was an error changing the password. Make sure you entered the correct old password.');
+                if (response.status == 401) {
+                    $("#changePasswordDialog").modal('hide');
+                    Actions.doSignInDialog();
+                } else {
+                    $("#changePasswordErrorMessage").addClass('alert-error').html('There was an error changing the password. Make sure you entered the correct old password.');
+                }
             }
         });
     },
@@ -416,8 +403,7 @@ Actions = {
                 $('#app-list').empty();
                 $('#admin-container').empty();
                 $("#logoffDialog").modal('hide');
-                Actions.showSignInButton();
-                Actions.doSignInDialog();
+                Actions.updateSession();
             },
             error:function (response) {
                 if (response.status == 401) {
