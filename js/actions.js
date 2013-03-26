@@ -416,8 +416,7 @@ Actions = {
                 $('#app-list').empty();
                 $('#admin-container').empty();
                 $("#logoffDialog").modal('hide');
-                Actions.showSignInButton();
-                Actions.doSignInDialog();
+                Actions.updateSession();
             },
             error:function (response) {
                 if (response.status == 401) {
