@@ -1602,9 +1602,15 @@ body{
 }
 .center
 {
-    margin-left:auto;
-    margin-right:auto;
-    width:200px;
-    text-align:center;
+    left: 50%;
+    margin-left: -100px;
+
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 20px;
+    width: 200px;
+    z-index: 999999;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4);
 
 }
