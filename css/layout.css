@@ -2001,6 +2001,7 @@ div {
 }
 
 #app-container {
+<<<<<<< HEAD
 	bottom:             0;
 	left:               0;
 	position:           absolute;
@@ -2009,6 +2010,16 @@ div {
 	background-color:   white;
 	-webkit-box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
 	box-shadow:         inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
+=======
+    height:100%;
+    left: 0px;
+    position: fixed;
+    right: 0;
+    top: 44px;
+    background-color:white;
+    -webkit-box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
+    box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, .5);
+>>>>>>> 682a3cd44857383f6b9c0d4ba1900c2ab2a95052
 }
 
 .app-loader {
@@ -2145,3 +2156,4 @@ body {
 	box-shadow:  0 6px 6px rgba(0, 0, 0, 0.4);
 
 }
+
