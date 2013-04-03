@@ -2139,3 +2139,14 @@ body {
 
 }
 
+#sidebar > ul:first-child > li {
+	border-radius: 4px 4px 0 0;
+}
+
+#sidebar > ul:last-child > li {
+	border-radius: 4px 4px 0 0;
+}
+
+#sidebar > ul > li.active {
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
+}
