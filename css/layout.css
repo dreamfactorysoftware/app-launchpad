@@ -1484,9 +1484,9 @@ div {margin: 0;padding: 0;}
 
 
 #app-container {
-    bottom: 0;
-    left: 0;
-    position: absolute;
+    height:100%;
+    left: 0px;
+    position: fixed;
     right: 0;
     top: 44px;
     background-color:white;
@@ -1585,6 +1585,9 @@ body{
     padding-left: 20px;
     padding-right: 20px;
     background-color:#333;
+    position:fixed;
+    width:100%;
+
 }
 
 .formLabel {
@@ -1614,3 +1617,4 @@ body{
     box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4);
 
 }
+
