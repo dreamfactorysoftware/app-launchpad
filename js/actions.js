@@ -85,6 +85,8 @@ Actions = {
         } else {
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', CurrentServer + '/app/' + name + url).appendTo('#app-container');
         }
+//        var a = document.getElementById(name);
+//        a && a.contentWindow && a.contentWindow.focus();
     },
     showUserInfo:function (user) {
 
@@ -112,6 +114,8 @@ Actions = {
             error:function (response) {
                 if (response.status == 401) {
                     Actions.doSignInDialog();
+                }else if(response.status == 500){
+                    Actions.showStatus(response.statusText, "error");
                 }
             }
         });
@@ -151,7 +155,11 @@ Actions = {
                     }
                 },
                 error:function (response) {
-                    $("#loginErrorMessage").addClass('alert-error').html(getErrorString(response));
+                    if (response.status == 401) {
+                        Actions.doSignInDialog();
+                    }else if(response.status == 500){
+                        Actions.showStatus(response.statusText, "error");
+                    }
                 }
             });
         } else {
@@ -415,13 +423,14 @@ Actions = {
     },
     showStatus: function(message, type){
         if (type == "error") {
-            $('#error-container').html(message).removeClass().addClass('alert alert-warning center').show().fadeOut(5000);
+            $('#error-container').html(message).removeClass().addClass('alert alert-danger center').show().fadeOut(10000);
         } else {
             $('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
         }
     }
 };
 $(document).ready(function () {
+
 
     $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) {
         e.stopPropagation();
