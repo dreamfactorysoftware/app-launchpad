@@ -8,6 +8,21 @@
 			"name":  "Sykes, Jason",
 			"email": "jasonsykes@dreamfactory.com",
 			"role":  "Lead Engineer, client-side"
+		},
+		{
+			"name":  "Hicks, Lee",
+			"email": "leehicks@dreamfactory.com",
+			"role":  "Lead Engineer, server-side"
+		},
+		{
+			"name":  "Appleton, Todd",
+			"email": "toddappleton@dreamfactory.com",
+			"role":  "Lead Engineer, client-side; UX/QA"
+		},
+		{
+			"name":  "Ablan, Jerry",
+			"email": "jerryablan@dreamfactory.com",
+			"role":  "Black Ops"
 		}
 	],
 	"homepage":          "http://dreamfactorybeta.com/",
