@@ -86,28 +86,22 @@ Actions = ({
     },
     updateSession: function () {
         var that = this;
-        $.ajax({
-            dataType: 'json',
-            url: CurrentServer + '/rest/User/Session',
-            data: 'app_name=launchpad&method=GET',
-            cache: false,
-            success: function (response) {
-                var session = response;
-                that.showUserInfo(session);
-                that.getApps(session);
-                CurrentUserID = session.id;
-                if (session.is_sys_admin) {
+        $.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
+            .done(function(data){
+                that.showUserInfo(data);
+                that.getApps(data);
+                CurrentUserID = data.id;
+                if (data.is_sys_admin) {
                     that.showAdminIcon();
                 }
-            },
-            error: function (response) {
+            })
+            .fail(function(response){
                 if (response.status == 401) {
                     this.doSignInDialog();
                 } else if (response.status == 500) {
                     this.showStatus(response.statusText, "error");
                 }
-            }
-        });
+            });
     },
     //
     // sign in functions
