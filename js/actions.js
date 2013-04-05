@@ -4,15 +4,12 @@ Actions = ({
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
     },
     getApps: function (data) {
-        var that = this;
-
         $('#error-container').empty().hide();
 
         Applications = {Applications: data};
         AllApps = [];
         AllApps = data.no_group_apps;
         data.app_groups.forEach(function (group) {
-            //AllApps.concat(group.apps);
             group.apps.forEach(function (app) {
                 AllApps.push(app);
             });
@@ -20,7 +17,7 @@ Actions = ({
         AllApps.forEach(function (app) {
             var checked = false;
             if (app.is_default) {
-                that.showApp(app.api_name, app.url, app.is_url_external);
+                Actions.showApp(app.api_name, app.url, app.is_url_external);
                 checked = true;
             }
             var option = '<option checked = ' + checked + ' value="' + app.id + '">' + app.name + '</option>';
@@ -40,9 +37,9 @@ Actions = ({
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
             return;
         }
-        if (data.app_groups.length != 0 || data.no_group_apps.length != 0) {
-            this.LoadAppTemplates();
-        }
+//        if (data.app_groups.length != 0 || data.no_group_apps.length != 0) {
+//            this.LoadAppTemplates();
+//        }
     },
     LoadAppTemplates: function () {
 
@@ -84,22 +81,30 @@ Actions = ({
             Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
         }
     },
-    updateSession: function () {
+    updateSession: function (action) {
+        Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
         var that = this;
         $.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
             .done(function(data){
-                that.showUserInfo(data);
-                that.getApps(data);
-                CurrentUserID = data.id;
-                if (data.is_sys_admin) {
+                $.data(document.body, 'session', data);
+            })
+            .complete(function(){
+                var sessionInfo = $.data(document.body, 'session');
+                if (sessionInfo.username != 'guest') {
+                    Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
+                }
+                Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
+                if (sessionInfo.is_sys_admin) {
                     that.showAdminIcon();
                 }
+                CurrentUserID = sessionInfo.id;
+                Actions.getApps(sessionInfo);
             })
             .fail(function(response){
                 if (response.status == 401) {
-                    this.doSignInDialog();
+                    that.doSignInDialog();
                 } else if (response.status == 500) {
-                    this.showStatus(response.statusText, "error");
+                    that.showStatus(response.statusText, "error");
                 }
             });
     },
@@ -119,37 +124,67 @@ Actions = ({
     },
     signIn: function () {
         var that = this;
-        if ($('#UserName').val() && $('#Password').val()) {
-
-
-            $.ajax({
-                dataType: 'json',
-                type: 'POST',
-                url: CurrentServer + '/REST/User/Session/?app_name=launchpad&method=POST',
-                data: JSON.stringify({UserName: $('#UserName').val(), Password: $('#Password').val()}),
-                cache: false,
-                success: function (response) {
-                    $("#loginDialog").modal('hide');
-                    $('#UserName', '#Password').val('');
-                    User = response;
-                    Actions.showUserInfo(response);
-                    Actions.getApps(response);
-                    CurrentUserID = response.id;
-                    if (response.is_sys_admin) {
-                        Actions.showAdminIcon();
-                    }
-                },
-                error: function (response) {
-                    if (response.status == 401) {
-                        that.doSignInDialog();
-                    } else if (response.status == 500) {
-                        that.showStatus(response.statusText, "error");
-                    }
+        if (!$('#UserName').val() || !$('#Password').val()) {
+            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name and Password to continue.');
+            return;
+        }
+        $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({UserName: $('#UserName').val(), Password: $('#Password').val()}))
+            .done(function(data){
+                $.data(document.body, 'session', data);
+            })
+            .complete(function(){
+                Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+                var sessionInfo = $.data(document.body, 'session');
+                if (sessionInfo.username != 'guest') {
+                    Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
+                }
+                Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
+                if (sessionInfo.is_sys_admin) {
+                    Actions.showAdminIcon();
+                }
+                CurrentUserID = sessionInfo.id;
+                Actions.getApps(sessionInfo);
+                $("#loginDialog").modal('hide');
+            })
+            .fail(function(response){
+                if (response.status == 401) {
+                    that.doSignInDialog();
+                } else if (response.status == 500) {
+                    that.showStatus(response.statusText, "error");
                 }
             });
-        } else {
-            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name and Password to continue.');
-        }
+//        var that = this;
+//        if ($('#UserName').val() && $('#Password').val()) {
+//
+//
+//            $.ajax({
+//                dataType: 'json',
+//                type: 'POST',
+//                url: CurrentServer + '/REST/User/Session/?app_name=launchpad',
+//                data: JSON.stringify({UserName: $('#UserName').val(), Password: $('#Password').val()}),
+//                cache: false,
+//                success: function (response) {
+//                    $("#loginDialog").modal('hide');
+//                    $('#UserName', '#Password').val('');
+//                    User = response;
+//                    Actions.showUserInfo(response);
+//                    Actions.getApps(response);
+//                    CurrentUserID = response.id;
+//                    if (response.is_sys_admin) {
+//                        Actions.showAdminIcon();
+//                    }
+//                },
+//                error: function (response) {
+//                    if (response.status == 401) {
+//                        that.doSignInDialog();
+//                    } else if (response.status == 500) {
+//                        that.showStatus(response.statusText, "error");
+//                    }
+//                }
+//            });
+//        } else {
+//            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name and Password to continue.');
+//        }
     },
     //
     // reset password functions
