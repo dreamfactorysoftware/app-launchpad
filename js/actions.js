@@ -138,11 +138,11 @@ Actions = ({
                     $("#loginDialog").modal('hide');
                     $('#UserName', '#Password').val('');
                     User = response;
-                    that.showUserInfo(response);
-                    that.getApps(response);
+                    Actions.showUserInfo(response);
+                    Actions.getApps(response);
                     CurrentUserID = response.id;
                     if (response.is_sys_admin) {
-                        that.showAdminIcon();
+                        Actions.showAdminIcon();
                     }
                 },
                 error: function (response) {
