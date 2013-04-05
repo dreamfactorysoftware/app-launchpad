@@ -1,45 +1,36 @@
-Actions = {
-    getAppName:function () {
-
-        var pathArray = window.location.pathname.split('/');
-        return pathArray[pathArray.length - 2];
-    },
-    init:function () {
-
+Actions = ({
+    init: function () {
         this.updateSession();
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
     },
-    showError:function (errors) {
-
-        Templates.loadTemplate(Templates.errorTemplate, errors, 'error-container');
-    },
-    getApps:function (data) {
+    getApps: function (data) {
+        var that = this;
 
         $('#error-container').empty().hide();
 
-        Applications = {Applications:data};
+        Applications = {Applications: data};
         AllApps = [];
         AllApps = data.no_group_apps;
-        data.app_groups.forEach(function(group){
+        data.app_groups.forEach(function (group) {
             //AllApps.concat(group.apps);
-            group.apps.forEach(function(app){
+            group.apps.forEach(function (app) {
                 AllApps.push(app);
             });
         });
-        AllApps.forEach(function(app){
+        AllApps.forEach(function (app) {
             var checked = false;
-            if(app.is_default){
-                Actions.showApp(app.api_name, app.url, app.is_url_external);
+            if (app.is_default) {
+                that.showApp(app.api_name, app.url, app.is_url_external);
                 checked = true;
             }
             var option = '<option checked = ' + checked + ' value="' + app.id + '">' + app.name + '</option>';
             $("#default_app").append(option);
         });
-        if(User.is_sys_admin){
-            Actions.showApp('admin','/public/admin/#/app','0');
-        }else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
+        if (data.is_sys_admin) {
+            this.showApp('admin', '/public/admin/#/app', '0');
+        } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
             $('#app-list-container').hide();
-            Actions.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].url, data.app_groups[0].apps[0].is_url_external);
+            this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].url, data.app_groups[0].apps[0].is_url_external);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
             $('#app-list-container').hide();
@@ -50,7 +41,7 @@ Actions = {
             return;
         }
         if (data.app_groups.length != 0 || data.no_group_apps.length != 0) {
-            Actions.LoadAppTemplates();
+            this.LoadAppTemplates();
         }
     },
     LoadAppTemplates: function () {
@@ -58,13 +49,13 @@ Actions = {
         Templates.loadTemplate(Templates.navBarDropDownTemplate, Applications, 'app-list');
         Templates.loadTemplate(Templates.appIconTemplate, Applications, 'app-list-container');
     },
-    showAdminIcon:function () {
+    showAdminIcon: function () {
         var template = '<a id="adminLink" class="btn btn-inverse" title="Admin Console" onclick="Actions.showApp(\'admin\',\'/public/admin/#/app\',\'0\')">' +
             '<i class="icon-cog"></i>';
         //Templates.loadTemplate(Templates.adminDropDownTemplate, null, 'admin-container');
         $('#dfControl1 .btn-group').append(template);
     },
-    showApp:function (name, url, type) {
+    showApp: function (name, url, type) {
 
         $('#app-list-container').hide();
         $('iframe').hide();
@@ -85,37 +76,35 @@ Actions = {
         } else {
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', CurrentServer + '/app/' + name + url).appendTo('#app-container');
         }
-//        var a = document.getElementById(name);
-//        a && a.contentWindow && a.contentWindow.focus();
     },
-    showUserInfo:function (user) {
+    showUserInfo: function (user) {
 
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
-        if(user.username != 'guest'){
+        if (user.username != 'guest') {
             Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
         }
     },
-    updateSession:function () {
-
+    updateSession: function () {
+        var that = this;
         $.ajax({
-            dataType:'json',
-            url:CurrentServer + '/rest/User/Session',
-            data:'app_name=launchpad&method=GET',
-            cache:false,
-            success:function (response) {
-                User = response;
-                Actions.showUserInfo(response);
-                Actions.getApps(response);
-                CurrentUserID = response.id;
-                if (response.is_sys_admin) {
-                    Actions.showAdminIcon();
+            dataType: 'json',
+            url: CurrentServer + '/rest/User/Session',
+            data: 'app_name=launchpad&method=GET',
+            cache: false,
+            success: function (response) {
+                var session = response;
+                that.showUserInfo(session);
+                that.getApps(session);
+                CurrentUserID = session.id;
+                if (session.is_sys_admin) {
+                    that.showAdminIcon();
                 }
             },
-            error:function (response) {
+            error: function (response) {
                 if (response.status == 401) {
-                    Actions.doSignInDialog();
-                }else if(response.status == 500){
-                    Actions.showStatus(response.statusText, "error");
+                    this.doSignInDialog();
+                } else if (response.status == 500) {
+                    this.showStatus(response.statusText, "error");
                 }
             }
         });
@@ -123,42 +112,44 @@ Actions = {
     //
     // sign in functions
     //
-    clearSignIn:function () {
-
+    clearSignIn: function () {
         $('#UserName').val('');
         $('#Password').val('');
+
     },
-    doSignInDialog:function () {
+    doSignInDialog: function () {
 
         $('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Name and Password below to sign in.");
-        Actions.clearSignIn();
+        this.clearSignIn();
         $("#loginDialog").modal('show');
     },
-    signIn:function () {
-
+    signIn: function () {
+        var that = this;
         if ($('#UserName').val() && $('#Password').val()) {
+
+
             $.ajax({
-                dataType:'json',
-                type:'POST',
-                url:CurrentServer + '/REST/User/Session/?app_name=launchpad&method=POST',
-                data:JSON.stringify({UserName:$('#UserName').val(), Password:$('#Password').val()}),
-                cache:false,
-                success:function (response) {
+                dataType: 'json',
+                type: 'POST',
+                url: CurrentServer + '/REST/User/Session/?app_name=launchpad&method=POST',
+                data: JSON.stringify({UserName: $('#UserName').val(), Password: $('#Password').val()}),
+                cache: false,
+                success: function (response) {
                     $("#loginDialog").modal('hide');
-                    Actions.clearSignIn();
+                    $('#UserName', '#Password').val('');
                     User = response;
-                    Actions.showUserInfo(response);
-                    Actions.getApps(response);
+                    that.showUserInfo(response);
+                    that.getApps(response);
                     CurrentUserID = response.id;
                     if (response.is_sys_admin) {
-                        Actions.showAdminIcon();
+                        that.showAdminIcon();
                     }
                 },
-                error:function (response) {
+                error: function (response) {
                     if (response.status == 401) {
-                        Actions.doSignInDialog();
-                    }else if(response.status == 500){
-                        Actions.showStatus(response.statusText, "error");
+                        that.doSignInDialog();
+                    } else if (response.status == 500) {
+                        that.showStatus(response.statusText, "error");
                     }
                 }
             });
@@ -169,63 +160,64 @@ Actions = {
     //
     // reset password functions
     //
-    clearResetPassword:function () {
+    clearResetPassword: function () {
 
         $('#Answer').val('');
         $('#NPasswordReset').val('');
         $('#VPasswordReset').val('');
     },
-    doResetPasswordDialog:function () {
-
+    doResetPasswordDialog: function () {
+        var that = this;
         if ($('#UserName').val() == '') {
             $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name to continue.');
             return;
         }
         $.ajax({
-            dataType:'json',
-            url:CurrentServer + '/rest/User/Challenge',
-            data:'app_name=launchpad&username=' + $('#UserName').val() + '&method=GET',
-            cache:false,
-            success:function (response) {
+            dataType: 'json',
+            url: CurrentServer + '/rest/User/Challenge',
+            data: 'app_name=launchpad&username=' + $('#UserName').val() + '&method=GET',
+            cache: false,
+            success: function (response) {
                 if (response.security_question) {
                     $("#Question").html(response.security_question);
                     $("#loginDialog").modal('hide');
-                    Actions.clearResetPassword();
+                    that.clearResetPassword();
                     $("#resetErrorMessage").removeClass('alert-error').html('Please complete the form below to reset your password.');
                     $("#resetPasswordDialog").modal('show');
                 } else {
                     $("#loginErrorMessage").addClass('alert-error').html('Unable to retrieve your security question.');
                 }
             },
-            error:function (response) {
+            error: function (response) {
                 $("#loginErrorMessage").addClass('alert-error').html('Unable to retrieve your security question.');
             }
         });
 
     },
-    resetPassword:function () {
+    resetPassword: function () {
 
         if ($('#Answer').val() && $('#NPasswordReset').val() && $('#VPasswordReset').val()) {
             if ($("#NPasswordReset").val() == $("#VPasswordReset").val()) {
+                var that = this;
                 $.ajax({
-                    dataType:'json',
-                    type:'POST',
-                    url:CurentServer + '/REST/User/Challenge/?app_name=launchpad&username=' + $('#UserName').val() + '&method=POST',
-                    data:JSON.stringify({security_answer:$('#Answer').val(), new_password:$('#NPasswordReset').val()}),
-                    cache:false,
-                    success:function (response) {
+                    dataType: 'json',
+                    type: 'POST',
+                    url: CurentServer + '/REST/User/Challenge/?app_name=launchpad&username=' + $('#UserName').val() + '&method=POST',
+                    data: JSON.stringify({security_answer: $('#Answer').val(), new_password: $('#NPasswordReset').val()}),
+                    cache: false,
+                    success: function (response) {
                         $('#resetErrorMessage').removeClass('alert-error');
                         $("#resetPasswordDialog").modal('hide');
-                        Actions.clearResetPassword();
+                        that.clearResetPassword();
                         User = response;
-                        Actions.showUserInfo(response);
-                        Actions.getApps(response);
+                        that.showUserInfo(response);
+                        that.getApps(response);
                         CurrentUserID = response.id;
                         if (response.is_sys_admin) {
-                            Actions.buildAdminDropDown();
+                            that.buildAdminDropDown();
                         }
                     },
-                    error:function (response) {
+                    error: function (response) {
                         $("#resetErrorMessage").addClass('alert-error').html('The password could not be reset with the entered values. Please check the answer to your security question.');
                     }
                 });
@@ -239,7 +231,7 @@ Actions = {
     //
     // edit profile functions
     //
-    clearProfile:function () {
+    clearProfile: function () {
 
         $("#displayname").val('');
         $("#firstname").val('');
@@ -249,28 +241,28 @@ Actions = {
         $("#security_question").val('');
         $("#security_answer").val('');
     },
-    doProfileDialog:function () {
-
+    doProfileDialog: function () {
+        var that = this;
         $.ajax({
-            dataType:'json',
-            url:CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/',
-            data: 'method=GET&app_name=' + Actions.getAppName(),
-            cache:false,
-            success:function (response) {
+            dataType: 'json',
+            url: CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/',
+            data: 'method=GET&app_name=launchpad',
+            cache: false,
+            success: function (response) {
                 Profile = response;
-                Actions.fillProfileForm();
+                that.fillProfileForm();
                 $("#changeProfileErrorMessage").removeClass('alert-error').html('Use the form below to change your user profile.');
                 $('#changeProfileDialog').modal('show');
 
             },
-            error:function (response) {
+            error: function (response) {
                 if (response.status == 401) {
-                    Actions.doSignInDialog();
+                    that.doSignInDialog();
                 }
             }
         });
     },
-    fillProfileForm:function () {
+    fillProfileForm: function () {
 
         $("#displayname").val(Profile.display_name);
         $("#firstname").val(Profile.first_name);
@@ -284,8 +276,8 @@ Actions = {
         }
         $("#security_answer").val('');
     },
-    updateProfile:function () {
-
+    updateProfile: function () {
+        var that = this;
         NewUser = {};
         NewUser.display_name = $("#displayname").val();
         NewUser.first_name = $("#firstname").val();
@@ -312,21 +304,21 @@ Actions = {
             NewUser.security_answer = a;
         }
         $.ajax({
-            dataType:'json',
-            type:'POST',
-            url:CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/?method=MERGE&app_name=' + Actions.getAppName() ,
-            data:JSON.stringify(NewUser),
-            cache:false,
-            success:function (response) {
+            dataType: 'json',
+            type: 'POST',
+            url: CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/?method=MERGE&app_name=launchpad',
+            data: JSON.stringify(NewUser),
+            cache: false,
+            success: function (response) {
                 // update display name
-                Actions.updateSession();
+                that.updateSession();
                 $("#changeProfileDialog").modal('hide');
-                Actions.clearProfile();
+                that.clearProfile();
             },
-            error:function (response) {
+            error: function (response) {
                 if (response.status == 401) {
                     $("#changeProfileDialog").modal('hide');
-                    Actions.doSignInDialog();
+                    that.doSignInDialog();
                 } else {
                     $("#changeProfileErrorMessage").addClass('alert-error').html('There was an error updating the profile.');
                 }
@@ -336,19 +328,19 @@ Actions = {
     //
     // change password functions
     //
-    clearChangePassword:function () {
+    clearChangePassword: function () {
 
         $('#OPassword').val('');
         $('#NPassword').val('');
         $('#VPassword').val('');
     },
-    doChangePasswordDialog:function () {
+    doChangePasswordDialog: function () {
 
         $('#changePasswordErrorMessage').removeClass('alert-error').html('Use the form below to change your password.');
-        Actions.clearChangePassword();
+        this.clearChangePassword();
         $("#changePasswordDialog").modal('show');
     },
-    checkPassword:function () {
+    checkPassword: function () {
 
         if ($("#OPassword").val() == '' || $("#NPassword").val() == '' || $("#VPassword").val() == '') {
             $("#changePasswordErrorMessage").addClass('alert-error').html('You must enter old and new passwords.');
@@ -356,30 +348,30 @@ Actions = {
         }
         if ($("#NPassword").val() == $("#VPassword").val()) {
             var data = {
-                old_password:$("#OPassword").val(),
-                new_password:$("#NPassword").val()
+                old_password: $("#OPassword").val(),
+                new_password: $("#NPassword").val()
             };
-            Actions.updatePassword(JSON.stringify(data));
+            this.updatePassword(JSON.stringify(data));
         } else {
             $("#changePasswordErrorMessage").addClass('alert-error').html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
         }
     },
-    updatePassword:function (pass) {
-
+    updatePassword: function (pass) {
+        var that = this;
         $.ajax({
-            dataType:'json',
-            type:'POST',
-            url:CurrentServer + '/rest/User/Password/?method=MERGE&app_name=' + Actions.getAppName() ,
-            data:pass,
-            cache:false,
-            success:function (response) {
+            dataType: 'json',
+            type: 'POST',
+            url: CurrentServer + '/rest/User/Password/?method=MERGE&app_name=launchpad',
+            data: pass,
+            cache: false,
+            success: function (response) {
                 $("#changePasswordDialog").modal('hide');
-                Actions.clearChangePassword();
+                that.clearChangePassword();
             },
-            error:function (response) {
+            error: function (response) {
                 if (response.status == 401) {
                     $("#changePasswordDialog").modal('hide');
-                    Actions.doSignInDialog();
+                    that.doSignInDialog();
                 } else {
                     $("#changePasswordErrorMessage").addClass('alert-error').html('There was an error changing the password. Make sure you entered the correct old password.');
                 }
@@ -389,46 +381,46 @@ Actions = {
     //
     // sign out functions
     //
-    doSignOutDialog:function () {
+    doSignOutDialog: function () {
 
         $("#logoffDialog").modal('show');
     },
-    signOut:function () {
-
+    signOut: function () {
+        var that = this;
         $.ajax({
-            dataType:'json',
-            type:'POST',
-            url:CurrentServer + '/rest/User/Session/' + CurrentUserID + '/',
-            data:'app_name=launchpad&method=DELETE',
-            cache:false,
-            success:function (response) {
+            dataType: 'json',
+            type: 'POST',
+            url: CurrentServer + '/rest/User/Session/' + CurrentUserID + '/',
+            data: 'app_name=launchpad&method=DELETE',
+            cache: false,
+            success: function (response) {
                 $('#app-container').empty();
                 $('#app-list-container').empty();
                 $('#app-list').empty();
                 $('#admin-container').empty();
                 $("#logoffDialog").modal('hide');
-                Actions.updateSession();
+                that.updateSession();
             },
-            error:function (response) {
+            error: function (response) {
                 if (response.status == 401) {
-                    Actions.showSignInButton();
-                    Actions.doSignInDialog();
+                    that.showSignInButton();
+                    that.doSignInDialog();
                 }
             }
         });
     },
-    showSignInButton:function () {
+    showSignInButton: function () {
 
-        $("#dfControl1").html('<a class="btn btn-primary" onclick="Actions.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
+        $("#dfControl1").html('<a class="btn btn-primary" onclick="this.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
     },
-    showStatus: function(message, type){
+    showStatus: function (message, type) {
         if (type == "error") {
             $('#error-container').html(message).removeClass().addClass('alert alert-danger center').show().fadeOut(10000);
         } else {
             $('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
         }
     }
-};
+});
 $(document).ready(function () {
 
 
