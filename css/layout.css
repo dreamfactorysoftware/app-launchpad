@@ -2153,3 +2153,17 @@ body {
 #sidebar > ul > li.active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) inset;
 }
+#loading{
+    color:white;
+    display:none;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    z-index:999999;
+    background-color:#E78F1E;
+    box-shadow:    0 5px 3px #666666;
+}

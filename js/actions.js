@@ -87,8 +87,6 @@ Actions = ({
         $.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
             .done(function(data){
                 $.data(document.body, 'session', data);
-            })
-            .complete(function(){
                 var sessionInfo = $.data(document.body, 'session');
                 if (sessionInfo.username != 'guest') {
                     Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
@@ -128,11 +126,10 @@ Actions = ({
             $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name and Password to continue.');
             return;
         }
+        $('#loading').show();
         $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({UserName: $('#UserName').val(), Password: $('#Password').val()}))
             .done(function(data){
                 $.data(document.body, 'session', data);
-            })
-            .complete(function(){
                 Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
                 var sessionInfo = $.data(document.body, 'session');
                 if (sessionInfo.username != 'guest') {
@@ -145,38 +142,13 @@ Actions = ({
                 CurrentUserID = sessionInfo.id;
                 Actions.getApps(sessionInfo);
                 $("#loginDialog").modal('hide');
+                $("#loading").hide();
             })
             .fail(function(response){
+                $("#loading").hide();
                 $("#loginErrorMessage").addClass('alert-error').html(getErrorString(response));
             });
-//        var that = this;
-//        if ($('#UserName').val() && $('#Password').val()) {
-//
-//
-//            $.ajax({
-//                dataType: 'json',
-//                type: 'POST',
-//                url: CurrentServer + '/REST/User/Session/?app_name=launchpad',
-//                data: JSON.stringify({UserName: $('#UserName').val(), Password: $('#Password').val()}),
-//                cache: false,
-//                success: function (response) {
-//                    $("#loginDialog").modal('hide');
-//                    $('#UserName', '#Password').val('');
-//                    User = response;
-//                    Actions.showUserInfo(response);
-//                    Actions.getApps(response);
-//                    CurrentUserID = response.id;
-//                    if (response.is_sys_admin) {
-//                        Actions.showAdminIcon();
-//                    }
-//                },
-//                error: function (response) {
-//                    $("#loginErrorMessage").addClass('alert-error').html(getErrorString(response));
-//                }
-//            });
-//        } else {
-//            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name and Password to continue.');
-//        }
+
     },
     //
     // reset password functions
