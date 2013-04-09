@@ -171,11 +171,7 @@ Actions = ({
 //                    }
 //                },
 //                error: function (response) {
-//                    if (response.status == 401) {
-//                        that.doSignInDialog();
-//                    } else if (response.status == 500) {
-//                        that.showStatus(response.statusText, "error");
-//                    }
+//                    $("#loginErrorMessage").addClass('alert-error').html(getErrorString(response));
 //                }
 //            });
 //        } else {
