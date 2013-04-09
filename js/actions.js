@@ -14,16 +14,18 @@ Actions = ({
                 AllApps.push(app);
             });
         });
+        var defaultShown = false;
         AllApps.forEach(function (app) {
-            var checked = false;
+            var selected = false;
             if (app.is_default) {
                 Actions.showApp(app.api_name, app.url, app.is_url_external);
-                checked = true;
+                selected  = true;
+                defaultShown=true;
             }
-            var option = '<option checked = ' + checked + ' value="' + app.id + '">' + app.name + '</option>';
+            var option = '<option selected = ' + selected + ' value="' + app.id + '">' + app.name + '</option>';
             $("#default_app").append(option);
         });
-        if (data.is_sys_admin) {
+        if (data.is_sys_admin && !defaultShown) {
             this.showApp('admin', '/public/admin/#/app', '0');
         } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
             $('#app-list-container').hide();
