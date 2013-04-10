@@ -25,7 +25,7 @@ Actions = ({
             var option = '<option value="' + app.id + '">' + app.name + '</option>';
             $("#default_app").append(option);
         });
-           var noption = '<option value="">None</option>';
+        var noption = '<option value="">None</option>';
         $("#default_app").append(noption);
         $("#default_app").val(window.defaultApp);
         if (data.is_sys_admin && !defaultShown) {
@@ -42,9 +42,9 @@ Actions = ({
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
             return;
         }
-//        if (data.app_groups.length != 0 || data.no_group_apps.length != 0) {
-//            this.LoadAppTemplates();
-//        }
+        if (data.app_groups.length != 0 || data.no_group_apps.length != 0) {
+            this.LoadAppTemplates();
+        }
     },
     LoadAppTemplates: function () {
 
