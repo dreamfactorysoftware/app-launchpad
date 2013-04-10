@@ -19,7 +19,7 @@ Actions = ({
         AllApps.forEach(function (app) {
             if (app.is_default) {
                 Actions.showApp(app.api_name, app.url, app.is_url_external);
-                window.defaultApp = app.id;
+                //window.defaultApp = app.id;
                 defaultShown=true;
             }
             var option = '<option value="' + app.id + '">' + app.name + '</option>';
@@ -27,7 +27,7 @@ Actions = ({
         });
         var noption = '<option value="">None</option>';
         $("#default_app").append(noption);
-        $("#default_app").val(window.defaultApp);
+        //$("#default_app").val(window.defaultApp);
         if (data.is_sys_admin && !defaultShown) {
             this.showApp('admin', '/public/admin/#/app', '0');
         } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
@@ -267,6 +267,7 @@ Actions = ({
         $("#lastname").val(Profile.last_name);
         $("#email").val(Profile.email);
         $("#phone").val(Profile.phone);
+        $("#default_app").val(Profile.default_app_id);
         if (Profile.security_question) {
             $("#security_question").val(Profile.security_question);
         } else {
