@@ -26,6 +26,8 @@ Actions = ({
             var option = '<option value="' + app.id + '">' + app.name + '</option>';
             $("#default_app").append(option);
         });
+           var noption = '<option value="">None</option>';
+        $("#default_app").append(noption);
         $("#default_app").val(window.defaultApp);
         if (data.is_sys_admin && !defaultShown) {
             this.showApp('admin', '/public/admin/#/app', '0');
