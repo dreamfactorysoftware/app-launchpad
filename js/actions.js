@@ -4,6 +4,7 @@ Actions = ({
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
     },
     getApps: function (data) {
+        console.log(data);
         $('#error-container').empty().hide();
 
         Applications = {Applications: data};
@@ -15,16 +16,17 @@ Actions = ({
             });
         });
         var defaultShown = false;
+        $("#default_app").empty();
         AllApps.forEach(function (app) {
-            var selected = false;
             if (app.is_default) {
                 Actions.showApp(app.api_name, app.url, app.is_url_external);
-                selected  = true;
+                window.defaultApp = app.id;
                 defaultShown=true;
             }
-            var option = '<option selected = ' + selected + ' value="' + app.id + '">' + app.name + '</option>';
+            var option = '<option value="' + app.id + '">' + app.name + '</option>';
             $("#default_app").append(option);
         });
+        $("#default_app").val(window.defaultApp);
         if (data.is_sys_admin && !defaultShown) {
             this.showApp('admin', '/public/admin/#/app', '0');
         } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
@@ -306,6 +308,7 @@ Actions = ({
             cache: false,
             success: function (response) {
                 // update display name
+
                 that.updateSession();
                 $("#changeProfileDialog").modal('hide');
                 that.clearProfile();
