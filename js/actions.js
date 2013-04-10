@@ -4,7 +4,6 @@ Actions = ({
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
     },
     getApps: function (data) {
-        console.log(data);
         $('#error-container').empty().hide();
 
         Applications = {Applications: data};
