@@ -81,7 +81,7 @@ Actions = ({
         if(fullscreen){
             this.toggleFullScreen(true);
         }
-        this.toggleFullScreen(true);
+       // this.toggleFullScreen(true);
     },
     showUserInfo: function (user) {
 
