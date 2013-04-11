@@ -18,7 +18,7 @@ Actions = ({
         $("#default_app").empty();
         AllApps.forEach(function (app) {
             if (app.is_default) {
-                Actions.showApp(app.api_name, app.url, app.is_url_external);
+                Actions.showApp(app.api_name, app.url, app.is_url_external, app.requires_fullscreen);
                 //window.defaultApp = app.id;
                 defaultShown=true;
             }
@@ -57,7 +57,7 @@ Actions = ({
         //Templates.loadTemplate(Templates.adminDropDownTemplate, null, 'admin-container');
         $('#dfControl1 .btn-group').append(template);
     },
-    showApp: function (name, url, type) {
+    showApp: function (name, url, type, fullscreen) {
 
         $('#app-list-container').hide();
         $('iframe').hide();
@@ -77,6 +77,9 @@ Actions = ({
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', url).appendTo('#app-container');
         } else {
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', CurrentServer + '/app/' + name + url).appendTo('#app-container');
+        }
+        if(fullscreen){
+            this.toggleFullScreen(true);
         }
     },
     showUserInfo: function (user) {
@@ -191,6 +194,13 @@ Actions = ({
             }
         });
 
+    },
+    toggleFullScreen: function(toggle){
+        if(toggle){
+            $('#app-container').css("top", "0px");
+        }else{
+            $('#app-container').css("top", "44px");
+        }
     },
     resetPassword: function () {
 
