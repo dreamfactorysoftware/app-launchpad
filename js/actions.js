@@ -81,6 +81,7 @@ Actions = ({
         if(fullscreen){
             this.toggleFullScreen(true);
         }
+        this.toggleFullScreen(true);
     },
     showUserInfo: function (user) {
 
@@ -197,9 +198,9 @@ Actions = ({
     },
     toggleFullScreen: function(toggle){
         if(toggle){
-            $('#app-container').css("top", "0px");
+            $('#app-container').css({"top":"0px", "z-index" :999999});
         }else{
-            $('#app-container').css("top", "44px");
+            $('#app-container').css({"top":"44px", "z-index" :1});
         }
     },
     resetPassword: function () {
