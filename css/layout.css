@@ -2172,12 +2172,12 @@ body {
     display: none;
     font-size: 0.9em;
     left: 50%;
-    margin-left: -50px;
-    margin-right: -50px;
+    margin-left: -70px;
+    margin-right: -70px;
     padding-top: 10px;
     position: absolute;
     top: -8px;
-    width: 100px;
+    width: 140px;
     z-index: 999999;
-
+    white-space: nowrap;
 }
