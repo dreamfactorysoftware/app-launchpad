@@ -81,7 +81,6 @@ Actions = ({
         if(fullscreen){
             this.toggleFullScreen(true);
         }
-       // this.toggleFullScreen(true);
     },
     showUserInfo: function (user) {
 
@@ -198,9 +197,11 @@ Actions = ({
     },
     toggleFullScreen: function(toggle){
         if(toggle){
-            $('#app-container').css({"top":"0px", "z-index" :999999});
+            $('#app-container').css({"top":"0px", "z-index" :999998});
+            $('#rocket').show();
         }else{
             $('#app-container').css({"top":"44px", "z-index" :1});
+            $('#rocket').hide();
         }
     },
     resetPassword: function () {

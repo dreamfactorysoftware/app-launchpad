@@ -2167,3 +2167,17 @@ body {
     background-color:#E78F1E;
     box-shadow:    0 5px 3px #666666;
 }
+#rocket{
+    box-shadow: 0 5px 3px #000000;
+    display: none;
+    font-size: 0.9em;
+    left: 50%;
+    margin-left: -25px;
+    margin-right: -25px;
+    padding-top: 10px;
+    position: absolute;
+    top: -8px;
+    width: 100px;
+    z-index: 999999;
+
+}
