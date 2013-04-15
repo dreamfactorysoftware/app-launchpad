@@ -29,14 +29,14 @@ Actions = ({
         $("#default_app").append(noption);
         //$("#default_app").val(window.defaultApp);
         if (data.is_sys_admin && !defaultShown) {
-            this.showApp('admin', '/public/admin/#/app', '0');
+            this.showApp('admin', '/public/admin/#/app', '0', false);
         } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
             $('#app-list-container').hide();
-            this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].url, data.app_groups[0].apps[0].is_url_external);
+            this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].url, data.app_groups[0].apps[0].is_url_external, data.app_groups[0].apps[0].requires_fullscreen);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
             $('#app-list-container').hide();
-            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].url, data.no_group_apps[0].is_url_external);
+            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].url, data.no_group_apps[0].is_url_external,data.app_groups[0].apps[0].requires_fullscreen);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
@@ -70,7 +70,11 @@ Actions = ({
             return;
         }
         if ($("#" + name).length > 0) {
+            if(fullscreen){
+                this.toggleFullScreen(true);
+            }
             $("#" + name).show();
+
             return;
         }
         if (type == 1) {
