@@ -2180,5 +2180,6 @@ body {
     width: 134px;
     z-index: 999999;
     white-space: nowrap;
-    
+    opacity: .2;
+
 }
