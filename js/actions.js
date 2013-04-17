@@ -89,7 +89,7 @@ Actions = ({
     showUserInfo: function (user) {
 
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
-        if (user.username != 'guest') {
+        if (user.email != 'guest@dreamfactory.com') {
             Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
         }
     },
@@ -100,7 +100,7 @@ Actions = ({
             .done(function(data){
                 $.data(document.body, 'session', data);
                 var sessionInfo = $.data(document.body, 'session');
-                if (sessionInfo.username != 'guest') {
+                if (sessionInfo.email != 'guest@dreamfactory.com') {
                     Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
                 }
                 Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
@@ -122,29 +122,29 @@ Actions = ({
     // sign in functions
     //
     clearSignIn: function () {
-        $('#UserName').val('');
+        $('#UserEmail').val('');
         $('#Password').val('');
 
     },
     doSignInDialog: function () {
 
-        $('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Name and Password below to sign in.");
+        $('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Email and Password below to sign in.");
         this.clearSignIn();
         $("#loginDialog").modal('show');
     },
     signIn: function () {
         var that = this;
-        if (!$('#UserName').val() || !$('#Password').val()) {
-            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name and Password to continue.');
+        if (!$('#UserEmail').val() || !$('#Password').val()) {
+            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Email and Password to continue.');
             return;
         }
         $('#loading').show();
-        $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({UserName: $('#UserName').val(), Password: $('#Password').val()}))
+        $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({Email: $('#UserEmail').val(), Password: $('#Password').val()}))
             .done(function(data){
                 $.data(document.body, 'session', data);
                 Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
                 var sessionInfo = $.data(document.body, 'session');
-                if (sessionInfo.username != 'guest') {
+                if (sessionInfo.email != 'guest@dreamfactory.com') {
                     Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
                 }
                 Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
@@ -173,14 +173,14 @@ Actions = ({
     },
     doResetPasswordDialog: function () {
         var that = this;
-        if ($('#UserName').val() == '') {
-            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Name to continue.');
+        if ($('#UserEmail').val() == '') {
+            $("#loginErrorMessage").addClass('alert-error').html('You must enter User Email to continue.');
             return;
         }
         $.ajax({
             dataType: 'json',
             url: CurrentServer + '/rest/User/Challenge',
-            data: 'app_name=launchpad&username=' + $('#UserName').val() + '&method=GET',
+            data: 'app_name=launchpad&email=' + $('#UserEmail').val() + '&method=GET',
             cache: false,
             success: function (response) {
                 if (response.security_question) {
@@ -216,7 +216,7 @@ Actions = ({
                 $.ajax({
                     dataType: 'json',
                     type: 'POST',
-                    url: CurentServer + '/REST/User/Challenge/?app_name=launchpad&username=' + $('#UserName').val() + '&method=POST',
+                    url: CurrentServer + '/REST/User/Challenge/?app_name=launchpad&email=' + $('#UserEmail').val() + '&method=POST',
                     data: JSON.stringify({security_answer: $('#Answer').val(), new_password: $('#NPasswordReset').val()}),
                     cache: false,
                     success: function (response) {
@@ -247,10 +247,10 @@ Actions = ({
     //
     clearProfile: function () {
 
-        $("#displayname").val('');
+        $("#email").val('');
         $("#firstname").val('');
         $("#lastname").val('');
-        $("#email").val('');
+        $("#displayname").val('');
         $("#phone").val('');
         $("#security_question").val('');
         $("#security_answer").val('');
@@ -278,10 +278,10 @@ Actions = ({
     },
     fillProfileForm: function () {
 
-        $("#displayname").val(Profile.display_name);
+        $("#email").val(Profile.email);
         $("#firstname").val(Profile.first_name);
         $("#lastname").val(Profile.last_name);
-        $("#email").val(Profile.email);
+        $("#displayname").val(Profile.display_name);
         $("#phone").val(Profile.phone);
         $("#default_app").val(Profile.default_app_id);
         if (Profile.security_question) {
@@ -294,10 +294,10 @@ Actions = ({
     updateProfile: function () {
         var that = this;
         NewUser = {};
-        NewUser.display_name = $("#displayname").val();
+        NewUser.email = $("#email").val();
         NewUser.first_name = $("#firstname").val();
         NewUser.last_name = $("#lastname").val();
-        NewUser.email = $("#email").val();
+        NewUser.display_name = $("#displayname").val();
         NewUser.phone = $("#phone").val();
         NewUser.default_app_id = $("#default_app").val();
         // require question
