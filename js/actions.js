@@ -58,7 +58,7 @@ Actions = ({
         $('#dfControl1 .btn-group').append(template);
     },
     showApp: function (name, url, type, fullscreen) {
-
+        $('#fs_toggle').hide();
         $('#app-list-container').hide();
         $('iframe').hide();
         if (name == "admin") {
@@ -72,6 +72,7 @@ Actions = ({
         if ($("#" + name).length > 0) {
             if(fullscreen){
                 this.toggleFullScreen(true);
+                $('#fs_toggle').show();
             }
             $("#" + name).show();
 
@@ -82,8 +83,12 @@ Actions = ({
         } else {
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', CurrentServer + '/app/' + name + url).appendTo('#app-container');
         }
-        if(fullscreen){
+        if(fullscreen && name != "admin"){
             this.toggleFullScreen(true);
+
+        }
+        if(name != 'admin'){
+            $('#fs_toggle').show();
         }
     },
     showUserInfo: function (user) {
