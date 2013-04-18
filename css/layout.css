@@ -1995,12 +1995,14 @@ div {
 #app-container {
     bottom:             0;
     left:               0;
-    position:           fixed;
+    position:           absolute;
     right:              0;
     top:                44px;
     background-color:   white;
     -webkit-box-shadow: inset 0 3px 3px 0 rgba(0, 0, 0, .5);
     box-shadow:         inset 0 3px 3px 0 rgba(0, 0, 0, .5);
+    -webkit-overflow-scrolling: touch;
+
 
 }
 
