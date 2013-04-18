@@ -92,11 +92,11 @@
     var confirm = function(){
         var data ={};
         data.email = $("#email").val();
-        data.password = $("#password").val();
+        data.new_password = $("#password").val();
         data = JSON.stringify(data);
         $.post('/rest/user/confirm/?app_name=launchpad', data)
                 .done(function(){
-                    window.location="/index.html";
+                    window.location="/";
                 }
         )
                 .fail(function(response){
