@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <title>DreamFactory Registration Confirmation</title>
+
+    <!-- Standard CSS -->
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css"
+          rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+    <!--[if IE 7]>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome-ie7.css" rel="stylesheet">    <![endif]-->
+
+    <!-- Initialize the system and start the application -->
+</head>
+<style>
+    #loading {
+        color: #555;
+        display:none;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -25px;
+        margin-top: -50px;
+        z-index: 999999;
+        box-shadow: 0 5px 3px #333333;
+    }
+    #container {
+        color: #555;
+
+        width: 500px;
+        height: 500px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -250px;
+        margin-top: -250px;
+
+    }
+</style>
+<body>
+<div id="loading" class="well"><i class="icon-spinner icon-spin icon-4x"></i></div>
+<div id="container">
+    <form class="form-horizontal" action="javascript:confirm()">
+        <fieldset>
+            <div id="legend">
+                <legend class="">Confirm your Registration</legend>
+            </div>
+            <div class="control-group">
+                <!-- Username -->
+                <label class="control-label" for="email">Email Address</label>
+
+                <div class="controls">
+                    <input type="text" id="email" name="username" placeholder="" class="input-xlarge">
+                </div>
+            </div>
+            <div class="control-group">
+                <!-- Password-->
+                <label class="control-label" for="password">Password</label>
+
+                <div class="controls">
+                    <input type="password" id="password" name="password" placeholder="" class="input-xlarge">
+                </div>
+            </div>
+            <div class="control-group">
+                <!-- Verify Password-->
+                <label class="control-label" for="password_verify">Verify Password</label>
+
+                <div class="controls">
+                    <input type="password" id="password_verify" name="password_verify" placeholder=""
+                           class="input-xlarge">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <!-- Button -->
+                <div class="controls">
+                    <button onclick="confirm()" class="btn btn-success">Confirm Registration</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script>
+   var confirm = function(){
+       $.post('/rest/user/confirm/?app_name=launchpad', {"email": $("#email").val(), "pass": $("#password").val()})
+               .done(function(){
+                   window.location="/index.html";
+               }
+       )
+               .fail(function(response){
+                   console.log(response);
+               }
+       )};
+
+
+</script>
+
+
+
+</body>
+</html>
+
