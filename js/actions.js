@@ -1,12 +1,12 @@
 Actions = ({
     init: function () {
-        this.updateSession();
+        this.updateSession("init");
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
     },
-    getApps: function (data) {
+    getApps: function (data, action) {
         $('#error-container').empty().hide();
 
-        Applications = {Applications: data};
+
         AllApps = [];
         AllApps = data.no_group_apps;
         data.app_groups.forEach(function (group) {
@@ -28,6 +28,9 @@ Actions = ({
         var noption = '<option value="">None</option>';
         $("#default_app").append(noption);
         //$("#default_app").val(window.defaultApp);
+        if(action == "update"){
+            return;
+        }
         if (data.is_sys_admin && !defaultShown) {
             this.showApp('admin', '/public/admin/#/app', '0', false);
         } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
@@ -42,14 +45,12 @@ Actions = ({
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
             return;
         }
-        if (data.app_groups.length != 0 || data.no_group_apps.length != 0) {
-            this.LoadAppTemplates();
-        }
-    },
-    LoadAppTemplates: function () {
 
-        Templates.loadTemplate(Templates.navBarDropDownTemplate, Applications, 'app-list');
-        Templates.loadTemplate(Templates.appIconTemplate, Applications, 'app-list-container');
+    },
+    LoadAppTemplates: function (data) {
+
+        Templates.loadTemplate(Templates.navBarDropDownTemplate, data, 'app-list');
+        Templates.loadTemplate(Templates.appIconTemplate, data, 'app-list-container');
     },
     showAdminIcon: function () {
         var template = '<a id="adminLink" class="btn btn-inverse" title="Admin Console" onclick="Actions.showApp(\'admin\',\'/public/admin/#/app\',\'0\')">' +
@@ -102,18 +103,21 @@ Actions = ({
         Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
         var that = this;
         $.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
-            .done(function(data){
-                $.data(document.body, 'session', data);
-                var sessionInfo = $.data(document.body, 'session');
+            .done(function(sessionInfo){
+                //$.data(document.body, 'session', data);
+                //var sessionInfo = $.data(document.body, 'session');
                 if (sessionInfo.email != 'guest@dreamfactory.com') {
                     Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
                 }
                 Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
+                Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
                 if (sessionInfo.is_sys_admin) {
                     that.showAdminIcon();
                 }
                 CurrentUserID = sessionInfo.id;
-                Actions.getApps(sessionInfo);
+                if(action == "init"){
+                    that.getApps(sessionInfo, action);
+                }
             })
             .fail(function(response){
                 if (response.status == 401) {
@@ -153,6 +157,7 @@ Actions = ({
                     Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
                 }
                 Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
+                Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
                 if (sessionInfo.is_sys_admin) {
                     Actions.showAdminIcon();
                 }
