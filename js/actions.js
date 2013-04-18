@@ -39,7 +39,7 @@ Actions = ({
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
             $('#app-list-container').hide();
-            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].url, data.no_group_apps[0].is_url_external,data.app_groups[0].apps[0].requires_fullscreen);
+            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].url, data.no_group_apps[0].is_url_external,data.no_group_apps[0].requires_fullscreen);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
