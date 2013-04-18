@@ -37,16 +37,16 @@
         height: 500px;
         position: absolute;
         left: 50%;
-        top: 50%;
+        top: 10px;
         margin-left: -250px;
-        margin-top: -250px;
+
 
     }
 </style>
 <body>
 <div id="loading" class="well"><i class="icon-spinner icon-spin icon-4x"></i></div>
 <div id="container">
-    <form class="form-horizontal" action="javascript:confirm()">
+    <div class="form-horizontal">
         <fieldset>
             <div id="legend">
                 <legend class="">Confirm your Registration</legend>
@@ -84,20 +84,25 @@
                 </div>
             </div>
         </fieldset>
-    </form>
+    </div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="js/json2.js"></script>
 <script>
-   var confirm = function(){
-       $.post('/rest/user/confirm/?app_name=launchpad', {"email": $("#email").val(), "pass": $("#password").val()})
-               .done(function(){
-                   window.location="/index.html";
-               }
-       )
-               .fail(function(response){
-                   console.log(response);
-               }
-       )};
+    var confirm = function(){
+        var data ={};
+        data.email = $("#email").val();
+        data.password = $("#password").val();
+        data = JSON.stringify(data);
+        $.post('/rest/user/confirm/?app_name=launchpad', data)
+                .done(function(){
+                    window.location="/index.html";
+                }
+        )
+                .fail(function(response){
+                    console.log(response);
+                }
+        )};
 
 
 </script>
