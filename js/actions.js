@@ -44,14 +44,13 @@ Actions = ({
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
             return;
+        }else{
+            $('#fs_toggle').hide();
+            $('#app-list').show();
         }
 
     },
-    LoadAppTemplates: function (data) {
 
-        Templates.loadTemplate(Templates.navBarDropDownTemplate, data, 'app-list');
-        Templates.loadTemplate(Templates.appIconTemplate, data, 'app-list-container');
-    },
     showAdminIcon: function () {
         var template = '<a id="adminLink" class="btn btn-inverse" title="Admin Console" onclick="Actions.showApp(\'admin\',\'/public/admin/#/app\',\'0\')">' +
             '<i class="icon-cog"></i>';
