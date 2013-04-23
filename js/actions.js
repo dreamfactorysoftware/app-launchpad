@@ -1,7 +1,21 @@
 Actions = ({
     init: function () {
-        this.updateSession("init");
-        Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+        this.getConfig();
+    },
+    getConfig: function () {
+        var that = this;
+        $.getJSON(CurrentServer + '/rest/System/Config?app_name=launchpad')
+            .done(function(configInfo){
+                Config = configInfo;
+                that.updateSession("init");
+                Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+            })
+            .fail(function(response){
+                alertErr(response);
+            });
+    },
+    createAccount: function () {
+        window.location="register.html";
     },
     getApps: function (data, action) {
         $('#error-container').empty().hide();
@@ -93,19 +107,20 @@ Actions = ({
     },
     showUserInfo: function (user) {
 
-        Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
-        if (user.email != 'guest@dreamfactory.com') {
+        Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
+        if (user.id) {
             Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
         }
     },
     updateSession: function (action) {
-        Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+        Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
         var that = this;
         $.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
             .done(function(sessionInfo){
                 //$.data(document.body, 'session', data);
                 //var sessionInfo = $.data(document.body, 'session');
-                if (sessionInfo.email != 'guest@dreamfactory.com') {
+                CurrentUserID = sessionInfo.id;
+                if (CurrentUserID) {
                     Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
                 }
                 Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
@@ -113,7 +128,6 @@ Actions = ({
                 if (sessionInfo.is_sys_admin) {
                     that.showAdminIcon();
                 }
-                CurrentUserID = sessionInfo.id;
                 if(action == "init"){
                     that.getApps(sessionInfo, action);
                 }
@@ -150,9 +164,10 @@ Actions = ({
         $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({Email: $('#UserEmail').val(), Password: $('#Password').val()}))
             .done(function(data){
                 $.data(document.body, 'session', data);
-                Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+                Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
                 var sessionInfo = $.data(document.body, 'session');
-                if (sessionInfo.email != 'guest@dreamfactory.com') {
+                CurrentUserID = sessionInfo.id;
+                if (CurrentUserID) {
                     Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
                 }
                 Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
@@ -160,7 +175,6 @@ Actions = ({
                 if (sessionInfo.is_sys_admin) {
                     Actions.showAdminIcon();
                 }
-                CurrentUserID = sessionInfo.id;
                 Actions.getApps(sessionInfo);
                 $("#loginDialog").modal('hide');
                 $("#loading").hide();
@@ -437,6 +451,7 @@ Actions = ({
     showSignInButton: function () {
 
         $("#dfControl1").html('<a class="btn btn-primary" onclick="this.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
+        $("#dfControl1").append('<a class="btn btn-primary" onclick="this.createAccount()"><li class="icon-key"></li>&nbsp;Create Account</a> ');
     },
     showStatus: function (message, type) {
         if (type == "error") {
