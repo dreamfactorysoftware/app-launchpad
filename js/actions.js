@@ -451,7 +451,9 @@ Actions = ({
     showSignInButton: function () {
 
         $("#dfControl1").html('<a class="btn btn-primary" onclick="this.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
-        $("#dfControl1").append('<a class="btn btn-primary" onclick="this.createAccount()"><li class="icon-key"></li>&nbsp;Create Account</a> ');
+        if (Config.allow_open_registration) {
+            $("#dfControl1").append('<a class="btn btn-primary" onclick="this.createAccount()"><li class="icon-key"></li>&nbsp;Create Account</a> ');
+        }
     },
     showStatus: function (message, type) {
         if (type == "error") {
