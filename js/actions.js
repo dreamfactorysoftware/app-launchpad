@@ -148,11 +148,20 @@ Actions = ({
         $('#Password').val('');
 
     },
-    doSignInDialog: function () {
+    doSignInDialog: function (stay) {
 
-        $('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Email and Password below to sign in.");
-        this.clearSignIn();
-        $("#loginDialog").modal('show');
+        window.Stay = false;
+        if(stay){
+            $('#loginErrorMessage').removeClass('alert-error').html("Your Session has expired. Please log in to continue");
+            this.clearSignIn();
+            $("#loginDialog").modal('show');
+            window.Stay = true;
+        }else{
+            $('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Email and Password below to sign in.");
+            this.clearSignIn();
+            $("#loginDialog").modal('show');
+            window.Stay = false;
+        }
     },
     signIn: function () {
         var that = this;
@@ -163,6 +172,11 @@ Actions = ({
         $('#loading').show();
         $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({Email: $('#UserEmail').val(), Password: $('#Password').val()}))
             .done(function(data){
+                if(Stay){
+                    $("#loginDialog").modal('hide');
+                    $("#loading").hide();
+                    return;
+                }
                 $.data(document.body, 'session', data);
                 Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
                 var sessionInfo = $.data(document.body, 'session');
