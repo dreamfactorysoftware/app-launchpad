@@ -200,15 +200,13 @@ Actions = ({
 
     },
     //
-    // reset password functions
+    // forgot password functions
     //
-    clearResetPassword: function () {
+    clearForgotPassword: function () {
 
         $('#Answer').val('');
-        $('#NPasswordReset').val('');
-        $('#VPasswordReset').val('');
     },
-    doResetPasswordDialog: function () {
+    doForgotPasswordDialog: function () {
         var that = this;
         if ($('#UserEmail').val() == '') {
             $("#loginErrorMessage").addClass('alert-error').html('You must enter User Email to continue.');
@@ -223,9 +221,9 @@ Actions = ({
                 if (response.security_question) {
                     $("#Question").html(response.security_question);
                     $("#loginDialog").modal('hide');
-                    that.clearResetPassword();
-                    $("#resetErrorMessage").removeClass('alert-error').html('Please complete the form below to reset your password.');
-                    $("#resetPasswordDialog").modal('show');
+                    that.clearForgotPassword();
+                    $("#forgotPasswordErrorMessage").removeClass('alert-error').html('Please answer your security question to log in.');
+                    $("#forgotPasswordDialog").modal('show');
                 } else {
                     $("#loginErrorMessage").addClass('alert-error').html('Unable to retrieve your security question.');
                 }
@@ -245,38 +243,34 @@ Actions = ({
             $('#rocket').hide();
         }
     },
-    resetPassword: function () {
+   forgotPassword: function () {
 
-        if ($('#Answer').val() && $('#NPasswordReset').val() && $('#VPasswordReset').val()) {
-            if ($("#NPasswordReset").val() == $("#VPasswordReset").val()) {
-                var that = this;
-                $.ajax({
-                    dataType: 'json',
-                    type: 'POST',
-                    url: CurrentServer + '/REST/User/Challenge/?app_name=launchpad&email=' + $('#UserEmail').val() + '&method=POST',
-                    data: JSON.stringify({security_answer: $('#Answer').val(), new_password: $('#NPasswordReset').val()}),
-                    cache: false,
-                    success: function (response) {
-                        $('#resetErrorMessage').removeClass('alert-error');
-                        $("#resetPasswordDialog").modal('hide');
-                        that.clearResetPassword();
-                        User = response;
-                        that.showUserInfo(response);
-                        that.getApps(response);
-                        CurrentUserID = response.id;
-                        if (response.is_sys_admin) {
-                            that.buildAdminDropDown();
-                        }
-                    },
-                    error: function (response) {
-                        $("#resetErrorMessage").addClass('alert-error').html('The password could not be reset with the entered values. Please check the answer to your security question.');
+        if ($('#Answer').val()) {
+            var that = this;
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                url: CurrentServer + '/REST/User/Challenge/?app_name=launchpad&email=' + $('#UserEmail').val() + '&method=POST',
+                data: JSON.stringify({security_answer: $('#Answer').val()}),
+                cache: false,
+                success: function (response) {
+                    $('#forgotPasswordErrorMessage').removeClass('alert-error');
+                    $("#forgotPasswordDialog").modal('hide');
+                    that.clearForgotPassword();
+                    User = response;
+                    that.showUserInfo(response);
+                    that.getApps(response);
+                    CurrentUserID = response.id;
+                    if (response.is_sys_admin) {
+                        that.buildAdminDropDown();
                     }
-                });
-            } else {
-                $("#resetErrorMessage").addClass('alert-error').html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
-            }
+                },
+                error: function (response) {
+                    $("#forgotPasswordErrorMessage").addClass('alert-error').html('Please check the answer to your security question.');
+                }
+            });
         } else {
-            $("#resetErrorMessage").addClass('alert-error').html('You must enter the security answer and a new password to continue, or contact your administrator for help.');
+            $("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the security answer to continue, or contact your administrator for help.');
         }
     },
     //
@@ -512,34 +506,8 @@ $(document).ready(function () {
         }
     }
 
-    function doPasswordResetVerify() {
-
-        var value = $("#NPasswordReset").val();
-        var verify = $("#VPasswordReset").val();
-        if (value.length > 0 && verify.length > 0) {
-            if (value == verify) {
-                $("#NPasswordReset").removeClass("RedBorder");
-                $("#NPasswordReset").addClass("GreenBorder");
-                $("#VPasswordReset").removeClass("RedBorder");
-                $("#VPasswordReset").addClass("GreenBorder");
-            } else {
-                $("#NPasswordReset").removeClass("GreenBorder");
-                $("#NPasswordReset").addClass("RedBorder");
-                $("#VPasswordReset").removeClass("GreenBorder");
-                $("#VPasswordReset").addClass("RedBorder");
-            }
-        } else {
-            $("#NPasswordReset").removeClass("RedBorder");
-            $("#NPasswordReset").removeClass("GreenBorder");
-            $("#VPasswordReset").removeClass("RedBorder");
-            $("#VPasswordReset").removeClass("GreenBorder");
-        }
-    }
-
     $("#NPassword").keyup(doPasswordVerify);
     $("#VPassword").keyup(doPasswordVerify);
-    $("#NPasswordReset").keyup(doPasswordResetVerify);
-    $("#VPasswordReset").keyup(doPasswordResetVerify);
 
     function checkEnterKey(e, action) {
 
@@ -552,8 +520,8 @@ $(document).ready(function () {
         checkEnterKey(e, Actions.signIn);
     });
 
-    $('#resetPasswordDialog input').keydown(function (e) {
-        checkEnterKey(e, Actions.resetPassword);
+    $('#forgotPasswordDialog input').keydown(function (e) {
+        checkEnterKey(e, Actions.forgotPassword);
     });
 
     $('#changeProfileDialog input').keydown(function (e) {

@@ -162,7 +162,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn cLeft" onclick="Actions.doResetPasswordDialog()">Reset Password...</a> <a href="#" class="btn" data-dismiss="modal"
+        <a href="#" class="btn cLeft" onclick="Actions.doForgotPasswordDialog()">Forgot Password...</a> <a href="#" class="btn" data-dismiss="modal"
                                                                                                          onclick="Actions.clearSignIn()">Close</a> <a
             href="#" class="btn btn-primary" onclick="Actions.signIn()">Sign In</a>
     </div>
@@ -180,14 +180,14 @@
         <a href="#" class="btn" data-dismiss="modal">Close</a> <a href="#" class="btn btn-primary" onclick="Actions.signOut()">Sign Out</a>
     </div>
 </div>
-<div id="resetPasswordDialog" class="modal hide fade">
+<div id="forgotPasswordDialog" class="modal hide fade">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearResetPassword()">&times;</button>
-        <h3>Password Reset</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearForgotPassword()">&times;</button>
+        <h3>Forgot Password</h3>
     </div>
     <div class="modal-body">
         <div>
-            <div class="alert" id="resetErrorMessage"></div>
+            <div class="alert" id="forgotPasswordErrorMessage"></div>
             <div class="cM1">
                 <div class="cLeft cW35 fixedLabel">Security&nbsp;Question:&nbsp;</div>
                 <div class="cLeft cW65">
@@ -202,25 +202,11 @@
                 </div>
                 <div class="cClear"><!-- --></div>
             </div>
-            <div class="cM1">
-                <div class="cLeft cW35 formLabel">New&nbsp;Password:&nbsp;</div>
-                <div class="cLeft cW65">
-                    <input type="password" class=" cW98" id="NPasswordReset" value="" />
-                </div>
-                <div class="cClear"><!-- --></div>
-            </div>
-            <div class="cM1">
-                <div class="cLeft cW35 formLabel">Verify&nbsp;Password:&nbsp;</div>
-                <div class="cLeft cW65">
-                    <input type="password" class=" cW98" id="VPasswordReset" value="" />
-                </div>
-                <div class="cClear"><!-- --></div>
-            </div>
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearResetPassword()">Close</a> <a href="#" class="btn btn-primary"
-                                                                                                         onclick="Actions.resetPassword()">Submit</a>
+        <a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearForgotPassword()">Close</a> <a href="#" class="btn btn-primary"
+                                                                                                         onclick="Actions.forgotPassword()">Submit</a>
     </div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
