@@ -122,7 +122,10 @@
     });
     /*]]>*/
 </script>-->
+<script src="/public/web-core/js/df.js"></script>
+<script src="/public/web-core/js/utils.js"></script>
 <script>
+    $("#email").val(CommonUtilities.getQueryParameter('email'));
     var confirm = function () {
         var data = {};
         data.email = $("#email").val();
@@ -147,6 +150,5 @@
         )
     };
 </script>
-<script src="/public/web-core/js/utils.js"></script>
 </body>
 </html>
