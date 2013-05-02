@@ -1,117 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-    <script src="js/json2.js"></script>
-    <title>DreamFactory Services Platform&trade;</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="DreamFactory Software, Inc.">
-    <meta name="language" content="en" />
-    <link rel="shortcut icon" href="/public/images/logo-32x32.png" />
-    <style>
-        body {
-            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-        }
-        img#logo-img {
-            margin-top:   5px;
-            margin-right: 15px;
-            float:        left;
-            height:       32px;
-        }
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
 
-        h2.headline {
-            border-bottom: 1px solid #ddd;
-            margin-top:    25px;
-            margin-bottom: 50px;
-        }
+	<title>DreamFactory Services Platform&trade;</title>
 
-        .main-content {
-            height:     640px;
-            font-size:  18px !important;
-            background: url(../images/bg-initial.png) 25% 0 no-repeat;
-        }
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+	<script src="js/json2.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="DreamFactory Software, Inc.">
+	<meta name="language" content="en" />
+	<link rel="shortcut icon" href="/public/images/logo-32x32.png" />
+	<style>
+		body {
+			padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+		}
 
-        .main-content.step2 {
-            height:     640px;
-            font-size:  18px !important;
-            background: url(../images/bg-initial.png) 100% 50% no-repeat;
-        }
+		img#logo-img {
+			margin-top:   5px;
+			margin-right: 15px;
+			float:        left;
+			height:       32px;
+		}
 
-        .main-content p {
-            font-size: 18px;
-            width:     450px;
-        }
+		h2.headline {
+			border-bottom: 1px solid #ddd;
+			margin-top:    25px;
+			margin-bottom: 50px;
+		}
 
-        .main-content .spacer {
-            height:        1px;
-            width:         1px;
-            margin-bottom: 25px;
-        }
+		.main-content {
+			height:     640px;
+			font-size:  18px !important;
+			background: url(../images/bg-initial.png) 25% 0 no-repeat;
+		}
 
-        .main-content label {
-            font-size: 16px;
-        }
+		.main-content.step2 {
+			height:     640px;
+			font-size:  18px !important;
+			background: url(../images/bg-initial.png) 100% 50% no-repeat;
+		}
 
-        .main-content.step1 .form-actions {
-            margin-top: 160px;
-        }
+		.main-content p {
+			font-size: 18px;
+			width:     450px;
+		}
 
-        .main-content footer p {
-            width: 960px;
-        }
+		.main-content .spacer {
+			height:        1px;
+			width:         1px;
+			margin-bottom: 25px;
+		}
 
-        label.error {
-            color:       darkred;
-            padding-top: 0;
-            margin-top:  -10px;
-            font-size:   10pt;
-            display:     block;
-        }
-    </style>
-    <link rel="stylesheet" type="text/css" href="/public/vendor/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/public/vendor/bootstrap/css/bootstrap-responsive.min.css" />
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->    <!--[if lt IE 9]>
-    <script type="text/javascript" src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>    <![endif]-->
+		.main-content label {
+			font-size: 16px;
+		}
+
+		.main-content.step1 .form-actions {
+			margin-top: 160px;
+		}
+
+		.main-content footer p {
+			width: 960px;
+		}
+
+		label.error {
+			color:       darkred;
+			padding-top: 0;
+			margin-top:  -10px;
+			font-size:   10pt;
+			display:     block;
+		}
+	</style>
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+	<!--[if IE 7]>
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome-ie7.css" rel="stylesheet"><![endif]-->
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->    <!--[if lt IE 9]>
+	<script type="text/javascript" src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>    <![endif]-->
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
+	<div class="navbar-inner">
+		<div class="container">
 
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span
-                    class="icon-bar"></span> <span class="icon-bar"></span> </a> <img id="logo-img" src="/public/images/logo-48x48.png"><a
-                class="brand" href="#">DreamFactory Powers Activate!</a>
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> </a> <img id="logo-img" src="/public/images/logo-48x48.png"><a
+				class="brand" href="#">DreamFactory Powers Activate!</a>
 
-            <div class="nav-collapse collapse">
-                <ul class="nav"></ul>
-            </div>
-        </div>
-    </div>
+			<div class="nav-collapse collapse">
+				<ul class="nav"></ul>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="container main-content step1">
-    <h2 class="headline">Register as a New User on this DSP!</h2>
+	<h2 class="headline">Register as a New User on this DSP!</h2>
 
-    <p>Please enter your email address and name. You will be emailed a confirmation link that will allow you to set your password.</p>
-    <div class="spacer"></div>
-<!--
-    <form id="register-form">
--->
-        <div class="control-group"><label for="email">Email Address</label><div class="controls"><input id="email" class="email required" type="text"></input></div></div>
-        <div class="control-group"><label for="firstname">First Name</label><div class="controls"><input id="firstname" class="required" type="text"></input></div></div>
-        <div class="control-group"><label for="lastname">Last Name</label><div class="controls"><input id="lastname" class="required" type="text"></input></div></div>
-        <div class="form-actions">
-            <button onclick="createUser()" class="btn btn-success">Register!</button>
-        </div>
-<!--
-    </form>
--->
-    <div class="alert hide" id="statusMessage"></div>
-    <footer>
-        <p>&copy; DreamFactory Software, Inc. 2013. All Rights Reserved.</p>
-    </footer>
+	<p>Please enter your email address and name. You will be emailed a confirmation link that will allow you to set your password.</p>
+
+	<div class="spacer"></div>
+	<!--
+		<form id="register-form">
+	-->
+	<div class="control-group">
+		<label for="email">Email Address</label>
+		<div class="controls">
+			<input id="email" class="email required" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="firstname">First Name</label>
+		<div class="controls">
+			<input id="firstname" class="required" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="lastname">Last Name</label>
+		<div class="controls">
+			<input id="lastname" class="required" type="text" />
+		</div>
+	</div>
+	<div class="form-actions">
+		<button onclick="createUser()" class="btn btn-success">Register!</button>
+	</div>
+	<!--
+		</form>
+	-->
+	<div class="alert hide" id="statusMessage"></div>
+	<footer>
+		<p>&copy; DreamFactory Software, Inc. 2013. All Rights Reserved.</p>
+	</footer>
 </div>
-<script src="/public/vendor/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
 <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/additional-methods.min.js"></script>
 <!--<script type="text/javascript">
@@ -122,55 +145,55 @@
     /*]]>*/
 </script>-->
 <script>
-    var createUser = function () {
+var createUser = function() {
 
-        var data = {};
-        data.email = $("#email").val();
-        data.first_name = $("#firstname").val();
-        data.last_name = $("#lastname").val();
-        if (data.email == '' || data.first_name == '' || data.last_name == '') {
-            $("#statusMessage").addClass('alert-error').html("Please enter all fields.").show();
-            return;
-        }
-        var user = data;
-        data = JSON.stringify(data);
-        $.post('/rest/user/register/?app_name=launchpad', data)
-                .done(function () {
-                    sendConfirmation(user);
-                }
-        )
-                .fail(function (response) {
-                    $("#statusMessage").addClass('alert-error').removeClass("alert-success").html(getErrorString(response)).show();
-                }
-        )
-    };
+	var data = {};
+	data.email = $("#email").val();
+	data.first_name = $("#firstname").val();
+	data.last_name = $("#lastname").val();
+	if (data.email == '' || data.first_name == '' || data.last_name == '') {
+		$("#statusMessage").addClass('alert-error').html("Please enter all fields.").show();
+		return;
+	}
+	var user = data;
+	data = JSON.stringify(data);
+	$.post('/rest/user/register/?app_name=launchpad', data)
+			.done(function() {
+				sendConfirmation(user);
+			}
+	)
+			.fail(function(response) {
+				$("#statusMessage").addClass('alert-error').removeClass("alert-success").html(getErrorString(response)).show();
+			}
+	)
+};
 
-    var sendConfirmation = function (user) {
+var sendConfirmation = function(user) {
 
-        var data = {
-            "to": user.email,
-            "cc": "",
-            "bcc": "",
-            "subject": "Welcome to DreamFactory",
-            "body_html": "Hi {first_name},<br/><br/>You have registered as a DreamFactory user. " +
-                    "Click the confirmation link below to set your password.<br/><br/>{_invite_url_}<br/><br/>Enjoy!<br/><br/>DreamFactory",
-            "from_name": "DreamFactory",
-            "from_email": "no-reply@dreamfactory.com",
-            "reply_to_name": "DreamFactory",
-            "reply_to_email": "no-reply@dreamfactory.com",
-            "first_name": user.first_name
-        };
-        data = JSON.stringify(data);
-        $.post('/rest/Email/register/?app_name=launchpad', data)
-                .done(function () {
-                    $("#statusMessage").removeClass('alert-error').addClass("alert-success").html("Registration was successful. Check your email for a confirmation link.").show();
-                }
-        )
-                .fail(function (response) {
-                    $("#statusMessage").addClass('alert-error').removeClass("alert-success").html("Unable to send confirmation email. " + getErrorString(response)).show();
-                }
-        )
-    };
+	var data = {
+		"to":             user.email,
+		"cc":             "",
+		"bcc":            "",
+		"subject":        "Welcome to DreamFactory",
+		"body_html":      "Hi {first_name},<br/><br/>You have registered as a DreamFactory user. " +
+				"Click the confirmation link below to set your password.<br/><br/>{_invite_url_}<br/><br/>Enjoy!<br/><br/>DreamFactory",
+		"from_name":      "DreamFactory",
+		"from_email":     "no-reply@dreamfactory.com",
+		"reply_to_name":  "DreamFactory",
+		"reply_to_email": "no-reply@dreamfactory.com",
+		"first_name":     user.first_name
+	};
+	data = JSON.stringify(data);
+	$.post('/rest/Email/register/?app_name=launchpad', data)
+			.done(function() {
+				$("#statusMessage").removeClass('alert-error').addClass("alert-success").html("Registration was successful. Check your email for a confirmation link.").show();
+			}
+	)
+			.fail(function(response) {
+				$("#statusMessage").addClass('alert-error').removeClass("alert-success").html("Unable to send confirmation email. " + getErrorString(response)).show();
+			}
+	)
+};
 </script>
 <script src="/public/web-core/js/utils.js"></script>
 </body>
