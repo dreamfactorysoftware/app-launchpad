@@ -60,7 +60,7 @@ Actions = ({
             return;
         }else{
             $('#fs_toggle').hide();
-            $('#app-list').show();
+            $('#app-list-container').show();
         }
 
     },
@@ -243,7 +243,7 @@ Actions = ({
             $('#rocket').hide();
         }
     },
-   forgotPassword: function () {
+    forgotPassword: function () {
 
         if ($('#Answer').val()) {
             var that = this;
@@ -446,7 +446,7 @@ Actions = ({
                 $('#app-list').empty();
                 $('#admin-container').empty();
                 $("#logoffDialog").modal('hide');
-                that.updateSession();
+                that.updateSession("init");
             },
             error: function (response) {
                 if (response.status == 401) {
