@@ -7,6 +7,7 @@ Actions = ({
         $.getJSON(CurrentServer + '/rest/System/Config?app_name=launchpad')
             .done(function(configInfo){
                 Config = configInfo;
+                document.title = "Launchpad " + configInfo.dsp_version;
                 that.updateSession("init");
                 Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
             })
