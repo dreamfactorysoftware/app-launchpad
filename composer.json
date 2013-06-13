@@ -1,8 +1,17 @@
 {
 	"name":              "dreamfactory/app-launchpad",
+	"version":           "1.0.4",
 	"description":       "DreamFactory Services Platform(tm) LaunchPad Application",
 	"keywords":          ["dreamfactory", "dsp", "cloud", "dsp-launchpad", "dsp-app", "dsp-core"],
 	"type":              "dreamfactory-platform",
+	"homepage":          "http://dreamfactory.com/",
+	"license":           ["Apache2.0"],
+	"support":           {
+		"email":  "support@dreamfactory.com",
+		"issues": "https://github.com/dreamfactorysoftware/dsp-core/issues",
+		"wiki":   "https://github.com/dreamfactorysoftware/dsp-core/wiki",
+		"source": "https://github.com/dreamfactorysoftware/dsp-core"
+	},
 	"authors":           [
 		{
 			"name":  "Sykes, Jason",
@@ -25,15 +34,6 @@
 			"role":  "Black Ops"
 		}
 	],
-	"homepage":          "http://dreamfactorybeta.com/",
-	"license":           ["GPL-3.0", "proprietary"],
-	"support":           {
-		"email":  "developer-support@dreamfactory.com",
-		"issues": "https://bitbucket.org/dreamfactory/app-launchpad/issues",
-		"forum":  "https://bitbucket.org/dreamfactory/app-launchpad/forum",
-		"wiki":   "https://bitbucket.org/dreamfactory/app-launchpad/wiki",
-		"source": "https://bitbucket.org/dreamfactory/app-launchpad/src"
-	},
 	"minimum-stability": "dev",
 	"require":           {
 		"dreamfactory/lib-platform-installer": "dev-master"
