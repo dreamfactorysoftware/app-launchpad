@@ -33,7 +33,7 @@ Actions = ({
         $("#default_app").empty();
         AllApps.forEach(function (app) {
             if (app.is_default) {
-                Actions.showApp(app.api_name, app.url, app.is_url_external, app.requires_fullscreen);
+                Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen);
                 //window.defaultApp = app.id;
                 defaultShown=true;
             }
@@ -50,11 +50,11 @@ Actions = ({
             this.showApp('admin', '/public/admin/#/app', '0', false);
         } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
             $('#app-list-container').hide();
-            this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].url, data.app_groups[0].apps[0].is_url_external, data.app_groups[0].apps[0].requires_fullscreen);
+            this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].launch_url, data.app_groups[0].apps[0].is_url_external, data.app_groups[0].apps[0].requires_fullscreen);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
             $('#app-list-container').hide();
-            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].url, data.no_group_apps[0].is_url_external,data.no_group_apps[0].requires_fullscreen);
+            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external,data.no_group_apps[0].requires_fullscreen);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
@@ -93,11 +93,9 @@ Actions = ({
 
             return;
         }
-        if (type == 1) {
+
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', url).appendTo('#app-container');
-        } else {
-            $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', CurrentServer + '/app/' + name + url).appendTo('#app-container');
-        }
+
         if(fullscreen && name != "admin"){
             this.toggleFullScreen(true);
 
