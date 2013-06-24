@@ -1,0 +1,162 @@
+/*
+Main stylesheet for LaunchPad
+*/
+
+.make-inline {
+    display: inline-block;
+}
+
+#navbar-container {
+    background: black;
+
+}
+
+#app-groups-container {
+    font-family: Lato;
+}
+
+
+#app-list-container {
+
+    background: #fff;
+    background-image: url('http://galleryheart.com/wp-content/uploads/2012/02/30_Mind-Blowing-Examples-of-Creative-Art-7.jpg');
+
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#app-list-container
+
+
+.accordion-group {
+    /*background-color: rgba(255, 158, 2, 0.5);*/
+    background-color: rgba(255, 59, 0, 0.4);
+    border: none;
+    border-radius: 0;
+}
+
+.accordion-group a {
+    color: white;
+}
+
+.accordion-group a:hover {
+    color: black;
+}
+
+.accordion-group a:active {
+    color: white;
+}
+
+.group-title {
+    margin-bottom: 0;
+    font-weight: 300;
+}
+
+.group-description {
+    margin-left: 20px;
+}
+
+.group-icon {
+    padding: 20px 10px 10px 10px;
+}
+
+.group-items {
+    /*
+    -webkit-box-shadow: 0px 0px 5px #ddd inset;
+    -moz-box-shadow:    0px 0px 5px #ddd inset;
+    box-shadow:         0px 0px 5px #ddd inset;
+    */
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.group-items ul {
+    margin-left: 0;
+}
+
+.group-items ul li {
+    border-bottom: 1px solid #fff;
+    list-style: none;
+    padding-left: 45px;
+}
+
+.group-items ul li:hover {
+    color: black !important;
+}
+
+.group-items ul li:last-child {
+    border-bottom: none;
+}
+
+.group-items ul li a {
+    color: white;
+    font-weight: 300 !important;
+}
+
+.group-items ul li a:hover {
+    color: black !important;
+
+}
+.group-items ul li a h4 {
+    margin-bottom: 0;
+    font-weight: 300;
+}
+
+.group-items ul li a p {
+    margin-left: 20px;
+}
+
+.btn-launch {
+    background: #AA2700;
+    margin-left: 5px;
+    border-radius: 0;
+    width: 30px;
+}
+
+.btn-launch:hover {
+    background: #DB9200;
+}
+
+.btn-signin {
+    width: auto;
+}
+
+
+@media screen and (max-width: 940px) {
+
+    .btn-stack {
+        /*display: block;*/
+        margin: 5px 0 0 5px;
+    }
+
+
+    #main-nav {
+        width: 100%;
+        background: black;
+
+    }
+
+    #main-nav .btn {
+        padding: 10px;
+        font-size: 1.3em;
+        border-radius: 0;
+        margin-bottom: 10px;
+    }
+
+    #main-nav a:last-child {
+        /*margin-bottom: 10px; */
+    }
+
+    #navbar-container {
+        padding: 0;
+        margin:0;
+
+    }
+
+
+    .navbar-spacer {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+}

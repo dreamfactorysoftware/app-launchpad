@@ -1,0 +1,192 @@
+/*
+Alternate style sheet for LaunchPad
+*/
+
+.make-inline {
+    display: inline-block;
+}
+
+#navbar-container {
+    background: black;
+
+}
+
+#app-groups-container {
+    font-family: Lato;
+}
+
+
+#app-list-container {
+
+    background: #fff;
+    background-image: url('http://hdnaturepictures.com/wp-content/uploads/2013/06/Sunflower-Close-Up-Wide.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#app-list-container
+
+
+.accordion-group {
+    /*background-color: rgba(255, 158, 2, 0.5);*/
+    background-color: rgba(255, 225, 58, 0.8);
+
+
+    border: none;
+    border-radius: 0;
+}
+
+.accordion-group a {
+    color: black;
+}
+
+.accordion-group a:hover {
+    color: white;
+}
+
+.group-title {
+    margin-bottom: 0;
+    font-weight: 300;
+}
+
+.group-description {
+    margin-left: 20px;
+}
+
+.group-icon {
+    padding: 20px 10px 10px 10px;
+}
+
+.group-items {
+    /*
+    -webkit-box-shadow: 0px 0px 5px #ddd inset;
+    -moz-box-shadow:    0px 0px 5px #ddd inset;
+    box-shadow:         0px 0px 5px #ddd inset;
+    */
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.group-items ul {
+    margin-left: 0;
+}
+
+.group-items ul li {
+    border-bottom: 1px solid #000;
+    list-style: none;
+    padding-left: 45px;
+}
+
+.group-items ul li:hover {
+    color: white !important;
+}
+
+.group-items ul li:last-child {
+    border-bottom: none;
+}
+
+.group-items ul li a {
+    color: black;
+    font-weight: 300 !important;
+}
+
+.group-items ul li a:hover {
+    color: white !important;
+
+}
+.group-items ul li a h4 {
+    margin-bottom: 0;
+    font-weight: 400;
+}
+
+.group-items ul li a p {
+    margin-left: 20px;
+}
+
+.btn-launch {
+    background-color: rgba(255, 225, 58, 1);
+    margin-left: 5px;
+    border-radius: 0;
+    width: 30px;
+}
+
+.btn-launch i {
+    color: black;
+}
+
+.btn-launch.disabled i {
+    color: white;
+}
+
+.btn-launch:hover {
+    background: black;
+}
+
+.btn-launch:hover i {
+    color: white;
+}
+
+.btn-signin {
+    width: auto;
+}
+
+a.btn-signin {
+    color: black !important;
+}
+
+a.btn-signin:hover {
+    color: white !important;
+}
+
+
+
+
+@media screen and (max-width: 940px) {
+
+    .btn-stack {
+        /*display: block;*/
+        margin: 5px 0 0 5px;
+    }
+
+
+    #main-nav {
+        width: 100%;
+        background: black;
+    }
+
+    #main-nav .btn {
+        padding: 10px;
+        font-size: 1.3em;
+        border-radius: 0;
+        margin-bottom: 10px;
+    }
+
+    #main-nav a:last-child {
+        /*margin-bottom: 10px; */
+    }
+
+    #navbar-container {
+        padding: 0;
+        margin:0;
+    }
+
+
+    .navbar-spacer {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Font Weights for mobile */
+    .group-title {
+        font-weight: 400;
+    }
+
+    .group-items ul li a {
+        font-weight: 400 !important;
+    }
+
+    .group-items ul li a h4 {
+        font-weight: 700;
+    }
+
+}
