@@ -1,6 +1,7 @@
 Actions = ({
     init: function () {
         this.getConfig();
+
     },
     getConfig: function () {
         var that = this;
@@ -60,79 +61,174 @@ Actions = ({
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
             return;
         }else{
-            $('#fs_toggle').hide();
+            $('#fs_toggle').addClass('disabled');
             $('#app-list-container').show();
         }
 
     },
-
-    showAdminIcon: function () {
-        var template = '<a id="adminLink" class="btn btn-inverse" title="Admin Console" onclick="Actions.showApp(\'admin\',\'/public/admin/#/app\',\'0\')">' +
-            '<i class="icon-cog"></i>';
-        //Templates.loadTemplate(Templates.adminDropDownTemplate, null, 'admin-container');
-        $('#dfControl1 .btn-group').append(template);
-    },
     showApp: function (name, url, type, fullscreen) {
-        $('#fs_toggle').hide();
+
+        $('#fs_toggle').addClass('disabled');
         $('#app-list-container').hide();
+        $('#apps-list-btn').removeClass('disabled');
+
         $('iframe').hide();
+
+        // Show the admin if your an admin
         if (name == "admin") {
             if ($('#admin').length > 0) {
-                $('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).show();
+                $('#adminLink').addClass('disabled');
+
+                // This reloads the admin app
+                // Did this because when we just $.show(see commented out line below)
+                // Angular hasn't populated the DOM because it's fallen out of scope
+                // I think
+                $('#admin').replaceWith(
+                    $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).appendTo('#app-container')
+                );
+                //$('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).show();
             } else {
+                $('#adminLink').addClass('disabled');
                 $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).appendTo('#app-container');
             }
             return;
         }
+
+
+        // check if there is an element with this id
         if ($("#" + name).length > 0) {
+            console.log('here');
+
+            //check if that element requires fullscreen
             if(fullscreen){
-                this.toggleFullScreen(true);
-                $('#fs_toggle').show();
+                //Actions.toggleFullScreen(true);
+
+                // It does require fullscreen.
+                // Set app-container to full screen
+                // No other app should be run
+                this.requireFullScreen();
             }
+
+            // Show the app
+            $('#fs_toggle').removeClass('disabled');
+            $('#fs_toggle').on('click', function() {
+                Actions.toggleFullScreen(true);
+            });
             $("#" + name).show();
+
 
             return;
         }
 
             $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', url).appendTo('#app-container');
 
+
+        /*
         if(fullscreen && name != "admin"){
             this.toggleFullScreen(true);
-
         }
+        */
+
+        // Check if the name is admin
         if(name != 'admin'){
-            $('#fs_toggle').show();
-        }
-    },
-    showUserInfo: function (user) {
+            //$('#fs_toggle').show();
 
-        Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
-        if (user.id) {
-            Templates.loadTemplate(Templates.userInfoTemplate, user, 'dfControl1');
+            // Check if the app requires fullscreen
+            if(fullscreen){
+
+                // It does so fire it up in fullscreen mode
+                Actions.requireFullScreen();
+           }else{
+
+                $('#fs_toggle').removeClass('disabled');
+                $('#adminLink').removeClass('disabled');
+
+                $('#fs_toggle').on('click', function() {
+                    Actions.toggleFullScreen(true);
+                });
+            }
         }
+
     },
+    showAppList: function() {
+
+        $('#apps-list-btn').addClass('disabled');
+        $('#adminLink').removeClass('disabled');
+        $('#fs_toggle').off('click');
+        $('#fs_toggle').addClass('disabled');
+        $('#app-list-container').show();
+
+    },
+    showAdmin: function() {
+
+        var name = 'admin',
+            url = '/public/admin/#/app',
+            type = 0,
+            fullscreen = 0;
+
+        this.showApp(name, url, type, fullscreen);
+    },
+
     updateSession: function (action) {
-        Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
+
         var that = this;
         $.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
             .done(function(sessionInfo){
                 //$.data(document.body, 'session', data);
                 //var sessionInfo = $.data(document.body, 'session');
+
+                // Check if sessionInfo has any apps in the no_group_apps array
+                if(sessionInfo.no_group_apps == 0){
+                    // It doesn't have any apps
+                    // Fail silently
+                    //console.log('fail');
+                }else{
+                    // It does have apps!
+
+                    //create an array variable to store these apps
+                    sessionInfo.mnm_ng_apps = [];
+
+                    // Fire up an new object
+                    var apps = {};
+
+                    // create the property 'apps' on our new object
+                    apps.apps = sessionInfo.no_group_apps;
+
+                    // push this new app object onto our array
+                    sessionInfo.mnm_ng_apps.push(apps);
+
+                    // **Note** I'm doing all this to mimick how the app_groups are returned
+                    // in order to put ungrouped apps into a group for display.
+                    // I know there is a better way...
+                }
+
+
                 CurrentUserID = sessionInfo.id;
-                if (CurrentUserID) {
-                    Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
+                if(CurrentUserID) {
+                    sessionInfo.activeSession = true;
                 }
-                Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
+
+                Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
                 Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
+
                 if (sessionInfo.is_sys_admin) {
-                    that.showAdminIcon();
+                    console.log('here');
+                    $('#adminLink').addClass('disabled');
+                    $('#fs_toggle').addClass('disabled');
+                    $('#apps-list-btn').removeClass('disabled');
+                    $('#fs_toggle').off('click');
                 }
+
+
                 if(action == "init"){
                     that.getApps(sessionInfo, action);
                 }
+
+
             })
             .fail(function(response){
                 if (response.status == 401) {
+                    Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
                     that.doSignInDialog();
                 } else if (response.status == 500) {
                     that.showStatus(response.statusText, "error");
@@ -163,6 +259,7 @@ Actions = ({
         }
     },
     signIn: function () {
+
         var that = this;
         if (!$('#UserEmail').val() || !$('#Password').val()) {
             $("#loginErrorMessage").addClass('alert-error').html('You must enter User Email and Password to continue.');
@@ -175,15 +272,44 @@ Actions = ({
                     $("#loginDialog").modal('hide');
                     $("#loading").hide();
                     return;
+
                 }
+
                 $.data(document.body, 'session', data);
-                Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
+
                 var sessionInfo = $.data(document.body, 'session');
+
+                // Check if sessionInfo has any apps in the no_group_apps array
+                if(sessionInfo.no_group_apps == 0){
+                    // It doesn't have apps
+                    // Fail silently
+                    //console.log('fail');
+                }else{
+                    // It does have apps!
+
+                    //create an array variable to store these apps
+                    sessionInfo.mnm_ng_apps = [];
+
+                    // Fire up an new object
+                    var apps = {};
+
+                    // create the property 'apps' on our new object
+                    apps.apps = sessionInfo.no_group_apps;
+
+                    // push this new app object onto our array
+                    sessionInfo.mnm_ng_apps.push(apps);
+
+                    // **Note** I'm doing all this to mimick how the app_groups are returned
+                    // in order to put ungrouped apps into a group for display.
+                    // I know there is a better way...
+                }
+
                 CurrentUserID = sessionInfo.id;
                 if (CurrentUserID) {
-                    Templates.loadTemplate(Templates.userInfoTemplate, sessionInfo, 'dfControl1');
+                    sessionInfo.activeSession = true;
                 }
-                Templates.loadTemplate(Templates.navBarDropDownTemplate, {Applications: sessionInfo}, 'app-list');
+
+                Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
                 Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
                 if (sessionInfo.is_sys_admin) {
                     Actions.showAdminIcon();
@@ -241,6 +367,10 @@ Actions = ({
             $('#app-container').css({"top":"44px", "z-index" :1});
             $('#rocket').hide();
         }
+    },
+
+    requireFullScreen: function() {
+        $('#app-container').css({"top":"0px", "z-index" :999998});
     },
     forgotPassword: function () {
 
@@ -446,10 +576,12 @@ Actions = ({
                 $('#admin-container').empty();
                 $("#logoffDialog").modal('hide');
                 that.updateSession("init");
+
             },
             error: function (response) {
                 if (response.status == 401) {
-                    that.showSignInButton();
+                    //that.showSignInButton();
+                    Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
                     that.doSignInDialog();
                 }
             }
@@ -471,8 +603,6 @@ Actions = ({
     }
 });
 $(document).ready(function () {
-
-
     $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) {
         e.stopPropagation();
     });
