@@ -2069,9 +2069,11 @@ html, body {
     box-shadow:         0 1px 1px 1px rgba(0, 0, 0, .3);
 }
 
+/*
 #app-list-container h4 {
     color: #444;
 }
+*/
 
 #app-list-container .media-body {
     color: #999;
