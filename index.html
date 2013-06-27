@@ -37,66 +37,43 @@
 	</div>
 	<div class="modal-body">
 		<div class="alert" id="changeProfileErrorMessage"></div>
+        <div class="modal-body-form">
+        <p>
+            <label class="formLabel" for="email">Email:</label>
+            <input type="email" class="cW98 ONKEYUP" id="email" value="" />
+		</p>
 
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">Email:&nbsp;</div>
-			<div class="cLeft cW65">
-				<input type="text" class="cW98 ONKEYUP" id="email" value="" />
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">First&nbsp;Name:&nbsp;</div>
-			<div class="cLeft cW65">
-				<input type="text" class="cW98 ONKEYUP" id="firstname" value="" />
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">Last&nbsp;Name:&nbsp;</div>
-			<div class="cLeft cW65">
-				<input type="text" class="cW98 ONKEYUP" id="lastname" value="" />
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">Display&nbsp;Name:&nbsp;</div>
-			<div class="cLeft cW65">
-				<input type="text" class="cW98 ONKEYUP" id="displayname" value="" />
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">Default App:&nbsp;</div>
-			<div class="cLeft cW65">
-				<select class="cW98 ONKEYUP" id="default_app">
-					<option value="">None</option>
-				</select>
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">Phone:&nbsp;</div>
-			<div class="cLeft cW65">
-				<input type="text" class="cW98 ONKEYUP" id="phone" value="" />
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">Security&nbsp;Question:&nbsp;</div>
-			<div class="cLeft cW65">
-				<input type="text" class="cW98 ONKEYUP" id="security_question" value="" />
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
-
-		<div class="cM1">
-			<div class="cLeft cW35 formLabel">Security&nbsp;Answer:&nbsp;</div>
-			<div class="cLeft cW65">
-				<input type="password" class="cW98 ONKEYUP" id="security_answer" value="" />
-			</div>
-			<div class="cClear"><!--  --></div>
-		</div>
+        <p>
+            <label class="formLabel" for="firstname">First&nbsp;Name:&nbsp;</label>
+            <input type="text" class="cW98 ONKEYUP" id="firstname" value="" />
+        </p>
+        <p>
+            <label class="formLabel" for="lastname">Last&nbsp;Name:&nbsp;</label>
+            <input type="text" class="cW98 ONKEYUP" id="lastname" value="" />
+        </p>
+        <p>
+            <label class="formLabel" for="displayname">Display&nbsp;Name:&nbsp;</label>
+            <input type="text" class="cW98 ONKEYUP" id="displayname" value="" />
+        </p>
+        <p>
+            <label class="formLabel" for="displayname">Default App:&nbsp;</label>
+            <select class="cW98 ONKEYUP" id="default_app">
+                <option value="">None</option>
+            </select>
+        </p>
+        <p>
+            <label class="formLabel" for="displayname">Phone:&nbsp;</label>
+            <input type="text" class="cW98 ONKEYUP" id="phone" value="" />
+        </p>
+        <p>
+            <label class="formLabel" for="displayname">Security&nbsp;Question:&nbsp;</label>
+            <input type="text" class="cW98 ONKEYUP" id="security_question" value="" />
+        </p>
+        <p>
+            <label class="formLabel" for="displayname">Security&nbsp;Answer:&nbsp;</label>
+            <input type="text" class="cW98 ONKEYUP" id="security_answer" value="" />
+        </p>
+        </div>
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearProfile()">Close</a> <a href="#" class="btn btn-primary"
@@ -109,29 +86,20 @@
 		<h3>Change Password</h3>
 	</div>
 	<div class="modal-body">
-		<div>
-			<div class="alert" id="changePasswordErrorMessage"></div>
-			<div class="cM1">
-				<div class="cLeft cW35 formLabel">Old&nbsp;Password:&nbsp;</div>
-				<div class="cLeft cW65">
-					<input type="password" class=" cW98" id="OPassword" value="" />
-				</div>
-				<div class="cClear"><!-- --></div>
-			</div>
-			<div class="cM1">
-				<div class="cLeft cW35 formLabel">New&nbsp;Password:&nbsp;</div>
-				<div class="cLeft cW65">
-					<input type="password" class="cW98" id="NPassword" value="" />
-				</div>
-				<div class="cClear"><!-- --></div>
-			</div>
-			<div class="cM1">
-				<div class="cLeft cW35 formLabel">Verify&nbsp;Password:&nbsp;</div>
-				<div class="cLeft cW65">
-					<input type="password" class="cW98" id="VPassword" value="" />
-				</div>
-				<div class="cClear"><!-- --></div>
-			</div>
+        <div class="alert" id="changePasswordErrorMessage"></div>
+		<div class="modal-body-form">
+            <p>
+                <label class="formLabel" for="OPassword">Old&nbsp;Password:&nbsp;</label>
+                <input type="text" class="cW98" id="OPassword" value="" />
+            </p>
+            <p>
+                <label class="formLabel" for="NPassword">New&nbsp;Password:&nbsp;</label>
+                <input type="text" class="cW98" id="NPassword" value="" />
+            </p>
+            <p>
+                <label class="formLabel" for="VPassword">Verify&nbsp;Password:&nbsp;</label>
+                <input type="text" class="cW98" id="VPassword" value="" />
+            </p>
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -146,22 +114,16 @@
 		<h3>Sign In</h3>
 	</div>
 	<div class="modal-body">
-		<div>
-			<div class="alert" id="loginErrorMessage"></div>
-			<div class="cM1">
-				<div class="cLeft cW35 formLabel">User&nbsp;Email:&nbsp;</div>
-				<div class="cLeft cW65">
-					<input type="text" class=" cW98" name="UserEmail" id="UserEmail" value="" />
-				</div>
-				<div class="cClear"><!-- --></div>
-			</div>
-			<div class="cM1">
-				<div class="cLeft cW35 formLabel">Password:&nbsp;</div>
-				<div class="cLeft cW65">
-					<input type="password" class=" cW98" name="Password" id="Password" value="" />
-				</div>
-				<div class="cClear"><!-- --></div>
-			</div>
+        <div class="alert" id="loginErrorMessage"></div>
+		<div class="modal-body-form">
+            <p>
+                <label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label>
+                <input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
+            </p>
+            <p>
+                <label class="formLabel" for="VPassword">Password:&nbsp;</label>
+                <input type="password" class="cW98" name="Password" id="Password" value="" />
+            </p>
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -189,22 +151,16 @@
 		<h3>Forgot Password</h3>
 	</div>
 	<div class="modal-body">
-		<div>
-			<div class="alert" id="forgotPasswordErrorMessage"></div>
-			<div class="cM1">
-				<div class="cLeft cW35 fixedLabel">Security&nbsp;Question:&nbsp;</div>
-				<div class="cLeft cW65">
-					<span class="cM1" id="Question" value="" />
-				</div>
-				<div class="cClear"><!-- --></div>
-			</div>
-			<div class="cM1">
-				<div class="cLeft cW35 formLabel">Security&nbsp;Answer:&nbsp;</div>
-				<div class="cLeft cW65">
-					<input type="password" class=" cW98" name="Answer" id="Answer" value="" />
-				</div>
-				<div class="cClear"><!-- --></div>
-			</div>
+        <div class="alert" id="forgotPasswordErrorMessage"></div>
+		<div class="modal-body-form">
+            <p>
+                <label class="formLabel" for="Question">Security&nbsp;Question:&nbsp;</label>
+                <p><span class="cM1" id="Question" value="" /></p>
+            </p>
+			<p>
+                <label class="formLabel" for="Question">Security&nbsp;Answer:&nbsp;</label>
+                <input type="password" class=" cW98" name="Answer" id="Answer" value="" />
+			</p>
 		</div>
 	</div>
 	<div class="modal-footer">

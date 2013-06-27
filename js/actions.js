@@ -150,6 +150,20 @@ Actions = ({
         }
 
     },
+
+    animateNavBarClose: function(callback) {
+
+        var navbarH  = $('#main-nav').height();
+        $('#main-nav').animate({
+            height: 0
+        }).removeClass('in');
+
+        if (typeof callback == 'function') {
+            callback.call(this);
+        }
+    },
+
+
     showAppList: function() {
 
         $('#apps-list-btn').addClass('disabled');
@@ -157,6 +171,7 @@ Actions = ({
         $('#fs_toggle').off('click');
         $('#fs_toggle').addClass('disabled');
         $('#app-list-container').show();
+        this.animateNavBarClose();
 
     },
     showAdmin: function() {
@@ -166,7 +181,10 @@ Actions = ({
             type = 0,
             fullscreen = 0;
 
-        this.showApp(name, url, type, fullscreen);
+
+        this.animateNavBarClose(function() {this.showApp(name, url, type, fullscreen)});
+
+
     },
 
     updateSession: function (action) {
@@ -311,9 +329,6 @@ Actions = ({
 
                 Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
                 Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
-                if (sessionInfo.is_sys_admin) {
-                    Actions.showAdminIcon();
-                }
                 Actions.getApps(sessionInfo);
                 $("#loginDialog").modal('hide');
                 $("#loading").hide();
@@ -416,6 +431,7 @@ Actions = ({
         $("#security_answer").val('');
     },
     doProfileDialog: function () {
+        this.animateNavBarClose();
         var that = this;
         $.ajax({
             dataType: 'json',
@@ -452,6 +468,7 @@ Actions = ({
         $("#security_answer").val('');
     },
     updateProfile: function () {
+
         var that = this;
         NewUser = {};
         NewUser.email = $("#email").val();
@@ -514,7 +531,7 @@ Actions = ({
 
         $('#changePasswordErrorMessage').removeClass('alert-error').html('Use the form below to change your password.');
         this.clearChangePassword();
-        $("#changePasswordDialog").modal('show');
+        this.animateNavBarClose(function() {$("#changePasswordDialog").modal('show')});
     },
     checkPassword: function () {
 
