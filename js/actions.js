@@ -97,7 +97,7 @@ Actions = ({
 
         // check if there is an element with this id
         if ($("#" + name).length > 0) {
-            console.log('here');
+
 
             //check if that element requires fullscreen
             if(fullscreen){
