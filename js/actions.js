@@ -230,7 +230,6 @@ Actions = ({
                 Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
 
                 if (sessionInfo.is_sys_admin) {
-                    console.log('here');
                     $('#adminLink').addClass('disabled');
                     $('#fs_toggle').addClass('disabled');
                     $('#apps-list-btn').removeClass('disabled');
