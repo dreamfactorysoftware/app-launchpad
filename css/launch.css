@@ -20,7 +20,7 @@ Main stylesheet for LaunchPad
 
     background: #222;
     /*background-image: url('http://galleryheart.com/wp-content/uploads/2012/02/30_Mind-Blowing-Examples-of-Creative-Art-7.jpg');*/
-
+    background-image: url('../img/launchpad_bg_rocket-01.png');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -29,9 +29,9 @@ Main stylesheet for LaunchPad
 
 
 .accordion-group {
-    /*background-color: rgba(255, 158, 2, 0.5);*/
-    /*background-color: rgba(255, 59, 0, .4);*/
-    background-color: #AA2700;
+    /*background-color: rgba(5, 124, 221, 0.8);*/
+    background-color: rgba(170, 39, 0, .85);
+    /*background-color: #AA2700;*/
     border: none;
     border-radius: 0;
 }
