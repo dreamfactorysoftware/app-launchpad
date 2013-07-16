@@ -125,7 +125,7 @@ var Templates = {
             '<a id="dfPasswordLnk" onclick="Actions.doChangePasswordDialog()" class="btn btn-inverse btn-launch btn-stack" title="Change Your Password"><i class="icon-key"></i></a>' +
             '<a id="fs_toggle" class="btn btn-inverse btn-launch btn-stack" title="Full Screen" ><i class="icon-resize-full"></i></a>' +
             '{{#User.is_sys_admin}}<a onclick="Actions.showAdmin();" id="adminLink" class="btn btn-inverse btn-launch btn-stack" title="Admin Console"><i class="icon-cog"></i></a>' +
-            '<a id="helpLink" class="btn btn-inverse btn-launch btn-stack" href="http://dreamfactorysoftware.github.io" title="Help"><i class="icon-question-sign"></i></a>' +
+            '<a id="helpLink" target="df-new" class="btn btn-inverse btn-launch btn-stack" href="http://dreamfactorysoftware.github.io" title="Help"><i class="icon-question-sign"></i></a>' +
             '{{/User.is_sys_admin}}' +
             '<a id="dfSignOutLink" onclick="Actions.doSignOutDialog()" class="btn btn-inverse btn-launch btn-stack" title="End Your Session Now"><i class="icon-signout"></i></a>' +
             '</div>' +
