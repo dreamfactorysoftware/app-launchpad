@@ -90,7 +90,7 @@ var Templates = {
             '<ul>' +
             '{{#apps}}' +
             '<li>' +
-            '<a onclick = "Actions.showApp(\'{{api_name}}\',\'{{launch_url}}\',\'{{is_url_external}}\',{{requires_fullscreen}})">' +
+            '<a onclick = "Actions.showApp(\'{{api_name}}\',\'{{launch_url}}\',\'{{is_url_external}}\',{{requires_fullscreen}}, {{allow_fullscreen_toggle}})">' +
             '<h4>{{name}}</h4>' +
             '<p>{{description}}</p>' +
             '</a>' +

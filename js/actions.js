@@ -66,7 +66,7 @@ Actions = ({
         }
 
     },
-    showApp: function (name, url, type, fullscreen) {
+    showApp: function (name, url, type, fullscreen, allowfullscreentoggle) {
 
         $('#fs_toggle').addClass('disabled');
         $('#app-list-container').hide();
@@ -110,10 +110,19 @@ Actions = ({
             }
 
             // Show the app
-            $('#fs_toggle').removeClass('disabled');
-            $('#fs_toggle').on('click', function() {
-                Actions.toggleFullScreen(true);
-            });
+
+            if(!allowfullscreentoggle){
+                $('#fs_toggle').off('click', function() {
+                    Actions.toggleFullScreen(false);
+                });
+            } else if(allowfullscreentoggle) {
+                $('#fs_toggle').removeClass('disabled');
+                $('#fs_toggle').on('click', function() {
+                    Actions.toggleFullScreen(true);
+                });
+
+            }
+
             $("#" + name).show();
 
 
@@ -139,13 +148,20 @@ Actions = ({
                 // It does so fire it up in fullscreen mode
                 Actions.requireFullScreen();
            }else{
+                if(!allowfullscreentoggle){
+                    $('#fs_toggle').off('click', function() {
+                        Actions.toggleFullScreen(false);
+                    });
+                } else if(allowfullscreentoggle) {
+                    $('#fs_toggle').removeClass('disabled');
+                    $('#fs_toggle').on('click', function() {
+                        Actions.toggleFullScreen(true);
+                    });
 
-                $('#fs_toggle').removeClass('disabled');
+                }
+
                 $('#adminLink').removeClass('disabled');
 
-                $('#fs_toggle').on('click', function() {
-                    Actions.toggleFullScreen(true);
-                });
             }
         }
 
