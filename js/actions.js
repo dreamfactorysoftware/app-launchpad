@@ -129,14 +129,14 @@ Actions = ({
             return;
         }
 
-            $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', url).appendTo('#app-container');
+        $('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', url).appendTo('#app-container');
 
 
         /*
-        if(fullscreen && name != "admin"){
-            this.toggleFullScreen(true);
-        }
-        */
+         if(fullscreen && name != "admin"){
+         this.toggleFullScreen(true);
+         }
+         */
 
         // Check if the name is admin
         if(name != 'admin'){
@@ -147,7 +147,7 @@ Actions = ({
 
                 // It does so fire it up in fullscreen mode
                 Actions.requireFullScreen();
-           }else{
+            }else{
                 if(!allowfullscreentoggle){
                     $('#fs_toggle').off('click', function() {
                         Actions.toggleFullScreen(false);
@@ -299,7 +299,7 @@ Actions = ({
             return;
         }
         $('#loading').show();
-        $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({Email: $('#UserEmail').val(), Password: $('#Password').val()}))
+        $.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({email: $('#UserEmail').val(), password: $('#Password').val()}))
             .done(function(data){
                 if(Stay){
                     $("#loginDialog").modal('hide');
