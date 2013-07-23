@@ -282,7 +282,6 @@ Actions = ({
         $('#loginDialog').modal('hide');
         $('#loginDialog').off();
         $('#loginDialog').on('hidden', function() {
-            console.log('hidden');
             Actions.clearSignIn();
         })
     },
@@ -295,7 +294,6 @@ Actions = ({
             this.clearSignIn();
             $("#loginDialog").modal('show');
             $('#loginDialog').on('shown', function() {
-                console.log('asdfadsfwerwr');
                 $('#UserEmail').focus();
             });
             window.Stay = true;
@@ -304,7 +302,6 @@ Actions = ({
             this.clearSignIn();
             $("#loginDialog").modal('show');
             $('#loginDialog').on('shown', function() {
-                console.log('asdfadsf');
                 $('#UserEmail').focus();
             });
             window.Stay = false;
