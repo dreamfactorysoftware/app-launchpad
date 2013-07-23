@@ -276,6 +276,17 @@ Actions = ({
         $('#Password').val('');
 
     },
+
+    hideSignIn: function() {
+
+        $('#loginDialog').modal('hide');
+        $('#loginDialog').off();
+        $('#loginDialog').on('hidden', function() {
+            console.log('hidden');
+            Actions.clearSignIn();
+        })
+    },
+
     doSignInDialog: function (stay) {
 
         window.Stay = false;
@@ -283,11 +294,19 @@ Actions = ({
             $('#loginErrorMessage').removeClass('alert-error').html("Your Session has expired. Please log in to continue");
             this.clearSignIn();
             $("#loginDialog").modal('show');
+            $('#loginDialog').on('shown', function() {
+                console.log('asdfadsfwerwr');
+                $('#UserEmail').focus();
+            });
             window.Stay = true;
         }else{
             $('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Email and Password below to sign in.");
             this.clearSignIn();
             $("#loginDialog").modal('show');
+            $('#loginDialog').on('shown', function() {
+                console.log('asdfadsf');
+                $('#UserEmail').focus();
+            });
             window.Stay = false;
         }
     },
