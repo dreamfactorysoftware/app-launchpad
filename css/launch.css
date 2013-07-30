@@ -218,3 +218,7 @@ Main stylesheet for LaunchPad
     }
 
 }
+
+.remote-login-icons {
+	display: none;
+}
