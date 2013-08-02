@@ -13,10 +13,10 @@
 	<!--[if IE 7]>
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome-ie7.css" rel="stylesheet">    <![endif]-->
 	<link rel="stylesheet" href="css/layout.css" type="text/css" />
-    <link rel="stylesheet" href="css/launch.css" type="text/css" />
-    <!--<link rel="stylesheet" href="css/sunflower.css" type="text/css" />-->
+	<link rel="stylesheet" href="css/launch.css" type="text/css" />
+	<!--<link rel="stylesheet" href="css/sunflower.css" type="text/css" />-->
 	<link rel="stylesheet" href="/public/web-core/js/pnotify/pnotify.css" type="text/css" />
-    <link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
+	<link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
 
 	<!-- Initialize the system and start the application -->
 </head>
@@ -37,47 +37,44 @@
 	</div>
 	<div class="modal-body">
 		<div class="alert" id="changeProfileErrorMessage"></div>
-        <div class="modal-body-form">
-        <p>
-            <label class="formLabel" for="email">Email:</label>
-            <input type="email" class="cW98 ONKEYUP" id="email" value="" />
-		</p>
+		<div class="modal-body-form">
+			<p>
+				<label class="formLabel" for="email">Email:</label> <input type="email" class="cW98 ONKEYUP" id="email" value="" />
+			</p>
 
-        <p>
-            <label class="formLabel" for="firstname">First&nbsp;Name:&nbsp;</label>
-            <input type="text" class="cW98 ONKEYUP" id="firstname" value="" />
-        </p>
-        <p>
-            <label class="formLabel" for="lastname">Last&nbsp;Name:&nbsp;</label>
-            <input type="text" class="cW98 ONKEYUP" id="lastname" value="" />
-        </p>
-        <p>
-            <label class="formLabel" for="displayname">Display&nbsp;Name:&nbsp;</label>
-            <input type="text" class="cW98 ONKEYUP" id="displayname" value="" />
-        </p>
-        <p>
-            <label class="formLabel" for="displayname">Default App:&nbsp;</label>
-            <select class="cW98 ONKEYUP" id="default_app">
-                <option value="">None</option>
-            </select>
-        </p>
-        <p>
-            <label class="formLabel" for="displayname">Phone:&nbsp;</label>
-            <input type="text" class="cW98 ONKEYUP" id="phone" value="" />
-        </p>
-        <p>
-            <label class="formLabel" for="displayname">Security&nbsp;Question:&nbsp;</label>
-            <input type="text" class="cW98 ONKEYUP" id="security_question" value="" />
-        </p>
-        <p>
-            <label class="formLabel" for="displayname">Security&nbsp;Answer:&nbsp;</label>
-            <input type="text" class="cW98 ONKEYUP" id="security_answer" value="" />
-        </p>
-        </div>
+			<p>
+				<label class="formLabel" for="firstname">First&nbsp;Name:&nbsp;</label> <input type="text" class="cW98 ONKEYUP" id="firstname" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="lastname">Last&nbsp;Name:&nbsp;</label> <input type="text" class="cW98 ONKEYUP" id="lastname" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="displayname">Display&nbsp;Name:&nbsp;</label> <input type="text" class="cW98 ONKEYUP" id="displayname" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="displayname">Default App:&nbsp;</label> <select class="cW98 ONKEYUP" id="default_app">
+				<option value="">None</option>
+			</select>
+			</p>
+			<p>
+				<label class="formLabel" for="displayname">Phone:&nbsp;</label> <input type="text" class="cW98 ONKEYUP" id="phone" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="displayname">Security&nbsp;Question:&nbsp;</label> <input type="text" class="cW98 ONKEYUP" id="security_question" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="displayname">Security&nbsp;Answer:&nbsp;</label> <input type="text" class="cW98 ONKEYUP" id="security_answer" value="" />
+			</p>
+		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearProfile()">Close</a> <a href="#" class="btn btn-primary"
-																								   onclick="Actions.updateProfile()">Save changes</a>
+		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearProfile()">Close</a>
+		<a href="#" class="btn btn-primary" onclick="Actions.updateProfile()">Save changes</a>
 	</div>
 </div>
 <div class="modal hide fade" id="changePasswordDialog">
@@ -86,26 +83,24 @@
 		<h3>Change Password</h3>
 	</div>
 	<div class="modal-body">
-        <div class="alert" id="changePasswordErrorMessage"></div>
+		<div class="alert" id="changePasswordErrorMessage"></div>
 		<div class="modal-body-form">
-            <p>
-                <label class="formLabel" for="OPassword">Old&nbsp;Password:&nbsp;</label>
-                <input type="text" class="cW98" id="OPassword" value="" />
-            </p>
-            <p>
-                <label class="formLabel" for="NPassword">New&nbsp;Password:&nbsp;</label>
-                <input type="text" class="cW98" id="NPassword" value="" />
-            </p>
-            <p>
-                <label class="formLabel" for="VPassword">Verify&nbsp;Password:&nbsp;</label>
-                <input type="text" class="cW98" id="VPassword" value="" />
-            </p>
+			<p>
+				<label class="formLabel" for="OPassword">Old&nbsp;Password:&nbsp;</label> <input type="text" class="cW98" id="OPassword" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="NPassword">New&nbsp;Password:&nbsp;</label> <input type="text" class="cW98" id="NPassword" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="VPassword">Verify&nbsp;Password:&nbsp;</label> <input type="text" class="cW98" id="VPassword" value="" />
+			</p>
 		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearChangePassword()">Close</a> <a href="#" class="btn btn-primary"
-																										  onclick="Actions.checkPassword()">Save
-		changes</a>
+		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearChangePassword()">Close</a>
+		<a href="#" class="btn btn-primary" onclick="Actions.checkPassword()">Save changes</a>
 	</div>
 </div>
 <div id="loginDialog" class="modal hide fade">
@@ -114,21 +109,34 @@
 		<h3>Sign In</h3>
 	</div>
 	<div class="modal-body">
-        <div class="alert" id="loginErrorMessage"></div>
+		<div class="alert" id="loginErrorMessage"></div>
 		<div class="modal-body-form">
-            <p>
-                <label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label>
-                <input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
-            </p>
-            <p>
-                <label class="formLabel" for="VPassword">Password:&nbsp;</label>
-                <input type="password" class="cW98" name="Password" id="Password" value="" />
-            </p>
+			<p>
+				<label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label> <input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
+			</p>
+
+			<p>
+				<label class="formLabel" for="VPassword">Password:&nbsp;</label> <input type="password" class="cW98" name="Password" id="Password" value="" />
+			</p>
+
+			<p style="text-align: center;">
+				Or </p>
+
+			<div class="well social-signin" style="padding:10px">
+				<h4 style="margin:4px auto; color: #666; text-align: center;">Sign-in with one of these providers</h4>
+				&nbsp;&nbsp;
+				<a rel="google"><img src="img/icon-google.png" alt="Sign-in with Google"></a>
+				<a rel="github"><img src="img/icon-github.png" alt="Sign-in with Github"></a>
+				<a rel="facebook"><img src="img/icon-facebook.png" alt="Sign-in with Facebook"></a>
+				<a rel="twitter"><img src="img/icon-twitter.png" alt="Sign-in with Twitter"></a>
+				<a rel="reddit"><img src="img/icon-reddit.png" alt="Sign-in with Reddit"></a>
+				<a rel="stackoverflow"><img src="img/icon-stackoverflow.png" alt="Sign-in with StackOverflow"></a>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="btn cLeft" onclick="Actions.doForgotPasswordDialog()">Forgot Password...</a>
-        <a href="#" class="btn" onclick="Actions.hideSignIn()">Close</a>
+		<a href="#" class="btn" onclick="Actions.hideSignIn()">Close</a>
 		<a href="#" class="btn btn-primary" onclick="Actions.signIn()">Sign In</a>
 	</div>
 </div>
@@ -142,7 +150,8 @@
 			Are you sure you want to sign out of the application? All unsaved work will be lost! </p>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal">Close</a> <a href="#" class="btn btn-primary" onclick="Actions.signOut()">Sign Out</a>
+		<a href="#" class="btn" data-dismiss="modal">Close</a>
+		<a href="#" class="btn btn-primary" onclick="Actions.signOut()">Sign Out</a>
 	</div>
 </div>
 <div id="forgotPasswordDialog" class="modal hide fade">
@@ -151,21 +160,22 @@
 		<h3>Forgot Password</h3>
 	</div>
 	<div class="modal-body">
-        <div class="alert" id="forgotPasswordErrorMessage"></div>
+		<div class="alert" id="forgotPasswordErrorMessage"></div>
 		<div class="modal-body-form">
-            <p>
-                <label class="formLabel" for="Question">Security&nbsp;Question:&nbsp;</label>
-                <p><span class="cM1" id="Question" value="" /></p>
-            </p>
 			<p>
-                <label class="formLabel" for="Question">Security&nbsp;Answer:&nbsp;</label>
-                <input type="password" class=" cW98" name="Answer" id="Answer" value="" />
+				<label class="formLabel" for="Question">Security&nbsp;Question:&nbsp;</label>
+
+			<p>
+				<span class="cM1" id="Question" value="" />
 			</p>
+			</p>            <p>
+			<label class="formLabel" for="Question">Security&nbsp;Answer:&nbsp;</label> <input type="password" class=" cW98" name="Answer" id="Answer" value="" />
+		</p>
 		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearForgotPassword()">Close</a> <a href="#" class="btn btn-primary"
-																										  onclick="Actions.forgotPassword()">Submit</a>
+		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearForgotPassword()">Close</a>
+		<a href="#" class="btn btn-primary" onclick="Actions.forgotPassword()">Submit</a>
 	</div>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -177,7 +187,33 @@
 <script src="/public/web-core/js/utils.js"></script>
 <script src="/public/web-core/js/pnotify/pnotify.js"></script>
 <script src="js/actions.js"></script>
+<script>
+jQuery(function($) {
+	$('div.social-signin').on('click', 'a', function(e) {
+		var _provider = $(this).attr('rel');
 
+		if (_provider) {
+			var availableWidth = window.screen.availWidth
+				, availableHeight = window.screen.availHeight
+				, availableLeft = window.screen.availLeft
+				, element = $(this)
+				, url = element.attr('href')
+				, width = 500
+				, height = 500
+				, modalWidth = ( width > availableWidth ) ? availableWidth - 80 : width
+				, modalHeight = ( height > availableHeight ) ? availableHeight - 80 : height
+				, offsetLeft = (availableLeft) ? availableLeft + ( (availableWidth - modalWidth) / 2 ) : ( (availableWidth - modalWidth) / 2 )
+				, offsetTop = ( (availableHeight - modalHeight) / 2 )
+				;
+
+			console.log(url, modalWidth, modalHeight, offsetTop, offsetLeft);
+
+			window.open(url, _provider,
+				'width=' + modalWidth + ',height=' + modalHeight + ',left=' + offsetLeft + ',top=' + offsetTop + ',screenX=' + offsetLeft + ',screenY=' + offsetTop);
+		}
+	});
+});
+</script>
 </body>
 </html>
 
