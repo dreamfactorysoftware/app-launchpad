@@ -120,96 +120,98 @@
 				<label class="formLabel" for="VPassword">Password:&nbsp;</label> <input type="password" class="cW98" name="Password" id="Password" value="" />
 			</p>
 
-			<p style="text-align: center;">
-				Or </p>
+			<div class="remote-login">
+				<p style="text-align: center;">
+					Or </p>
 
-			<div class="well social-signin" style="padding:10px">
-				<h4 style="margin:4px auto; color: #666; text-align: center;">Sign-in with one of these providers</h4>
+				<div class="well social-signin" style="padding:10px">
+					<h4 style="margin:4px auto; color: #666; text-align: center;">Sign-in with one of these providers</h4>
 
-				<div class="remote-login-providers"></div>
+					<div class="remote-login-providers"></div>
+				</div>
+
 			</div>
 		</div>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn cLeft" onclick="Actions.doForgotPasswordDialog()">Forgot Password...</a>
-		<a href="#" class="btn" onclick="Actions.hideSignIn()">Close</a>
-		<a href="#" class="btn btn-primary" onclick="Actions.signIn()">Sign In</a>
-	</div>
-</div>
-<div id="logoffDialog" class="modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Sign Out</h3>
-	</div>
-	<div class="modal-body">
-		<p>
-			Are you sure you want to sign out of the application? All unsaved work will be lost! </p>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal">Close</a>
-		<a href="#" class="btn btn-primary" onclick="Actions.signOut()">Sign Out</a>
-	</div>
-</div>
-<div id="forgotPasswordDialog" class="modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearForgotPassword()">&times;</button>
-		<h3>Forgot Password</h3>
-	</div>
-	<div class="modal-body">
-		<div class="alert" id="forgotPasswordErrorMessage"></div>
-		<div class="modal-body-form">
-			<p>
-				<label class="formLabel" for="Question">Security&nbsp;Question:&nbsp;</label>
-
-			<p>
-				<span class="cM1" id="Question" value="" />
-			</p>
-			</p>            <p>
-			<label class="formLabel" for="Question">Security&nbsp;Answer:&nbsp;</label> <input type="password" class=" cW98" name="Answer" id="Answer" value="" />
-		</p>
+		<div class="modal-footer">
+			<a href="#" class="btn cLeft" onclick="Actions.doForgotPasswordDialog()">Forgot Password...</a>
+			<a href="#" class="btn" onclick="Actions.hideSignIn()">Close</a>
+			<a href="#" class="btn btn-primary" onclick="Actions.signIn()">Sign In</a>
 		</div>
 	</div>
-	<div class="modal-footer">
-		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearForgotPassword()">Close</a>
-		<a href="#" class="btn btn-primary" onclick="Actions.forgotPassword()">Submit</a>
+	<div id="logoffDialog" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3>Sign Out</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				Are you sure you want to sign out of the application? All unsaved work will be lost! </p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
+			<a href="#" class="btn btn-primary" onclick="Actions.signOut()">Sign Out</a>
+		</div>
 	</div>
-</div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-<!--<script src="/public/web-core/js/jquery.js"></script>-->
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-<!--<script src="/public/web-core/js/bootstrap.min.js"></script>-->
-<script src="/public/web-core/js/mustache.js"></script>
-<script src="js/templates.js"></script>
-<script src="/public/web-core/js/utils.js"></script>
-<script src="/public/web-core/js/pnotify/pnotify.js"></script>
-<script src="js/actions.js"></script>
-<script>
-jQuery(function($) {
-	$('div.social-signin').on('click', 'a', function(e) {
-		var _provider = $(this).attr('rel');
+	<div id="forgotPasswordDialog" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearForgotPassword()">&times;</button>
+			<h3>Forgot Password</h3>
+		</div>
+		<div class="modal-body">
+			<div class="alert" id="forgotPasswordErrorMessage"></div>
+			<div class="modal-body-form">
+				<p>
+					<label class="formLabel" for="Question">Security&nbsp;Question:&nbsp;</label>
 
-		if (_provider) {
-			var availableWidth = window.screen.availWidth
-				, availableHeight = window.screen.availHeight
-				, availableLeft = window.screen.availLeft
-				, element = $(this)
-				, url = element.attr('href')
-				, width = 500
-				, height = 500
-				, modalWidth = ( width > availableWidth ) ? availableWidth - 80 : width
-				, modalHeight = ( height > availableHeight ) ? availableHeight - 80 : height
-				, offsetLeft = (availableLeft) ? availableLeft + ( (availableWidth - modalWidth) / 2 ) : ( (availableWidth - modalWidth) / 2 )
-				, offsetTop = ( (availableHeight - modalHeight) / 2 )
-				;
+				<p>
+					<span class="cM1" id="Question" value="" />
+				</p>
+				</p>            <p>
+				<label class="formLabel" for="Question">Security&nbsp;Answer:&nbsp;</label> <input type="password" class=" cW98" name="Answer" id="Answer" value="" />
+			</p>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearForgotPassword()">Close</a>
+			<a href="#" class="btn btn-primary" onclick="Actions.forgotPassword()">Submit</a>
+		</div>
+	</div>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	<!--<script src="/public/web-core/js/jquery.js"></script>-->
+	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+	<!--<script src="/public/web-core/js/bootstrap.min.js"></script>-->
+	<script src="/public/web-core/js/mustache.js"></script>
+	<script src="js/templates.js"></script>
+	<script src="/public/web-core/js/utils.js"></script>
+	<script src="/public/web-core/js/pnotify/pnotify.js"></script>
+	<script src="js/actions.js"></script>
+	<script>
+	jQuery(function($) {
+		$('div.social-signin').on('click', 'a', function(e) {
+			var _provider = $(this).attr('rel');
 
-			console.log(url, modalWidth, modalHeight, offsetTop, offsetLeft);
+			if (_provider) {
+				var availableWidth = window.screen.availWidth
+					, availableHeight = window.screen.availHeight
+					, availableLeft = window.screen.availLeft
+					, element = $(this)
+					, url = element.attr('href')
+					, width = 500
+					, height = 500
+					, modalWidth = ( width > availableWidth ) ? availableWidth - 80 : width
+					, modalHeight = ( height > availableHeight ) ? availableHeight - 80 : height
+					, offsetLeft = (availableLeft) ? availableLeft + ( (availableWidth - modalWidth) / 2 ) : ( (availableWidth - modalWidth) / 2 )
+					, offsetTop = ( (availableHeight - modalHeight) / 2 )
+					;
 
-			window.open(url, _provider,
-				'width=' + modalWidth + ',height=' + modalHeight + ',left=' + offsetLeft + ',top=' + offsetTop + ',screenX=' + offsetLeft + ',screenY=' + offsetTop);
-		}
+				console.log(url, modalWidth, modalHeight, offsetTop, offsetLeft);
+
+				window.open(url, _provider,
+					'width=' + modalWidth + ',height=' + modalHeight + ',left=' + offsetLeft + ',top=' + offsetTop + ',screenX=' + offsetLeft + ',screenY=' + offsetTop);
+			}
+		});
 	});
-});
-</script>
+	</script>
 </body>
 </html>
 

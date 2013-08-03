@@ -278,11 +278,13 @@ Actions = ({
 	clearSignIn:   function() {
 		$('#UserEmail').val('');
 		$('#Password').val('');
-		if (Config.allow_remote_logins && Config.remote_login_providers.length) {
+		if (Config.allow_remote_logins && Config.remote_login_providers) {
 			$('#loginDialog .remote-login-providers').empty();
 			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
 				$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i] + '"></span>');
 			}
+		} else {
+			$('#loginDialog .remote-login').hide();
 		}
 	},
 
