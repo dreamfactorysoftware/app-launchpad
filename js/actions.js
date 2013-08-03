@@ -278,7 +278,12 @@ Actions = ({
 	clearSignIn:   function() {
 		$('#UserEmail').val('');
 		$('#Password').val('');
-
+		if (Config.allow_remote_logins && Config.remote_login_providers.length) {
+			$('#loginDialog .remote-login-providers').empty();
+			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
+				$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i] + '"></span>');
+			}
+		}
 	},
 
 	hideSignIn: function() {
@@ -328,7 +333,7 @@ Actions = ({
 				}
 
 				if (data.redirect_uri) {
-					var _popup = window.open(data.redirect_uri, 'Remote Login','scrollbars=0');
+					var _popup = window.open(data.redirect_uri, 'Remote Login', 'scrollbars=0');
 				}
 
 				$.data(document.body, 'session', data);
