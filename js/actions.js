@@ -286,7 +286,7 @@ Actions = ({
 		if (Config.allow_remote_logins && Config.remote_login_providers) {
 			$('#loginDialog .remote-login-providers').empty();
 			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
-				$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i] + '"></span>');
+				$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i].toLowerCase() + '"></span>');
 			}
 		} else {
 			$('#loginDialog .remote-login').hide();
@@ -753,6 +753,7 @@ jQuery(function($) {
 			$('h3', $_daddy).html('Sign in with ' + _provider);
 			$('.modal-body,.modal-footer', $_daddy).slideUp();
 			$('.sso-modal-body', $_daddy).slideDown();
+			$('#sso-provider').attr('src', '/web/remoteLogin?provider=' + _provider);
 		}
 	});
 });
