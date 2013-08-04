@@ -1,9 +1,10 @@
 Actions = ({
-	init:          function() {
-		this.getConfig();
 
+	init: function() {
+		this.getConfig();
 	},
-	getConfig:     function() {
+
+	getConfig: function() {
 		var that = this;
 		$.getJSON(CurrentServer + '/rest/System/Config?app_name=launchpad')
 			.done(function(configInfo) {
@@ -16,12 +17,13 @@ Actions = ({
 				alertErr(response);
 			});
 	},
+
 	createAccount: function() {
 		window.location = "register.html";
 	},
-	getApps:       function(data, action) {
-		$('#error-container').empty().hide();
 
+	getApps: function(data, action) {
+		$('#error-container').empty().hide();
 
 		AllApps = [];
 		AllApps = data.no_group_apps;
@@ -67,7 +69,7 @@ Actions = ({
 		}
 
 	},
-	showApp:       function(name, url, type, fullscreen, allowfullscreentoggle) {
+	showApp: function(name, url, type, fullscreen, allowfullscreentoggle) {
 
 		$('#fs_toggle').addClass('disabled');
 		$('#app-list-container').hide();
@@ -272,10 +274,13 @@ Actions = ({
 				}
 			});
 	},
-	//
-	// sign in functions
-	//
-	clearSignIn:   function() {
+
+	//*************************************************************************
+	//* Login
+	//*************************************************************************
+
+
+	clearSignIn: function() {
 		$('#UserEmail').val('');
 		$('#Password').val('');
 		if (Config.allow_remote_logins && Config.remote_login_providers) {
@@ -297,7 +302,7 @@ Actions = ({
 		})
 	},
 
-	doSignInDialog:         function(stay) {
+	doSignInDialog: function(stay) {
 
 		window.Stay = false;
 		if (stay) {
@@ -318,7 +323,7 @@ Actions = ({
 			window.Stay = false;
 		}
 	},
-	signIn:                 function() {
+	signIn:         function() {
 
 		var that = this;
 		if (!$('#UserEmail').val() || !$('#Password').val()) {
@@ -384,9 +389,12 @@ Actions = ({
 			});
 
 	},
-	//
-	// forgot password functions
-	//
+
+	//*************************************************************************
+	//* Forgot Password
+	//*************************************************************************
+
+
 	clearForgotPassword:    function() {
 
 		$('#Answer').val('');
@@ -429,10 +437,10 @@ Actions = ({
 		}
 	},
 
-	requireFullScreen:      function() {
+	requireFullScreen: function() {
 		$('#app-container').css({"top": "0px", "z-index": 999998});
 	},
-	forgotPassword:         function() {
+	forgotPassword:    function() {
 
 		if ($('#Answer').val()) {
 			var that = this;
@@ -462,10 +470,12 @@ Actions = ({
 			$("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the security answer to continue, or contact your administrator for help.');
 		}
 	},
-	//
-	// edit profile functions
-	//
-	clearProfile:           function() {
+
+	//*************************************************************************
+	//* Profile
+	//*************************************************************************
+
+	clearProfile:    function() {
 
 		$("#email").val('');
 		$("#firstname").val('');
@@ -475,7 +485,7 @@ Actions = ({
 		$("#security_question").val('');
 		$("#security_answer").val('');
 	},
-	doProfileDialog:        function() {
+	doProfileDialog: function() {
 		this.animateNavBarClose();
 		var that = this;
 		$.ajax({
@@ -497,7 +507,7 @@ Actions = ({
 			}
 		});
 	},
-	fillProfileForm:        function() {
+	fillProfileForm: function() {
 
 		$("#email").val(Profile.email);
 		$("#firstname").val(Profile.first_name);
@@ -512,7 +522,7 @@ Actions = ({
 		}
 		$("#security_answer").val('');
 	},
-	updateProfile:          function() {
+	updateProfile:   function() {
 
 		var that = this;
 		NewUser = {};
@@ -563,9 +573,11 @@ Actions = ({
 			}
 		});
 	},
-	//
-	// change password functions
-	//
+
+	//*************************************************************************
+	//* Password Changing
+	//*************************************************************************
+
 	clearChangePassword:    function() {
 
 		$('#OPassword').val('');
@@ -618,9 +630,10 @@ Actions = ({
 			}
 		});
 	},
-	//
-	// sign out functions
-	//
+
+	//*************************************************************************
+	//* Logout Functions
+	//*************************************************************************
 	doSignOutDialog:        function() {
 
 		$("#logoffDialog").modal('show');
@@ -666,63 +679,82 @@ Actions = ({
 		}
 	}
 });
-$(document).ready(function() {
-	$('body').on('touchstart.dropdown', '.dropdown-menu', function(e) {
+
+/**
+ * DocReady
+ */
+jQuery(function($) {
+	var $_body = $('body'), $_password = $('#NPassword'), $_passwordConfirm = $('#VPassword');
+
+	$_body.on('touchstart.dropdown', '.dropdown-menu', function(e) {
 		e.stopPropagation();
 	});
-	$('body').css('height', ($(window).height() + 44) + 'px');
+
+	$_body.css('height', ($(window).height() + 44) + 'px');
+
 	$(window).resize(function() {
-		$('body').css('height', ($(window).height() + 44) + 'px');
+		$_body.css('height', ($(window).height() + 44) + 'px');
 	});
 
+	//@todo use jquery validate cuz this ain't working
 	function doPasswordVerify() {
+		var value = $_password.val(), verify = $_passwordConfirm.val();
 
-		var value = $("#NPassword").val();
-		var verify = $("#VPassword").val();
-		if (value.length > 0 && verify.length > 0) {
+		if (value.length && verify.length) {
 			if (value == verify) {
-				$("#NPassword").removeClass("RedBorder");
-				$("#NPassword").addClass("GreenBorder");
-				$("#VPassword").removeClass("RedBorder");
-				$("#VPassword").addClass("GreenBorder");
+				$_password.removeClass("RedBorder").addClass("GreenBorder");
+				$_passwordConfirm.removeClass("RedBorder").addClass("GreenBorder");
 			} else {
-				$("#NPassword").removeClass("GreenBorder");
-				$("#NPassword").addClass("RedBorder");
-				$("#VPassword").removeClass("GreenBorder");
-				$("#VPassword").addClass("RedBorder");
+				$_password.removeClass("GreenBorder").addClass("RedBorder");
+				$_passwordConfirm.removeClass("GreenBorder").addClass("RedBorder");
 			}
 		} else {
-			$("#NPassword").removeClass("RedBorder");
-			$("#NPassword").removeClass("GreenBorder");
-			$("#VPassword").removeClass("RedBorder");
-			$("#VPassword").removeClass("GreenBorder");
+			$_password.removeClass("RedBorder").removeClass("GreenBorder");
+			$_passwordConfirm.removeClass("RedBorder").removeClass("GreenBorder");
 		}
 	}
 
-	$("#NPassword").keyup(doPasswordVerify);
-	$("#VPassword").keyup(doPasswordVerify);
+	$_password.keyup(doPasswordVerify);
+	$_passwordConfirm.keyup(doPasswordVerify);
 
+	//@todo figure out a better way to capture enter key, this sucks
 	function checkEnterKey(e, action) {
-
 		if (e.keyCode == 13) {
 			action();
 		}
 	}
 
-	$('#loginDialog input').keydown(function(e) {
+	$('#loginDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.signIn);
 	});
 
-	$('#forgotPasswordDialog input').keydown(function(e) {
+	$('#forgotPasswordDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.forgotPassword);
 	});
 
-	$('#changeProfileDialog input').keydown(function(e) {
+	$('#changeProfileDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.updateProfile);
 	});
 
-	$('#changePasswordDialog input').keydown(function(e) {
+	$('#changePasswordDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.checkPassword);
 	});
+
+	/**
+	 * Support for remote logins
+	 */
+	$('.remote-login-providers').on('click', 'span', function(e) {
+		e.preventDefault();
+
+		var _provider = $(this).attr('class').replace('sm-icon-', '');
+
+		if (_provider) {
+			var $_daddy = $($(this).parent().data('owner'));
+			$('h3', $_daddy).html('Sign in with ' + _provider);
+			$('.modal-body,.modal-footer', $_daddy).slideUp();
+			$('.sso-modal-body', $_daddy).slideDown();
+		}
+	});
 });
+
 Actions.init();
