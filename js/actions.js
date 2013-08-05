@@ -209,6 +209,53 @@ Actions = ({
 
     },
 
+    appGrouper: function(sessionInfo) {
+        // Check if sessionInfo has any apps in the no_group_apps array
+        if (sessionInfo.no_group_apps == 0) {
+            // It doesn't have any apps
+            // Fail silently
+            //console.log('fail');
+        } else {
+            // It does have apps!
+
+            //create an array variable to store these apps
+            sessionInfo.mnm_ng_apps = [];
+
+            // Fire up an new object
+            var apps = {};
+
+            // create the property 'apps' on our new object
+            apps.apps = sessionInfo.no_group_apps;
+
+            var no_url_apps = [];
+
+
+            $.each(apps.apps, function(k, v) {
+                if(v.launch_url === '') {
+                    no_url_apps.push(k);
+
+                }
+            });
+
+            no_url_apps.reverse();
+
+            $.each(no_url_apps, function(k, v) {
+                apps.apps.splice(v, 1);
+            });
+
+
+            // push this new app object onto our array
+            sessionInfo.mnm_ng_apps.push(apps);
+
+            return false;
+
+
+            // **Note** I'm doing all this to mimick how the app_groups are returned
+            // in order to put ungrouped apps into a group for display.
+            // I know there is a better way...
+        }
+    },
+
     updateSession: function(action) {
 
         var that = this;
@@ -217,59 +264,7 @@ Actions = ({
                 //$.data(document.body, 'session', data);
                 //var sessionInfo = $.data(document.body, 'session');
 
-                // Check if sessionInfo has any apps in the no_group_apps array
-                if (sessionInfo.no_group_apps == 0) {
-                    // It doesn't have any apps
-                    // Fail silently
-                    //console.log('fail');
-                } else {
-                    // It does have apps!
-
-                    //create an array variable to store these apps
-                    sessionInfo.mnm_ng_apps = [];
-
-                    // Fire up an new object
-                    var apps = {};
-
-                    // create the property 'apps' on our new object
-                    apps.apps = sessionInfo.no_group_apps;
-
-                    var no_url_apps = [];
-
-
-                    $.each(apps.apps, function(k, v) {
-                        if(v.launch_url === '') {
-                            no_url_apps.push(k);
-
-                        }
-                    });
-
-                    no_url_apps.reverse();
-
-                    $.each(no_url_apps, function(k, v) {
-                        apps.apps.splice(v, 1);
-                    });
-
-                    //console.log(apps);
-
-
-                    // push this new app object onto our array
-                    sessionInfo.mnm_ng_apps.push(apps);
-
-
-                    /*
-                     sessionInfo.mnm_ng_apps[0].apps.forEach(function(app, index){
-                     if(app.launch_url ==""){
-                     sessionInfo.mnm_ng_apps[0].apps.splice(index, 1);
-                     }
-
-                     });
-                     */
-
-                    // **Note** I'm doing all this to mimick how the app_groups are returned
-                    // in order to put ungrouped apps into a group for display.
-                    // I know there is a better way...
-                }
+                that.appGrouper(sessionInfo);
 
 
                 CurrentUserID = sessionInfo.id;
@@ -376,30 +371,7 @@ Actions = ({
 
                 var sessionInfo = $.data(document.body, 'session');
 
-                // Check if sessionInfo has any apps in the no_group_apps array
-                if (sessionInfo.no_group_apps == 0) {
-                    // It doesn't have apps
-                    // Fail silently
-                    //console.log('fail');
-                } else {
-                    // It does have apps!
-
-                    //create an array variable to store these apps
-                    sessionInfo.mnm_ng_apps = [];
-
-                    // Fire up an new object
-                    var apps = {};
-
-                    // create the property 'apps' on our new object
-                    apps.apps = sessionInfo.no_group_apps;
-
-                    // push this new app object onto our array
-                    sessionInfo.mnm_ng_apps.push(apps);
-
-                    // **Note** I'm doing all this to mimick how the app_groups are returned
-                    // in order to put ungrouped apps into a group for display.
-                    // I know there is a better way...
-                }
+                that.appGrouper(sessionInfo);
 
                 CurrentUserID = sessionInfo.id;
                 if (CurrentUserID) {
