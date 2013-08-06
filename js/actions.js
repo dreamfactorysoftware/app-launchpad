@@ -264,7 +264,7 @@ Actions = ({
                 //$.data(document.body, 'session', data);
                 //var sessionInfo = $.data(document.body, 'session');
 
-                that.appGrouper(sessionInfo);
+                Actions.appGrouper(sessionInfo);
 
 
                 CurrentUserID = sessionInfo.id;
@@ -371,7 +371,7 @@ Actions = ({
 
                 var sessionInfo = $.data(document.body, 'session');
 
-                that.appGrouper(sessionInfo);
+                Actions.appGrouper(sessionInfo);
 
                 CurrentUserID = sessionInfo.id;
                 if (CurrentUserID) {
