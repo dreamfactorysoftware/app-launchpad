@@ -49,19 +49,24 @@ Actions = ({
 		}
 		if (data.is_sys_admin && !defaultShown) {
 			this.showApp('admin', '/public/admin/#/app', '0', false);
-		} else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
+		}
+		else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
 			$('#app-list-container').hide();
 			this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].launch_url, data.app_groups[0].apps[0].is_url_external,
 				data.app_groups[0].apps[0].requires_fullscreen);
 			return;
-		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
+		}
+		else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
 			$('#app-list-container').hide();
-			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external, data.no_group_apps[0].requires_fullscreen);
+			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external,
+				data.no_group_apps[0].requires_fullscreen);
 			return;
-		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
+		}
+		else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
 			$('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
 			return;
-		} else {
+		}
+		else {
 			$('#fs_toggle').addClass('disabled');
 			$('#app-list-container').show();
 		}
@@ -89,9 +94,11 @@ Actions = ({
 						CurrentServer + url).appendTo('#app-container')
 				);
 				//$('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).show();
-			} else {
+			}
+			else {
 				$('#adminLink').addClass('disabled');
-				$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).appendTo('#app-container');
+				$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src',
+					CurrentServer + url).appendTo('#app-container');
 			}
 			return;
 		}
@@ -117,7 +124,8 @@ Actions = ({
 				$('#fs_toggle').off('click', function() {
 					Actions.toggleFullScreen(false);
 				});
-			} else if (allowfullscreentoggle) {
+			}
+			else if (allowfullscreentoggle) {
 				$('#fs_toggle').removeClass('disabled');
 				$('#fs_toggle').on('click', function() {
 					Actions.toggleFullScreen(true);
@@ -149,12 +157,14 @@ Actions = ({
 
 				// It does so fire it up in fullscreen mode
 				Actions.requireFullScreen();
-			} else {
+			}
+			else {
 				if (!allowfullscreentoggle) {
 					$('#fs_toggle').off('click', function() {
 						Actions.toggleFullScreen(false);
 					});
-				} else if (allowfullscreentoggle) {
+				}
+				else if (allowfullscreentoggle) {
 					$('#fs_toggle').removeClass('disabled');
 					$('#fs_toggle').on('click', function() {
 						Actions.toggleFullScreen(true);
@@ -181,7 +191,6 @@ Actions = ({
 		}
 	},
 
-
 	showAppList: function() {
 
 		$('#apps-list-btn').addClass('disabled');
@@ -199,15 +208,13 @@ Actions = ({
 			type = 0,
 			fullscreen = 0;
 
-
 		this.animateNavBarClose(function() {
 			this.showApp(name, url, type, fullscreen)
 		});
 
-
 	},
 
-	updateSession:          function(action) {
+	updateSession: function(action) {
 
 		var that = this;
 		$.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
@@ -220,7 +227,8 @@ Actions = ({
 					// It doesn't have any apps
 					// Fail silently
 					//console.log('fail');
-				} else {
+				}
+				else {
 					// It does have apps!
 
 					//create an array variable to store these apps
@@ -267,28 +275,51 @@ Actions = ({
 				if (response.status == 401) {
 					Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
 					that.doSignInDialog();
-				} else if (response.status == 500) {
+				}
+				else if (response.status == 500) {
 					that.showStatus(response.statusText, "error");
 				}
 			});
 	},
-	//
-	// sign in functions
-	//
-	clearSignIn:            function() {
+
+
+	//*************************************************************************
+	//* Login
+	//*************************************************************************
+
+
+	clearSignIn: function() {
 		$('#UserEmail').val('');
 		$('#Password').val('');
-
+		if (Config.allow_remote_logins && Config.remote_login_providers) {
+			$('#loginDialog .remote-login-providers').empty();
+			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
+				$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i].toLowerCase() + '"></span>');
+			}
+		}
+		else {
+			$('#loginDialog .remote-login').hide();
+		}
 	},
-	doSignInDialog:         function(stay) {
 
+	hideSignIn: function() {
+
+		$('#loginDialog').modal('hide');
+		$('#loginDialog').off();
+		$('#loginDialog').on('hidden', function() {
+			Actions.clearSignIn();
+		})
+	},
+
+	doSignInDialog: function(stay) {
 		window.Stay = false;
 		if (stay) {
 			$('#loginErrorMessage').removeClass('alert-error').html("Your Session has expired. Please log in to continue");
 			this.clearSignIn();
 			$("#loginDialog").modal('show');
 			window.Stay = true;
-		} else {
+		}
+		else {
 			if (Config.allow_remote_logins) $('.remote-login-icons').css({display: 'inline-block'});
 			$('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Email and Password below to sign in.");
 			this.clearSignIn();
@@ -296,7 +327,7 @@ Actions = ({
 			window.Stay = false;
 		}
 	},
-	signIn:                 function() {
+	signIn:         function() {
 
 		var that = this;
 		if (!$('#UserEmail').val() || !$('#Password').val()) {
@@ -310,7 +341,10 @@ Actions = ({
 					$("#loginDialog").modal('hide');
 					$("#loading").hide();
 					return;
+				}
 
+				if (data.redirect_uri) {
+					var _popup = window.open(data.redirect_uri, 'Remote Login', 'scrollbars=0');
 				}
 
 				$.data(document.body, 'session', data);
@@ -322,7 +356,8 @@ Actions = ({
 					// It doesn't have apps
 					// Fail silently
 					//console.log('fail');
-				} else {
+				}
+				else {
 					// It does have apps!
 
 					//create an array variable to store these apps
@@ -359,9 +394,12 @@ Actions = ({
 			});
 
 	},
-	//
-	// forgot password functions
-	//
+
+	//*************************************************************************
+	//* Forgot Password
+	//*************************************************************************
+
+
 	clearForgotPassword:    function() {
 
 		$('#Answer').val('');
@@ -384,7 +422,8 @@ Actions = ({
 					that.clearForgotPassword();
 					$("#forgotPasswordErrorMessage").removeClass('alert-error').html('Please answer your security question to log in.');
 					$("#forgotPasswordDialog").modal('show');
-				} else {
+				}
+				else {
 					$("#loginErrorMessage").addClass('alert-error').html('Unable to retrieve your security question.');
 				}
 			},
@@ -398,16 +437,17 @@ Actions = ({
 		if (toggle) {
 			$('#app-container').css({"top": "0px", "z-index": 999998});
 			$('#rocket').show();
-		} else {
+		}
+		else {
 			$('#app-container').css({"top": "44px", "z-index": 1});
 			$('#rocket').hide();
 		}
 	},
 
-	requireFullScreen:      function() {
+	requireFullScreen: function() {
 		$('#app-container').css({"top": "0px", "z-index": 999998});
 	},
-	forgotPassword:         function() {
+	forgotPassword:    function() {
 
 		if ($('#Answer').val()) {
 			var that = this;
@@ -433,14 +473,17 @@ Actions = ({
 					$("#forgotPasswordErrorMessage").addClass('alert-error').html('Please check the answer to your security question.');
 				}
 			});
-		} else {
+		}
+		else {
 			$("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the security answer to continue, or contact your administrator for help.');
 		}
 	},
-	//
-	// edit profile functions
-	//
-	clearProfile:           function() {
+
+	//*************************************************************************
+	//* Profile
+	//*************************************************************************
+
+	clearProfile:    function() {
 
 		$("#email").val('');
 		$("#firstname").val('');
@@ -450,7 +493,7 @@ Actions = ({
 		$("#security_question").val('');
 		$("#security_answer").val('');
 	},
-	doProfileDialog:        function() {
+	doProfileDialog: function() {
 		this.animateNavBarClose();
 		var that = this;
 		$.ajax({
@@ -472,7 +515,7 @@ Actions = ({
 			}
 		});
 	},
-	fillProfileForm:        function() {
+	fillProfileForm: function() {
 
 		$("#email").val(Profile.email);
 		$("#firstname").val(Profile.first_name);
@@ -482,12 +525,13 @@ Actions = ({
 		$("#default_app").val(Profile.default_app_id);
 		if (Profile.security_question) {
 			$("#security_question").val(Profile.security_question);
-		} else {
+		}
+		else {
 			$("#security_question").val('');
 		}
 		$("#security_answer").val('');
 	},
-	updateProfile:          function() {
+	updateProfile:   function() {
 
 		var that = this;
 		NewUser = {};
@@ -532,15 +576,18 @@ Actions = ({
 				if (response.status == 401) {
 					$("#changeProfileDialog").modal('hide');
 					that.doSignInDialog();
-				} else {
+				}
+				else {
 					$("#changeProfileErrorMessage").addClass('alert-error').html('There was an error updating the profile.');
 				}
 			}
 		});
 	},
-	//
-	// change password functions
-	//
+
+	//*************************************************************************
+	//* Password Changing
+	//*************************************************************************
+
 	clearChangePassword:    function() {
 
 		$('#OPassword').val('');
@@ -567,7 +614,8 @@ Actions = ({
 				new_password: $("#NPassword").val()
 			};
 			this.updatePassword(JSON.stringify(data));
-		} else {
+		}
+		else {
 			$("#changePasswordErrorMessage").addClass('alert-error').html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
 		}
 	},
@@ -587,20 +635,23 @@ Actions = ({
 				if (response.status == 401) {
 					$("#changePasswordDialog").modal('hide');
 					that.doSignInDialog();
-				} else {
+				}
+				else {
 					$("#changePasswordErrorMessage").addClass('alert-error').html('There was an error changing the password. Make sure you entered the correct old password.');
 				}
 			}
 		});
 	},
-	//
-	// sign out functions
-	//
-	doSignOutDialog:        function() {
+
+	//*************************************************************************
+	//* Logout Functions
+	//*************************************************************************
+
+	doSignOutDialog:  function() {
 
 		$("#logoffDialog").modal('show');
 	},
-	signOut:                function() {
+	signOut:          function() {
 		var that = this;
 		$.ajax({
 			dataType: 'json',
@@ -626,78 +677,101 @@ Actions = ({
 			}
 		});
 	},
-	showSignInButton:       function() {
+	showSignInButton: function() {
 
 		$("#dfControl1").html('<a class="btn btn-primary" onclick="this.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a> ');
 		if (Config.allow_open_registration) {
 			$("#dfControl1").append('<a class="btn btn-primary" onclick="this.createAccount()"><li class="icon-key"></li>&nbsp;Create Account</a> ');
 		}
 	},
-	showStatus:             function(message, type) {
+	showStatus:       function(message, type) {
 		if (type == "error") {
 			$('#error-container').html(message).removeClass().addClass('alert alert-danger center').show().fadeOut(10000);
-		} else {
+		}
+		else {
 			$('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
 		}
 	}
 });
-$(document).ready(function() {
-	$('body').on('touchstart.dropdown', '.dropdown-menu', function(e) {
+
+/**
+ * DocReady
+ */
+jQuery(function($) {
+	var $_body = $('body'), $_password = $('#NPassword'), $_passwordConfirm = $('#VPassword');
+
+	$_body.on('touchstart.dropdown', '.dropdown-menu', function(e) {
 		e.stopPropagation();
 	});
-	$('body').css('height', ($(window).height() + 44) + 'px');
+
+	$_body.css('height', ($(window).height() + 44) + 'px');
+
 	$(window).resize(function() {
-		$('body').css('height', ($(window).height() + 44) + 'px');
+		$_body.css('height', ($(window).height() + 44) + 'px');
 	});
 
+	//@todo use jquery validate cuz this ain't working
 	function doPasswordVerify() {
+		var value = $_password.val(), verify = $_passwordConfirm.val();
 
-		var value = $("#NPassword").val();
-		var verify = $("#VPassword").val();
-		if (value.length > 0 && verify.length > 0) {
+		if (value.length && verify.length) {
 			if (value == verify) {
-				$("#NPassword").removeClass("RedBorder");
-				$("#NPassword").addClass("GreenBorder");
-				$("#VPassword").removeClass("RedBorder");
-				$("#VPassword").addClass("GreenBorder");
-			} else {
-				$("#NPassword").removeClass("GreenBorder");
-				$("#NPassword").addClass("RedBorder");
-				$("#VPassword").removeClass("GreenBorder");
-				$("#VPassword").addClass("RedBorder");
+				$_password.removeClass("RedBorder").addClass("GreenBorder");
+				$_passwordConfirm.removeClass("RedBorder").addClass("GreenBorder");
 			}
-		} else {
-			$("#NPassword").removeClass("RedBorder");
-			$("#NPassword").removeClass("GreenBorder");
-			$("#VPassword").removeClass("RedBorder");
-			$("#VPassword").removeClass("GreenBorder");
+			else {
+				$_password.removeClass("GreenBorder").addClass("RedBorder");
+				$_passwordConfirm.removeClass("GreenBorder").addClass("RedBorder");
+			}
+		}
+		else {
+			$_password.removeClass("RedBorder").removeClass("GreenBorder");
+			$_passwordConfirm.removeClass("RedBorder").removeClass("GreenBorder");
 		}
 	}
 
-	$("#NPassword").keyup(doPasswordVerify);
-	$("#VPassword").keyup(doPasswordVerify);
+	$_password.keyup(doPasswordVerify);
+	$_passwordConfirm.keyup(doPasswordVerify);
 
+	//@todo figure out a better way to capture enter key, this sucks
 	function checkEnterKey(e, action) {
-
 		if (e.keyCode == 13) {
 			action();
 		}
 	}
 
-	$('#loginDialog input').keydown(function(e) {
+	$('#loginDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.signIn);
 	});
 
-	$('#forgotPasswordDialog input').keydown(function(e) {
+	$('#forgotPasswordDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.forgotPassword);
 	});
 
-	$('#changeProfileDialog input').keydown(function(e) {
+	$('#changeProfileDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.updateProfile);
 	});
 
-	$('#changePasswordDialog input').keydown(function(e) {
+	$('#changePasswordDialog').find('input').keydown(function(e) {
 		checkEnterKey(e, Actions.checkPassword);
 	});
+
+	/**
+	 * Support for remote logins
+	 */
+	$('.remote-login-providers').on('click', 'span', function(e) {
+		e.preventDefault();
+
+		var _provider = $(this).attr('class').replace('sm-icon-', '');
+
+		if (_provider) {
+			var $_daddy = $($(this).parent().data('owner'));
+			$('h3', $_daddy).html('Sign in with ' + _provider);
+			$('.modal-body,.modal-footer', $_daddy).slideUp();
+			$('.sso-modal-body', $_daddy).slideDown();
+			$('#sso-provider').attr('src', '/web/remoteLogin?provider=' + _provider);
+		}
+	});
 });
+
 Actions.init();
