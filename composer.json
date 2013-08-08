@@ -7,9 +7,8 @@
 	"license":           ["Apache2.0"],
 	"support":           {
 		"email":  "support@dreamfactory.com",
-		"issues": "https://github.com/dreamfactorysoftware/dsp-core/issues",
-		"wiki":   "https://github.com/dreamfactorysoftware/dsp-core/wiki",
-		"source": "https://github.com/dreamfactorysoftware/dsp-core"
+		"issues": "https://github.com/dreamfactorysoftware/app-launchpad/issues",
+		"wiki":   "https://github.com/dreamfactorysoftware/app-launchpad/wiki"
 	},
 	"authors":           [
 		{
