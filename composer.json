@@ -1,7 +1,6 @@
 {
 	"name":              "dreamfactory/app-launchpad",
-	"version":           "1.0.5",
-	"homepage":          "http://dreamfactorysoftware.github.io",
+	"version":           "1.0.6",
 	"description":       "DreamFactory Services Platform(tm) LaunchPad Application",
 	"keywords":          ["dreamfactory", "dsp", "cloud", "dsp-launchpad", "dsp-app", "dsp-core"],
 	"type":              "dreamfactory-platform",
