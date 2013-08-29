@@ -6,14 +6,12 @@ Actions = ({
 
 	getConfig: function() {
 		var that = this;
-		$.getJSON(CurrentServer + '/rest/System/Config?app_name=launchpad')
-			.done(function(configInfo) {
-				Config = configInfo;
-				document.title = "Launchpad " + configInfo.dsp_version;
-				that.updateSession("init");
-				Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
-			})
-			.fail(function(response) {
+		$.getJSON(CurrentServer + '/rest/System/Config?app_name=launchpad').done(function(configInfo) {
+			Config = configInfo;
+			document.title = "Launchpad " + configInfo.dsp_version;
+			that.updateSession("init");
+			Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+		}).fail(function(response) {
 				alertErr(response);
 			});
 	},
@@ -58,7 +56,8 @@ Actions = ({
 			return;
 		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
 			$('#app-list-container').hide();
-			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external, data.no_group_apps[0].requires_fullscreen);
+			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external,
+				data.no_group_apps[0].requires_fullscreen);
 			return;
 		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
 			$('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
@@ -86,14 +85,13 @@ Actions = ({
 				// Did this because when we just $.show(see commented out line below)
 				// Angular hasn't populated the DOM because it's fallen out of scope
 				// I think
-				$('#admin').replaceWith(
-					$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src',
-						CurrentServer + url).appendTo('#app-container')
-				);
+				$('#admin').replaceWith($('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src',
+					CurrentServer + url).appendTo('#app-container'));
 				//$('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).show();
 			} else {
 				$('#adminLink').addClass('disabled');
-				$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).appendTo('#app-container');
+				$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src',
+					CurrentServer + url).appendTo('#app-container');
 			}
 			return;
 		}
@@ -196,10 +194,7 @@ Actions = ({
 	},
 	showAdmin:   function() {
 
-		var name = 'admin',
-			url = '/public/admin/#/app',
-			type = 0,
-			fullscreen = 0;
+		var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0;
 
 
 		this.animateNavBarClose(function() {
@@ -259,37 +254,35 @@ Actions = ({
 	updateSession: function(action) {
 
 		var that = this;
-		$.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad')
-			.done(function(sessionInfo) {
-				//$.data(document.body, 'session', data);
-				//var sessionInfo = $.data(document.body, 'session');
+		$.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad').done(function(sessionInfo) {
+			//$.data(document.body, 'session', data);
+			//var sessionInfo = $.data(document.body, 'session');
 
-				Actions.appGrouper(sessionInfo);
-
-
-				CurrentUserID = sessionInfo.id;
-				if (CurrentUserID) {
-					sessionInfo.activeSession = true;
-				}
-
-				Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
-				Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
-
-				if (sessionInfo.is_sys_admin) {
-					$('#adminLink').addClass('disabled');
-					$('#fs_toggle').addClass('disabled');
-					$('#apps-list-btn').removeClass('disabled');
-					$('#fs_toggle').off('click');
-				}
+			Actions.appGrouper(sessionInfo);
 
 
-				if (action == "init") {
-					that.getApps(sessionInfo, action);
-				}
+			CurrentUserID = sessionInfo.id;
+			if (CurrentUserID) {
+				sessionInfo.activeSession = true;
+			}
+
+			Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
+			Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
+
+			if (sessionInfo.is_sys_admin) {
+				$('#adminLink').addClass('disabled');
+				$('#fs_toggle').addClass('disabled');
+				$('#apps-list-btn').removeClass('disabled');
+				$('#fs_toggle').off('click');
+			}
 
 
-			})
-			.fail(function(response) {
+			if (action == "init") {
+				that.getApps(sessionInfo, action);
+			}
+
+
+		}).fail(function(response) {
 				if (response.status == 401) {
 					Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
 					that.doSignInDialog();
@@ -310,7 +303,11 @@ Actions = ({
 		if (Config.allow_remote_logins && Config.remote_login_providers) {
 			$('#loginDialog .remote-login-providers').empty();
 			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
-				$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i].toLowerCase() + '"></span>');
+				if ('stack_exchange' == Config.remote_login_providers[_i].toLowerCase()) {
+					$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i].toLowerCase() + '"><img style="float: left; border: none; width:32px; height: 32px; text-decoration: none; outline: none" src="/public/launchpad/img/icon-stackexchange.png" alt="Login with StackExchange"></span>');
+				} else {
+					$('#loginDialog .remote-login-providers').append('<span class="sm-icon-' + Config.remote_login_providers[_i].toLowerCase() + '"></span>');
+				}
 			}
 		} else {
 			$('#loginDialog .remote-login').hide();
@@ -365,8 +362,8 @@ Actions = ({
 			return;
 		}
 		$('#loading').show();
-		$.post(CurrentServer + '/rest/User/Session?app_name=launchpad', JSON.stringify({email: $('#UserEmail').val(), password: $('#Password').val()}))
-			.done(function(data) {
+		$.post(CurrentServer + '/rest/User/Session?app_name=launchpad',
+				JSON.stringify({email: $('#UserEmail').val(), password: $('#Password').val()})).done(function(data) {
 				if (Stay) {
 					$("#loginDialog").modal('hide');
 					$("#loading").hide();

@@ -4,13 +4,11 @@
 	"description":       "DreamFactory Services Platform(tm) LaunchPad Application",
 	"keywords":          ["dreamfactory", "dsp", "cloud", "dsp-launchpad", "dsp-app", "dsp-core"],
 	"type":              "dreamfactory-platform",
-	"homepage":          "http://dreamfactory.com/",
 	"license":           ["Apache2.0"],
 	"support":           {
 		"email":  "support@dreamfactory.com",
-		"issues": "https://github.com/dreamfactorysoftware/dsp-core/issues",
-		"wiki":   "https://github.com/dreamfactorysoftware/dsp-core/wiki",
-		"source": "https://github.com/dreamfactorysoftware/dsp-core"
+		"issues": "https://github.com/dreamfactorysoftware/app-launchpad/issues",
+		"wiki":   "https://github.com/dreamfactorysoftware/app-launchpad/wiki"
 	},
 	"authors":           [
 		{
