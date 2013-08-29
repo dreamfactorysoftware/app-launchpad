@@ -326,11 +326,21 @@ Actions = ({
 		})
 	},
 
-	doSignInDialog: function(stay) {
+	doSignInDialog:    function(stay) {
+		var _message = $.QueryString('error');
+
+		if (_message) {
+			_message = decodeURIComponent(_message.replace(/\+/g, '%20'));
+		}
+		else {
+			_message =
+				( stay ? 'Your Session has expired. Please log in to continue' : 'Please enter your User Email and Password below to sign in.' );
+		}
 
 		window.Stay = false;
+
 		if (stay) {
-			$('#loginErrorMessage').removeClass('alert-error').html("Your Session has expired. Please log in to continue");
+			$('#loginErrorMessage').removeClass('alert-error').html(_message);
 			this.clearSignIn();
 			$("#loginDialog").modal('show');
 			$('#loginDialog').on('shown', function() {
@@ -338,7 +348,7 @@ Actions = ({
 			});
 			window.Stay = true;
 		} else {
-			$('#loginErrorMessage').removeClass('alert-error').html("Please enter your User Email and Password below to sign in.");
+			$('#loginErrorMessage').removeClass('alert-error').html(_message);
 			this.clearSignIn();
 			$("#loginDialog").modal('show');
 			$('#loginDialog').on('shown', function() {
@@ -347,7 +357,7 @@ Actions = ({
 			window.Stay = false;
 		}
 	},
-	signIn:         function() {
+	signIn:            function() {
 
 		var that = this;
 		if (!$('#UserEmail').val() || !$('#Password').val()) {
@@ -385,15 +395,27 @@ Actions = ({
 				$("#loading").hide();
 			})
 			.fail(function(response) {
-				$("#loading").hide();
-				$("#loginErrorMessage").addClass('alert-error').html(getErrorString(response));
+				that.displayModalError('#loginErrorMessage', getErrorString(response));
 			});
 
 	},
+	/**
+	 *
+	 * @param elem
+	 * @param message
+	 */
+	displayModalError: function(elem, message) {
+		if (message) {
+			$("#loading").hide();
+			$(elem).addClass('alert-error').html(message);
+		} else {
+			$(elem).empty().removeClass('alert-error');
+		}
+	},
 
-	//*************************************************************************
-	//* Forgot Password
-	//*************************************************************************
+//*************************************************************************
+//* Forgot Password
+//*************************************************************************
 
 
 	clearForgotPassword:    function() {
@@ -472,9 +494,9 @@ Actions = ({
 		}
 	},
 
-	//*************************************************************************
-	//* Profile
-	//*************************************************************************
+//*************************************************************************
+//* Profile
+//*************************************************************************
 
 	clearProfile:    function() {
 
@@ -575,9 +597,9 @@ Actions = ({
 		});
 	},
 
-	//*************************************************************************
-	//* Password Changing
-	//*************************************************************************
+//*************************************************************************
+//* Password Changing
+//*************************************************************************
 
 	clearChangePassword:    function() {
 
@@ -632,9 +654,9 @@ Actions = ({
 		});
 	},
 
-	//*************************************************************************
-	//* Logout Functions
-	//*************************************************************************
+//*************************************************************************
+//* Logout Functions
+//*************************************************************************
 	doSignOutDialog:        function() {
 
 		$("#logoffDialog").modal('show');
@@ -679,7 +701,8 @@ Actions = ({
 			$('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
 		}
 	}
-});
+})
+;
 
 /**
  * DocReady
