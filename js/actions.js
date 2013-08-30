@@ -6,7 +6,7 @@ Actions = ({
 
 	getConfig: function() {
 		var that = this;
-		$.getJSON(CurrentServer + '/rest/System/Config?app_name=launchpad').done(function(configInfo) {
+		$.getJSON(CurrentServer + '/rest/system/config?app_name=launchpad').done(function(configInfo) {
 			Config = configInfo;
 			document.title = "Launchpad " + configInfo.dsp_version;
 			that.updateSession("init");
@@ -254,7 +254,7 @@ Actions = ({
 	updateSession: function(action) {
 
 		var that = this;
-		$.getJSON(CurrentServer + '/rest/User/Session?app_name=launchpad').done(function(sessionInfo) {
+		$.getJSON(CurrentServer + '/rest/user/session?app_name=launchpad').done(function(sessionInfo) {
 			//$.data(document.body, 'session', data);
 			//var sessionInfo = $.data(document.body, 'session');
 
@@ -362,7 +362,7 @@ Actions = ({
 			return;
 		}
 		$('#loading').show();
-		$.post(CurrentServer + '/rest/User/Session?app_name=launchpad',
+		$.post(CurrentServer + '/rest/user/session?app_name=launchpad',
 				JSON.stringify({email: $('#UserEmail').val(), password: $('#Password').val()})).done(function(data) {
 				if (Stay) {
 					$("#loginDialog").modal('hide');
@@ -427,7 +427,7 @@ Actions = ({
 		}
 		$.ajax({
 			dataType: 'json',
-			url:      CurrentServer + '/rest/User/Challenge',
+			url:      CurrentServer + '/rest/user/challenge',
 			data:     'app_name=launchpad&email=' + $('#UserEmail').val() + '&method=GET',
 			cache:    false,
 			success:  function(response) {
@@ -510,7 +510,7 @@ Actions = ({
 		var that = this;
 		$.ajax({
 			dataType: 'json',
-			url:      CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/',
+			url:      CurrentServer + '/rest/user/profile/' + CurrentUserID + '/',
 			data:     'method=GET&app_name=launchpad',
 			cache:    false,
 			success:  function(response) {
@@ -573,7 +573,7 @@ Actions = ({
 		$.ajax({
 			dataType: 'json',
 			type:     'POST',
-			url:      CurrentServer + '/rest/User/Profile/' + CurrentUserID + '/?method=MERGE&app_name=launchpad',
+			url:      CurrentServer + '/rest/user/profile/' + CurrentUserID + '/?method=MERGE&app_name=launchpad',
 			data:     JSON.stringify(NewUser),
 			cache:    false,
 			success:  function(response) {
@@ -633,7 +633,7 @@ Actions = ({
 		$.ajax({
 			dataType: 'json',
 			type:     'POST',
-			url:      CurrentServer + '/rest/User/Password/?method=MERGE&app_name=launchpad',
+			url:      CurrentServer + '/rest/user/password/?method=MERGE&app_name=launchpad',
 			data:     pass,
 			cache:    false,
 			success:  function(response) {
@@ -663,7 +663,7 @@ Actions = ({
 		$.ajax({
 			dataType: 'json',
 			type:     'POST',
-			url:      CurrentServer + '/rest/User/Session/' + CurrentUserID + '/',
+			url:      CurrentServer + '/rest/user/session/' + CurrentUserID + '/',
 			data:     'app_name=launchpad&method=DELETE',
 			cache:    false,
 			success:  function(response) {
