@@ -34,9 +34,14 @@ Actions = ({
         $("#default_app").empty();
         AllApps.forEach(function(app) {
             if (app.is_default) {
-                Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen);
+                Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen, app.allow_fullscreen_toggle);
                 //window.defaultApp = app.id;
                 defaultShown = true;
+
+                if (app.allow_fullscreen_toggle) {
+                    Actions.toggleFullScreen(true);
+                }
+
             }
             var option = '<option value="' + app.id + '">' + app.name + '</option>';
             $("#default_app").append(option);
@@ -52,12 +57,11 @@ Actions = ({
         } else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
             $('#app-list-container').hide();
             this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].launch_url, data.app_groups[0].apps[0].is_url_external,
-                data.app_groups[0].apps[0].requires_fullscreen);
+                data.app_groups[0].apps[0].requires_fullscreen, data.app_groups[0].apps[0].allow_fullscreen_toggle);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
             $('#app-list-container').hide();
-            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external,
-                data.no_group_apps[0].requires_fullscreen);
+            this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external, data.no_group_apps[0].requires_fullscreen, data.no_group_apps[0].allow_fullscreen_toggle);
             return;
         } else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
@@ -188,7 +192,10 @@ Actions = ({
         $('#adminLink').removeClass('disabled');
         $('#fs_toggle').off('click');
         $('#fs_toggle').addClass('disabled');
+        $('app-container').css({"z-index" : 1});
         $('#app-list-container').show();
+        $('#app-list-container').css({"z-index" : 99998})
+
         this.animateNavBarClose();
 
     },
@@ -449,16 +456,17 @@ Actions = ({
     },
     toggleFullScreen:       function(toggle) {
         if (toggle) {
-            $('#app-container').css({"top": "0px", "z-index": 999998});
+            $('#app-container').css({"top": "0px", "z-index": 99998});
             $('#rocket').show();
         } else {
-            $('#app-container').css({"top": "44px", "z-index": 1});
+            $('#app-container').css({"top": "44px", "z-index": 99997});
+            $('#fs_toggle').removeClass('disabled');
             $('#rocket').hide();
         }
     },
 
     requireFullScreen: function() {
-        $('#app-container').css({"top": "0px", "z-index": 999998});
+        $('#app-container').css({"top": "0px", "z-index": 99998});
     },
     forgotPassword:    function() {
 
