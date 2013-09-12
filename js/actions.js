@@ -501,7 +501,7 @@ Actions = ({
 //* Profile
 //*************************************************************************
 
-	clearProfile:    function() {
+	clearProfile: function() {
 
 		$("#email").val('');
 		$("#firstname").val('');
@@ -511,6 +511,7 @@ Actions = ({
 		$("#security_question").val('');
 		$("#security_answer").val('');
 	},
+
 	doProfileDialog: function() {
 		this.animateNavBarClose();
 		var that = this;
@@ -533,6 +534,7 @@ Actions = ({
 			}
 		});
 	},
+
 	fillProfileForm: function() {
 
 		$("#email").val(Profile.email);
@@ -548,7 +550,8 @@ Actions = ({
 		}
 		$("#security_answer").val('');
 	},
-	updateProfile:   function() {
+
+	updateProfile: function() {
 
 		var that = this;
 		NewUser = {};
