@@ -560,6 +560,9 @@ Actions = ({
         NewUser.display_name = $("#displayname").val();
         NewUser.phone = $("#phone").val();
         NewUser.default_app_id = $("#default_app").val();
+        if(NewUser.default_app_id == ""){
+            NewUser.default_app_id = null;
+        }
         // require question
         var q = $("#security_question").val();
         if (q == '') {
