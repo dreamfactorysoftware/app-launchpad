@@ -3,222 +3,213 @@ Main stylesheet for LaunchPad
 */
 
 .make-inline {
-    display: inline-block;
+	display: inline-block;
 }
 
 #navbar-container {
-    background: black;
+	background: black;
 
 }
 
 #app-groups-container {
-    font-family: Lato;
+	font-family: Lato;
 }
-
 
 #app-list-container {
 
-    background: #222;
-    /*background-image: url('http://galleryheart.com/wp-content/uploads/2012/02/30_Mind-Blowing-Examples-of-Creative-Art-7.jpg');*/
-    background-image: url('../img/launchpad_bg_gray.png');
-    background-repeat: no-repeat;
-    background-size: cover;
+	background:        #222;
+	/*background-image: url('http://galleryheart.com/wp-content/uploads/2012/02/30_Mind-Blowing-Examples-of-Creative-Art-7.jpg');*/
+	background-image:  url('../img/launchpad_bg_gray.png');
+	background-repeat: no-repeat;
+	background-size:   cover;
 }
 
 #app-list-container
-
-
 .accordion-group {
-    /*background-color: rgba(5, 124, 221, 0.8);*/
-    background-color: rgba(170, 39, 0, .85);
-    /*background-color: #AA2700;*/
-    border: none;
-    border-radius: 0;
+	/*background-color: rgba(5, 124, 221, 0.8);*/
+	background-color: rgba(170, 39, 0, .85);
+	/*background-color: #AA2700;*/
+	border:           none;
+	border-radius:    0;
 }
 
 .accordion-group a {
-    color: white;
+	color: white;
 }
 
 .accordion-group a:hover {
-    color: black;
+	color: black;
 }
 
 .accordion-group a:active {
-    color: white;
+	color: white;
 }
 
 .group-title {
-    margin-bottom: 0;
-    font-weight: 300;
+	margin-bottom: 0;
+	font-weight:   300;
 }
 
 .group-description {
-    margin-left: 20px;
+	margin-left: 20px;
 }
 
 .group-icon {
-    padding: 20px 10px 10px 10px;
+	padding: 20px 10px 10px 10px;
 }
 
 .group-items {
-    /*
-    -webkit-box-shadow: 0px 0px 5px #ddd inset;
-    -moz-box-shadow:    0px 0px 5px #ddd inset;
-    box-shadow:         0px 0px 5px #ddd inset;
-    */
-    padding-left: 0;
-    padding-right: 0;
+	/*
+	-webkit-box-shadow: 0px 0px 5px #ddd inset;
+	-moz-box-shadow:    0px 0px 5px #ddd inset;
+	box-shadow:         0px 0px 5px #ddd inset;
+	*/
+	padding-left:  0;
+	padding-right: 0;
 }
 
 .group-items ul {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 .group-items ul li {
-    border-bottom: 1px solid #fff;
-    list-style: none;
-    padding-left: 45px;
+	border-bottom: 1px solid #fff;
+	list-style:    none;
+	padding-left:  45px;
 }
 
 .group-items ul li:hover {
-    color: black !important;
+	color: black !important;
 }
 
 .group-items ul li:last-child {
-    border-bottom: none;
+	border-bottom: none;
 }
 
 .group-items ul li a {
-    color: white;
-    font-weight: 300 !important;
+	color:       white;
+	font-weight: 300 !important;
 }
 
 .group-items ul li a:hover {
-    color: black !important;
+	color: black !important;
 
 }
+
 .group-items ul li a h4 {
-    margin-bottom: 0;
-    font-weight: 300;
+	margin-bottom: 0;
+	font-weight:   300;
 }
 
 .group-items ul li a p {
-    margin-left: 20px;
+	margin-left: 20px;
 }
 
 .btn-launch {
-    background: #AA2700;
-    margin-left: 5px;
-    border-radius: 0;
-    width: 30px;
+	background:    #AA2700;
+	margin-left:   5px;
+	border-radius: 0;
+	width:         30px;
 }
 
 .btn-launch:hover {
-    background: #DB9200;
+	background: #DB9200;
 }
 
 .btn-signin {
-    width: auto;
+	width: auto;
 }
 
 .modal {
-    font-family: Lato;
-    font-weight: 400;
+	font-family: Lato;
+	font-weight: 400;
 }
 
 .modal-header {
-    border-radius: 0 0 0 0;
-    background: #AA2700;
-    border: 1px solid #AA2700;
+	border-radius: 0 0 0 0;
+	background:    #AA2700;
+	border:        1px solid #AA2700;
 }
 
 .modal-header h3 {
-    text-shadow: none;
-    color: white;
+	text-shadow: none;
+	color:       white;
 }
 
 .modal-body {
-    font-weight: 400;
+	font-weight: 400;
 }
 
 .modal-body-form {
-    display: block;
-    text-align: left;
-    margin:0 10%;
-    width: 80%;
+	display:    block;
+	text-align: left;
+	margin:     0 10%;
+	width:      80%;
 }
 
 .modal-body-form label {
-    display: block;
-    text-align: left;
+	display:    block;
+	text-align: left;
 }
 
-.modal-body {}
+.modal-body {
+}
 
 .modal-footer {
-    border-radius: 0 0 0 0;
+	border-radius: 0 0 0 0;
 }
 
 .modal-footer a.btn-primary {
-    background: #ffaf4b; /* Old browsers */
-    background: -moz-linear-gradient(top,  #ffaf4b 0%, #ff920a 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffaf4b), color-stop(100%,#ff920a)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #ffaf4b 0%,#ff920a 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #ffaf4b 0%,#ff920a 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #ffaf4b 0%,#ff920a 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #ffaf4b 0%,#ff920a 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a',GradientType=0 ); /* IE6-9 */
+	background: #ffaf4b; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffaf4b), color-stop(100%, #ff920a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #ffaf4b 0%, #ff920a 100%); /* W3C */
+	filter:     progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=0); /* IE6-9 */
 }
 
 .modal-footer a.btn-primary:hover {
-    background: #ff920a; /* Old browsers */
-    background: -moz-linear-gradient(top,  #ff920a 0%, #ff800a 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff920a), color-stop(100%,#ff800a)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #ff920a 0%,#ff800a 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #ff920a 0%,#ff800a 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #ff920a 0%,#ff800a 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #ff920a 0%,#ff800a 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff920a', endColorstr='#ff800a',GradientType=0 ); /* IE6-9 */
+	background: #ff920a; /* Old browsers */
+	background: -moz-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff920a), color-stop(100%, #ff800a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #ff920a 0%, #ff800a 100%); /* W3C */
+	filter:     progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff920a', endColorstr='#ff800a', GradientType=0); /* IE6-9 */
 }
 
 @media screen and (max-width: 940px) {
+	.btn-stack {
+		/*display: block;*/
+		margin: 5px 0 0 5px;
+	}
 
-    .btn-stack {
-        /*display: block;*/
-        margin: 5px 0 0 5px;
-    }
+	#main-nav {
+		width:      100%;
+		background: black;
+	}
 
+	#main-nav .btn {
+		padding:       10px;
+		font-size:     1.3em;
+		border-radius: 0;
+		margin-bottom: 10px;
+	}
 
-    #main-nav {
-        width: 100%;
-        background: black;
-    }
+	#main-nav a:last-child {
+		/*margin-bottom: 10px; */
+	}
 
-    #main-nav .btn {
-        padding: 10px;
-        font-size: 1.3em;
-        border-radius: 0;
-        margin-bottom: 10px;
-    }
+	#navbar-container {
+		padding: 0;
+		margin:  0;
+	}
 
-    #main-nav a:last-child {
-        /*margin-bottom: 10px; */
-    }
-
-    #navbar-container {
-        padding: 0;
-        margin:0;
-    }
-
-
-    .navbar-spacer {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-}
-
-.remote-login-icons {
-	display: none;
+	.navbar-spacer {
+		padding-left:  10px;
+		padding-right: 10px;
+	}
 }

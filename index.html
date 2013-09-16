@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html itemscope itemtype="http://schema.org/Article">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=yes">
@@ -14,13 +14,24 @@
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.css" rel="stylesheet">    <![endif]-->
 	<link rel="stylesheet" href="css/layout.css" type="text/css" />
 	<link rel="stylesheet" href="css/launch.css" type="text/css" />
-	<!--<link rel="stylesheet" href="css/sunflower.css" type="text/css" />-->
 	<link rel="stylesheet" href="/public/web-core/js/pnotify/pnotify.css" type="text/css" />
-	<link rel="stylesheet" href="css/sm-icons.css" type="text/css" />
-	<!--<link rel="stylesheet" href="css/sunflower.css" type="text/css" />-->
+	<link rel="stylesheet" href="css/remote-login.css" type="text/css" />
 	<link rel="stylesheet" href="/public/web-core/js/pnotify/pnotify.css" type="text/css" />
 	<link href='//fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'>
-	<!-- Initialize the system and start the application -->
+	<link href='//fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+	<script type="text/javascript">
+	(function() {
+		var po = document.createElement('script');
+		po.type = 'text/javascript';
+		po.async = true;
+		po.src = 'https://plus.google.com/js/client:plusone.js?onload=start';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(po, s);
+	})();
+	</script>
 </head>
 <body>
 <div id="rocket" class="btn btn-inverse " onclick="Actions.toggleFullScreen(false)"><i id="toggleIcon" class="icon-resize-small"></i> Exit Fullscreen</div>
@@ -97,17 +108,17 @@
 		<div class="modal-body-form">
 			<p>
 				<label class="formLabel" for="OPassword">Old&nbsp;Password:&nbsp;</label>
-				<input type="text" class="cW98" id="OPassword" value="" />
+				<input type="password" class="cW98" id="OPassword" value="" />
 			</p>
 
 			<p>
 				<label class="formLabel" for="NPassword">New&nbsp;Password:&nbsp;</label>
-				<input type="text" class="cW98" id="NPassword" value="" />
+				<input type="password" class="cW98" id="NPassword" value="" />
 			</p>
 
 			<p>
 				<label class="formLabel" for="VPassword">Verify&nbsp;Password:&nbsp;</label>
-				<input type="text" class="cW98" id="VPassword" value="" />
+				<input type="password" class="cW98" id="VPassword" value="" />
 			</p>
 		</div>
 	</div>
@@ -117,7 +128,7 @@
 	</div>
 </div>
 
-<div id="loginDialog" class="modal hide fade">
+<div id="loginDialog" class="modal hide">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -126,37 +137,36 @@
 			</div>
 			<div class="modal-body">
 				<div class="alert" id="loginErrorMessage"></div>
+
 				<div class="modal-body-form">
 					<p>
-						<label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label>
-						<input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
+						<label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label> <input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
 					</p>
 
 					<p>
-						<label class="formLabel" for="VPassword">Password:&nbsp;</label>
-						<input type="password" class="cW98" name="Password" id="Password" value="" />
+						<label class="formLabel" for="VPassword">Password:&nbsp;</label> <input type="password" class="cW98" name="Password" id="Password" value="" />
 					</p>
 
-					<div class="remote-login">
-						<p style="text-align: center;">
-							Or </p>
+					<div class="remote-login hide">
+						<h5>Or</h5>
 
-						<div class="well social-signin" style="padding:10px">
-							<h4 style="margin:4px auto; color: #666; text-align: center;">Sign-in with one of these providers</h4>
+						<div class="remote-login-wrapper">
+							<h4 style="">Sign-in with one of these providers</h4>
 
 							<div class="remote-login-providers" data-owner="#loginDialog"></div>
 						</div>
-
 					</div>
+
 				</div>
 			</div>
-			<div class="modal-footer">
-				<button class="btn pull-left" onclick="Actions.doForgotPasswordDialog()">Forgot Password...</button>
-				<button class="btn btn-default" data-dismiss="modal" onclick="Actions.hideSignIn()">Close</button>
-				<button class="btn btn-primary" onclick="Actions.signIn()">Sign In</button>
-			</div>
-			<!--<div class="sso-modal-body hide">-->				<!--<iframe seamless frameborder="0" id="sso-provider"></iframe>-->			<!--</div>-->
 		</div>
+		<div class="modal-footer">
+			<button class="btn pull-left" onclick="Actions.doForgotPasswordDialog()">Forgot Password...</button>
+			<button class="btn btn-default" data-dismiss="modal" onclick="Actions.hideSignIn()">Close</button>
+			<button class="btn btn-primary" onclick="Actions.signIn()">Sign In</button>
+			<!-- Add where you want your sign-in button to render -->
+		</div>
+		<!--<div class="sso-modal-body hide">-->                <!--<iframe seamless frameborder="0" id="sso-provider"></iframe>-->            <!--</div>-->
 	</div>
 </div>
 
@@ -186,8 +196,9 @@
 		<div class="modal-body-form">
 			<p>
 				<label class="formLabel" for="Question">Security Question:</label>
+
 			<p>
-				<span class="cM1" id="Question" value=""></span>
+				<span class="cM1" id="Question"></span>
 			</p>
 
 			<p>
@@ -202,12 +213,12 @@
 		<a href="#" class="btn btn-primary" onclick="Actions.forgotPassword()">Submit</a>
 	</div>
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="/public/web-core/js/mustache.js"></script>
 <script src="js/templates.js"></script>
 <script src="/public/web-core/js/utils.js"></script>
 <script src="/public/web-core/js/pnotify/pnotify.js"></script>
+<script src="js/querystring-0.9.0-min.js"></script>
 <script src="js/actions.js"></script>
 </body>
 </html>
