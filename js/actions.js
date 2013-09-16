@@ -313,7 +313,10 @@ Actions = ({
 
 		if (Config.allow_remote_logins && Config.remote_login_providers) {
 			$_providers.empty();
-			_show = Config.remote_login_providers.length > 0;
+
+			var _icon = Config.remote_login_providers[i].toLowerCase();
+
+			if ('google' == _icon) _icon = 'google-plus';
 
 			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
 				$_providers.append('<i class="icon-' + Config.remote_login_providers[_i] + ' icon-3x" data-provider="' + Config.remote_login_providers[_i] + '"></i>');
