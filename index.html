@@ -128,7 +128,7 @@
 	</div>
 </div>
 
-<div id="loginDialog" class="modal hide">
+<div id="loginDialog" class="modal fade hide">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -136,8 +136,7 @@
 				<h3>Sign In</h3>
 			</div>
 			<div class="modal-body">
-				<div class="alert" id="loginErrorMessage"></div>
-
+				<div class="alert alert-block" id="loginErrorMessage"></div>
 				<div class="modal-body-form">
 					<p>
 						<label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label> <input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
@@ -164,9 +163,7 @@
 			<button class="btn pull-left" onclick="Actions.doForgotPasswordDialog()">Forgot Password...</button>
 			<button class="btn btn-default" data-dismiss="modal" onclick="Actions.hideSignIn()">Close</button>
 			<button class="btn btn-primary" onclick="Actions.signIn()">Sign In</button>
-			<!-- Add where you want your sign-in button to render -->
 		</div>
-		<!--<div class="sso-modal-body hide">-->                <!--<iframe seamless frameborder="0" id="sso-provider"></iframe>-->            <!--</div>-->
 	</div>
 </div>
 
@@ -192,13 +189,13 @@
 	</div>
 
 	<div class="modal-body">
-		<div class="alert" id="forgotPasswordErrorMessage"></div>
+		<div class="alert alert-block" id="forgotPasswordErrorMessage"></div>
 		<div class="modal-body-form">
 			<p>
 				<label class="formLabel" for="Question">Security Question:</label>
 
 			<p>
-				<span class="cM1" id="Question"></span>
+				<span class="cM1" id="Question" value=""></span>
 			</p>
 
 			<p>

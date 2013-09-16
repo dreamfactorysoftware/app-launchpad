@@ -1,5 +1,6 @@
 .remote-login {
-	display: none;
+	display:       block;
+	margin-bottom: 8px;
 }
 
 .remote-login h5 {
@@ -20,25 +21,25 @@
 	color:      #666;
 	text-align: center;
 	font-size:  17px;
-	transition: color 0.4s ease-in-out;
+	transition: color 0.3s ease-in-out;
 }
 
 .remote-login-wrapper:hover {
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
-	transition: box-shadow 0.4s ease-in-out;
+	transition: box-shadow 0.3s ease-in-out;
 }
 
 .remote-login-wrapper:hover h4 {
 	color:      #d2902a;
-	transition: color 0.4s ease-in-out;
+	transition: color 0.3s ease-in-out;
 }
 
 .remote-login [class^="icon-"], .remote-login [class*="icon-"] {
-	border:         1px solid #ccc;
+	border:         1px solid #ddd;
 	float:          left;
-	color:          #333;
-	transition:     opacity 0.6s ease-in-out;
-	opacity:        .6;
+	color:          #666;
+	transition:     opacity 0.3s ease-in-out;
+	opacity:        0.75;
 	display:        inline-block;
 	width:          48px;
 	height:         48px;
@@ -49,9 +50,9 @@
 }
 
 .remote-login [class^="icon-"]:hover, .remote-login [class*="icon-"]:hover {
-	box-shadow:   0 0 8px rgba(0, 0, 0, 0.15);
-	transition:   opacity 0.6s ease-in-out;
-	border-color: #ddd;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+	opacity:    1;
+	transition: opacity 0.3s ease-in-out;
 }
 
 .remote-login-providers :hover {

@@ -132,12 +132,17 @@ Main stylesheet for LaunchPad
 }
 
 .modal-header h3 {
-	text-shadow: none;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 	color:       white;
+	font-size:   18px;
 }
 
 .modal-body {
 	font-weight: 400;
+}
+
+.modal-body .alert-error p {
+	margin-top: 2px;
 }
 
 .modal-body-form {

@@ -61,8 +61,8 @@ Actions = ({
 			return;
 		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
 			$('#app-list-container').hide();
-			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external, data.no_group_apps[0].requires_fullscreen,
-				data.no_group_apps[0].allow_fullscreen_toggle);
+			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external,
+				data.no_group_apps[0].requires_fullscreen, data.no_group_apps[0].allow_fullscreen_toggle);
 			return;
 		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
 			$('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
@@ -306,7 +306,6 @@ Actions = ({
 
 
 	clearSignIn: function() {
-
 		var $_dlg = $('#loginDialog');
 		var $_providers = $('.remote-login-providers', $_dlg);
 
@@ -317,7 +316,7 @@ Actions = ({
 			_show = Config.remote_login_providers.length > 0;
 
 			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
-				$_providers.append('<i class="icon-' + Config.remote_login_providers[_i] + ' icon-3x" data-title="' + Config.remote_login_providers[_i] + '"></i>');
+				$_providers.append('<i class="icon-' + Config.remote_login_providers[_i] + ' icon-3x" data-provider="' + Config.remote_login_providers[_i] + '"></i>');
 			}
 
 			$('.remote-login', $_dlg).show();
@@ -411,6 +410,7 @@ Actions = ({
 		if (message) {
 			$("#loading").hide();
 			$(elem).addClass('alert-error').html(message);
+//			$(elem).addClass('alert-error').append('<p><i style="vertical-align: middle; padding-right: 8px;" class="icon-exclamation-sign icon-2x"></i>' + message + '</p>');
 		} else {
 			$(elem).empty().removeClass('alert-error');
 		}
@@ -658,9 +658,9 @@ Actions = ({
 		});
 	},
 
-//*************************************************************************
-//* Logout Functions
-//*************************************************************************
+	//*************************************************************************
+	//* Logout Functions
+	//*************************************************************************
 	doSignOutDialog:        function() {
 
 		$("#logoffDialog").modal('show');
@@ -705,8 +705,7 @@ Actions = ({
 			$('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
 		}
 	}
-})
-;
+});
 
 /**
  * DocReady
@@ -774,7 +773,7 @@ jQuery(function($) {
 	$('.remote-login-providers').on('click', 'i', function(e) {
 		e.preventDefault();
 
-		var _provider = $(this).attr('class').replace('icon-', '');
+		var _provider = $(this).data('provider');
 
 		if (_provider) {
 			window.top.location.href = '/web/remoteLogin?pid=' + _provider + '&return_url=' + encodeURI(window.top.location);
