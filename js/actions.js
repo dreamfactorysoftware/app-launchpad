@@ -314,12 +314,12 @@ Actions = ({
 		if (Config.allow_remote_logins && Config.remote_login_providers) {
 			$_providers.empty();
 
-			var _icon = Config.remote_login_providers[i].toLowerCase();
-
-			if ('google' == _icon) _icon = 'google-plus';
-
 			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
-				$_providers.append('<i class="icon-' + Config.remote_login_providers[_i] + ' icon-3x" data-provider="' + Config.remote_login_providers[_i] + '"></i>');
+				var _icon = Config.remote_login_providers[_i].toLowerCase();
+
+				if ('google' == _icon) _icon = 'google-plus';
+
+				$_providers.append('<i class="icon-' + _icon + ' icon-3x" data-provider="' + Config.remote_login_providers[_i] + '"></i>');
 			}
 
 			$('.remote-login', $_dlg).show();
