@@ -33,16 +33,23 @@ Actions = ({
 		var defaultShown = false;
 		$("#default_app").empty();
 		AllApps.forEach(function(app) {
-			if (app.is_default) {
+			if (app.is_default && !data.is_sys_admin) {
 				Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen, app.allow_fullscreen_toggle);
 				//window.defaultApp = app.id;
 				defaultShown = true;
 
 				if (app.allow_fullscreen_toggle) {
 					Actions.toggleFullScreen(true);
-				}
-
 			}
+            else if (app.is_default && data.is_sys_admin) {
+
+                app.requires_fullscreen = false;
+
+                Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen, app.allow_fullscreen_toggle);
+                //window.defaultApp = app.id;
+                defaultShown = true;
+
+            }
 			var option = '<option value="' + app.id + '">' + app.name + '</option>';
 			$("#default_app").append(option);
 		});
