@@ -33,8 +33,11 @@
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearProfile()">&times;</button>
 		<h3>Change Profile</h3>
 	</div>
+    <div class="alert-area">
+        <div class="alert" id="changeProfileErrorMessage"></div>
+    </div>
 	<div class="modal-body">
-		<div class="alert" id="changeProfileErrorMessage"></div>
+
 		<div class="modal-body-form">
 			<p>
 				<label class="formLabel" for="email">Email:</label>
@@ -89,8 +92,10 @@
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearChangePassword()">&times;</button>
 		<h3>Change Password</h3>
 	</div>
+    <div class="alert-area">
+        <div class="alert" id="changePasswordErrorMessage"></div>
+    </div>
 	<div class="modal-body">
-		<div class="alert" id="changePasswordErrorMessage"></div>
 		<div class="modal-body-form">
 			<p>
 				<label class="formLabel" for="OPassword">Old&nbsp;Password:&nbsp;</label>
@@ -121,8 +126,10 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearSignIn()">&times;</button>
 				<h3>Sign In</h3>
 			</div>
+            <div class="alert-area">
+                <div class="alert alert-block" id="loginErrorMessage"></div>
+            </div>
 			<div class="modal-body">
-				<div class="alert alert-block" id="loginErrorMessage"></div>
 				<div class="modal-body-form">
 					<p>
 						<label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label> <input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
@@ -173,9 +180,11 @@
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearForgotPassword()">&times;</button>
 		<h3>Forgot Password</h3>
 	</div>
+    <div class="alert-area">
+        <div class="alert alert-block" id="forgotPasswordErrorMessage"></div>
 
+    </div>
 	<div class="modal-body">
-		<div class="alert alert-block" id="forgotPasswordErrorMessage"></div>
 		<div class="modal-body-form">
 			<p>
 				<label class="formLabel" for="Question">Security Question:</label>

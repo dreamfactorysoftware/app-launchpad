@@ -137,6 +137,13 @@ Main stylesheet for LaunchPad
 	font-size:   18px;
 }
 
+.alert-area {
+    width: 90%;
+    padding: 20px 0;
+    text-align: center;
+    margin: auto;
+}
+
 .modal-body {
 	font-weight: 400;
 }
@@ -155,9 +162,6 @@ Main stylesheet for LaunchPad
 .modal-body-form label {
 	display:    block;
 	text-align: left;
-}
-
-.modal-body {
 }
 
 .modal-footer {
