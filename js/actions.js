@@ -317,7 +317,9 @@ Actions = ({
 			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
 				var _icon = Config.remote_login_providers[_i].toLowerCase();
 
-				if ('google' == _icon) _icon = 'google-plus';
+				if ('google' == _icon) {
+					_icon = 'google-plus';
+				}
 
 				$_providers.append('<i class="icon-' + _icon + ' icon-3x" data-provider="' + Config.remote_login_providers[_i] + '"></i>');
 			}
@@ -339,10 +341,8 @@ Actions = ({
 
 		if (_message) {
 			_message = decodeURIComponent(_message.replace(/\+/g, '%20'));
-		}
-		else {
-			_message =
-				( stay ? 'Your Session has expired. Please log in to continue' : 'Please enter your User Email and Password below to sign in.' );
+		} else {
+			_message = ( stay ? 'Your Session has expired. Please log in to continue' : 'Please enter your User Email and Password below to sign in.' );
 		}
 
 		window.Stay = false;
@@ -398,8 +398,7 @@ Actions = ({
 				Actions.getApps(sessionInfo);
 				$("#loginDialog").modal('hide');
 				$("#loading").hide();
-			})
-			.fail(function(response) {
+			}).fail(function(response) {
 				Actions.displayModalError('#loginErrorMessage', getErrorString(response));
 			});
 
@@ -562,6 +561,10 @@ Actions = ({
 		NewUser.display_name = $("#displayname").val();
 		NewUser.phone = $("#phone").val();
 		NewUser.default_app_id = $("#default_app").val();
+
+		if (NewUser.default_app_id == "") {
+			NewUser.default_app_id = null;
+		}
 		// require question
 		var q = $("#security_question").val();
 		if (q == '') {
