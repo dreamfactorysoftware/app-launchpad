@@ -683,10 +683,9 @@ a:hover {
 }
 
 .widget-title, .modal-header, .table th, div.dataTables_wrapper .ui-widget-header {
-	background-color: #EFEFEF;
-	background-image: -moz-linear-gradient(center top, #FDFDFD 0%, #EAEAEA 100%);
-	border-bottom:    1px solid #CDCDCD;
-	height:           36px;
+	background:    #EFEFEF -moz-linear-gradient(center top, #FDFDFD 0%, #EAEAEA 100%);
+	border-bottom: 1px solid #CDCDCD;
+	height:        36px;
 }
 
 .widget-title .nav-tabs {
@@ -1392,11 +1391,6 @@ div.dataTables_wrapper .ui-widget-header {
 .modal-header {
 	height:  auto;
 	padding: 8px 15px 5px;
-}
-
-.modal-header h3 {
-	font-size:   12px;
-	text-shadow: 0 1px 0 #FFFFFF;
 }
 
 .notify-ui ul {
@@ -2158,18 +2152,24 @@ body {
 }
 
 #loading {
-	color:            white;
 	display:          none;
-	width:            50px;
-	height:           50px;
+	/*width:            50px;*/
+	/*height:           50px;*/
 	position:         absolute;
 	left:             50%;
 	top:              50%;
-	margin-left:      -25px;
-	margin-top:       -25px;
+	margin-left:      -100px;
+	/*margin-top:       -25px;*/
 	z-index:          999999;
 	background-color: #E78F1E;
-	box-shadow:       0 5px 3px #666666;
+	border:           1px solid #c1680e;
+	border-radius:    6px;
+	box-shadow:       0 0 12px rgba(0, 0, 0, .6);
+	padding:          8px;
+}
+
+#loading .icon-spinner {
+	color: #fff;
 }
 
 #rocket {
@@ -2187,9 +2187,4 @@ body {
 	white-space:  nowrap;
 	opacity:      .2;
 
-}
-
-#sso-provider {
-	min-width:  500px;
-	min-height: 500px;
 }

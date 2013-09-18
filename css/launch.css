@@ -117,11 +117,12 @@ Main stylesheet for LaunchPad
 }
 
 .modal {
-	font-family: 'Lato', sans-serif;
-	font-weight: 400;
+	width: 400px;
 }
 
 .modal-header {
+	font-family:   'Lato', sans-serif;
+	font-weight:   400;
 	border-radius: 0 0 0 0;
 	background:    #AA2700;
 	border:        1px solid #AA2700;
@@ -134,14 +135,18 @@ Main stylesheet for LaunchPad
 }
 
 .alert-area {
-	width:      90%;
-	padding:    20px 0;
-	text-align: center;
-	margin:     auto;
+	margin: 20px;
+}
+
+.alert-area .alert {
+	padding: 8px 14px;
 }
 
 .modal-body {
-	font-weight: 400;
+	padding-top:  0;
+	max-height:   400px;
+	overflow-y:   auto;
+	margin-right: 4px;
 }
 
 .modal-body .alert-error p {
@@ -151,13 +156,19 @@ Main stylesheet for LaunchPad
 .modal-body-form {
 	display:    block;
 	text-align: left;
-	margin:     0 10%;
-	width:      80%;
+	margin:     0 8px;
 }
 
 .modal-body-form label {
-	display:    block;
-	text-align: left;
+	font-family:   "Open Sans", "Helvetica Neue Light", 'Arial', sans-serif;
+	font-weight:   bold;
+	text-align:    left;
+	margin-bottom: 2px;
+	font-size:     12pt;
+}
+
+.modal-body-form .input-xlarge {
+	width: 96%;
 }
 
 .modal-footer {
@@ -165,25 +176,25 @@ Main stylesheet for LaunchPad
 }
 
 .modal-footer a.btn-primary {
-	background: #ffaf4b; /* Old browsers */
-	background: -moz-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffaf4b), color-stop(100%, #ff920a)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #ffaf4b 0%, #ff920a 100%); /* W3C */
-	filter:     progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=0); /* IE6-9 */
+	/*background: #ffaf4b; *//* Old browsers */
+	/*background: -moz-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); *//* FF3.6+ */
+	/*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffaf4b), color-stop(100%, #ff920a)); *//* Chrome,Safari4+ */
+	/*background: -webkit-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); *//* Chrome10+,Safari5.1+ */
+	/*background: -o-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); *//* Opera 11.10+ */
+	/*background: -ms-linear-gradient(top, #ffaf4b 0%, #ff920a 100%); *//* IE10+ */
+	/*background: linear-gradient(to bottom, #ffaf4b 0%, #ff920a 100%); *//* W3C */
+	/*filter:     progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffaf4b', endColorstr='#ff920a', GradientType=0); *//* IE6-9 */
 }
 
 .modal-footer a.btn-primary:hover {
-	background: #ff920a; /* Old browsers */
-	background: -moz-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff920a), color-stop(100%, #ff800a)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #ff920a 0%, #ff800a 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #ff920a 0%, #ff800a 100%); /* W3C */
-	filter:     progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff920a', endColorstr='#ff800a', GradientType=0); /* IE6-9 */
+	/*background: #ff920a; *//* Old browsers */
+	/*background: -moz-linear-gradient(top, #ff920a 0%, #ff800a 100%); *//* FF3.6+ */
+	/*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ff920a), color-stop(100%, #ff800a)); *//* Chrome,Safari4+ */
+	/*background: -webkit-linear-gradient(top, #ff920a 0%, #ff800a 100%); *//* Chrome10+,Safari5.1+ */
+	/*background: -o-linear-gradient(top, #ff920a 0%, #ff800a 100%); *//* Opera 11.10+ */
+	/*background: -ms-linear-gradient(top, #ff920a 0%, #ff800a 100%); *//* IE10+ */
+	/*background: linear-gradient(to bottom, #ff920a 0%, #ff800a 100%); *//* W3C */
+	/*filter:     progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff920a', endColorstr='#ff800a', GradientType=0); *//* IE6-9 */
 }
 
 @media screen and (max-width: 940px) {

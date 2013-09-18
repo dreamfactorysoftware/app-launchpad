@@ -40,16 +40,19 @@ Actions = ({
 
 		_apps.forEach(function(app) {
 			if (app.is_default && !data.is_sys_admin) {
-				Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen, app.allow_fullscreen_toggle);
+				Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen,
+					app.allow_fullscreen_toggle);
 
 				//window.defaultApp = app.id;
 				_defaultShown = true;
 
 				if (app.allow_fullscreen_toggle) {
 					Actions.toggleFullScreen(true);
-				} else if (app.is_default && data.is_sys_admin) {
+				}
+				else if (app.is_default && data.is_sys_admin) {
 					app.requires_fullscreen = false;
-					Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen, app.allow_fullscreen_toggle);
+					Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen,
+						app.allow_fullscreen_toggle);
 
 					//window.defaultApp = app.id;
 					_defaultShown = true;
@@ -67,17 +70,23 @@ Actions = ({
 
 		if (data.is_sys_admin && !_defaultShown) {
 			this.showApp('admin', '/public/admin/#/app', '0', false);
-		} else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
+		}
+		else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
 			$('#app-list-container').hide();
-			this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].launch_url, data.app_groups[0].apps[0].is_url_external,
-				data.app_groups[0].apps[0].requires_fullscreen, data.app_groups[0].apps[0].allow_fullscreen_toggle);
-		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
+			this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].launch_url,
+				data.app_groups[0].apps[0].is_url_external, data.app_groups[0].apps[0].requires_fullscreen,
+				data.app_groups[0].apps[0].allow_fullscreen_toggle);
+		}
+		else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
 			$('#app-list-container').hide();
-			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external,
-				data.no_group_apps[0].requires_fullscreen, data.no_group_apps[0].allow_fullscreen_toggle);
-		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
+			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url,
+				data.no_group_apps[0].is_url_external, data.no_group_apps[0].requires_fullscreen,
+				data.no_group_apps[0].allow_fullscreen_toggle);
+		}
+		else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
 			$('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
-		} else {
+		}
+		else {
 			$('#fs_toggle').addClass('disabled');
 			$('#app-list-container').show();
 		}
@@ -100,17 +109,17 @@ Actions = ({
 				// Did this because when we just $.show(see commented out line below)
 				// Angular hasn't populated the DOM because it's fallen out of scope
 				// I think
-				$('#admin').replaceWith($('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src',
-					CurrentServer + url).appendTo('#app-container'));
+				$('#admin').replaceWith($('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name',
+						name).attr('class', 'app-loader').attr('src', CurrentServer + url).appendTo('#app-container'));
 				//$('#admin').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src', CurrentServer + url).show();
-			} else {
+			}
+			else {
 				$('#adminLink').addClass('disabled');
-				$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class', 'app-loader').attr('src',
-					CurrentServer + url).appendTo('#app-container');
+				$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('name', name).attr('class',
+						'app-loader').attr('src', CurrentServer + url).appendTo('#app-container');
 			}
 			return;
 		}
-
 
 		// check if there is an element with this id
 		if ($("#" + name).length > 0) {
@@ -132,7 +141,8 @@ Actions = ({
 				$('#fs_toggle').off('click', function() {
 					Actions.toggleFullScreen(false);
 				});
-			} else if (allowfullscreentoggle) {
+			}
+			else if (allowfullscreentoggle) {
 				$('#fs_toggle').removeClass('disabled');
 				$('#fs_toggle').on('click', function() {
 					Actions.toggleFullScreen(true);
@@ -142,12 +152,11 @@ Actions = ({
 
 			$("#" + name).show();
 
-
 			return;
 		}
 
-		$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src', url).appendTo('#app-container');
-
+		$('<iframe>').attr('frameBorder', '0').attr('id', name).attr('class', 'app-loader').attr('src',
+			url).appendTo('#app-container');
 
 		/*
 		 if(fullscreen && name != "admin"){
@@ -164,12 +173,14 @@ Actions = ({
 
 				// It does so fire it up in fullscreen mode
 				Actions.requireFullScreen();
-			} else {
+			}
+			else {
 				if (!allowfullscreentoggle) {
 					$('#fs_toggle').off('click', function() {
 						Actions.toggleFullScreen(false);
 					});
-				} else if (allowfullscreentoggle) {
+				}
+				else if (allowfullscreentoggle) {
 					$('#fs_toggle').removeClass('disabled');
 					$('#fs_toggle').on('click', function() {
 						Actions.toggleFullScreen(true);
@@ -196,7 +207,6 @@ Actions = ({
 		}
 	},
 
-
 	showAppList: function() {
 
 		$('#apps-list-btn').addClass('disabled');
@@ -214,11 +224,9 @@ Actions = ({
 
 		var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0;
 
-
 		this.animateNavBarClose(function() {
 			this.showApp(name, url, type, fullscreen)
 		});
-
 
 	},
 
@@ -228,7 +236,8 @@ Actions = ({
 			// It doesn't have any apps
 			// Fail silently
 			//console.log('fail');
-		} else {
+		}
+		else {
 			// It does have apps!
 
 			//create an array variable to store these apps
@@ -241,7 +250,6 @@ Actions = ({
 			apps.apps = sessionInfo.no_group_apps;
 
 			var no_url_apps = [];
-
 
 			$.each(apps.apps, function(k, v) {
 				if (v.launch_url === '') {
@@ -256,12 +264,10 @@ Actions = ({
 				apps.apps.splice(v, 1);
 			});
 
-
 			// push this new app object onto our array
 			sessionInfo.mnm_ng_apps.push(apps);
 
 			return false;
-
 
 			// **Note** I'm doing all this to mimick how the app_groups are returned
 			// in order to put ungrouped apps into a group for display.
@@ -278,7 +284,6 @@ Actions = ({
 
 			Actions.appGrouper(sessionInfo);
 
-
 			CurrentUserID = sessionInfo.id;
 			if (CurrentUserID) {
 				sessionInfo.activeSession = true;
@@ -294,17 +299,16 @@ Actions = ({
 				$('#fs_toggle').off('click');
 			}
 
-
 			if (action == "init") {
 				that.getApps(sessionInfo, action);
 			}
-
 
 		}).fail(function(response) {
 				if (response.status == 401 || response.status == 403) {
 					Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
 					that.doSignInDialog();
-				} else if (response.status == 500) {
+				}
+				else if (response.status == 500) {
 					that.showStatus(response.statusText, "error");
 				}
 			});
@@ -313,7 +317,6 @@ Actions = ({
 	//*************************************************************************
 	//* Login
 	//*************************************************************************
-
 
 	clearSignIn: function() {
 		var $_dlg = $('#loginDialog');
@@ -333,12 +336,14 @@ Actions = ({
 						_icon = 'google-plus';
 					}
 
-					$_providers.append('<i class="icon-' + _icon + ' icon-3x" data-provider="' + provider.api_name + '"></i>');
+					$_providers.append('<i class="icon-' + _icon + ' icon-3x" data-provider="' + provider.api_name +
+									   '"></i>');
 				}
 			});
 
 			$('.remote-login', $_dlg).show();
-		} else {
+		}
+		else {
 			$('.remote-login', $_dlg).hide();
 		}
 	},
@@ -354,8 +359,11 @@ Actions = ({
 
 		if (_message) {
 			_message = decodeURIComponent(_message.replace(/\+/g, '%20'));
-		} else {
-			_message = ( stay ? 'Your Session has expired. Please log in to continue' : 'Please enter your User Email and Password below to sign in.' );
+		}
+		else {
+			_message =
+			( stay ? 'Your Session has expired. Please log in to continue'
+				: 'Please enter your User Email and Password below to sign in.' );
 		}
 
 		window.Stay = false;
@@ -367,7 +375,8 @@ Actions = ({
 				$('#UserEmail').focus();
 			});
 			window.Stay = true;
-		} else {
+		}
+		else {
 			$("#loginDialog").modal('show').on('shown', function() {
 				$('#UserEmail').focus();
 			});
@@ -379,7 +388,7 @@ Actions = ({
 
 		var that = this;
 		if (!$('#UserEmail').val() || !$('#Password').val()) {
-			$("#loginErrorMessage").addClass('alert-error').html('You must enter User Email and Password to continue.');
+			$("#loginErrorMessage").addClass('alert-error').html('You must enter your email address and password to continue.');
 			return;
 		}
 		$('#loading').show();
@@ -426,7 +435,8 @@ Actions = ({
 			$("#loading").hide();
 			$(elem).addClass('alert-error').html(message);
 //			$(elem).addClass('alert-error').append('<p><i style="vertical-align: middle; padding-right: 8px;" class="icon-exclamation-sign icon-2x"></i>' + message + '</p>');
-		} else {
+		}
+		else {
 			$(elem).empty().removeClass('alert-error');
 		}
 	},
@@ -435,7 +445,6 @@ Actions = ({
 //* Forgot Password
 //*************************************************************************
 
-
 	clearForgotPassword:    function() {
 
 		$('#Answer').val('');
@@ -443,13 +452,13 @@ Actions = ({
 	doForgotPasswordDialog: function() {
 		var that = this;
 		if ($('#UserEmail').val() == '') {
-			$("#loginErrorMessage").addClass('alert-error').html('You must enter User Email to continue.');
+			$("#loginErrorMessage").addClass('alert-error').html('You must enter your email address to continue.');
 			return;
 		}
 		$.ajax({
 			dataType: 'json',
-			url:      CurrentServer + '/rest/user/challenge',
-			data:     'app_name=launchpad&email=' + $('#UserEmail').val() + '&method=GET',
+			url: CurrentServer + '/rest/user/challenge',
+			data: 'app_name=launchpad&email=' + $('#UserEmail').val() + '&method=GET',
 			cache:    false,
 			success:  function(response) {
 				if (response.security_question) {
@@ -458,7 +467,8 @@ Actions = ({
 					that.clearForgotPassword();
 					$("#forgotPasswordErrorMessage").removeClass('alert-error').html('Please answer your security question to log in.');
 					$("#forgotPasswordDialog").modal('show');
-				} else {
+				}
+				else {
 					$("#loginErrorMessage").addClass('alert-error').html('Unable to retrieve your security question.');
 				}
 			},
@@ -472,7 +482,8 @@ Actions = ({
 		if (toggle) {
 			$('#app-container').css({"top": "0px", "z-index": 99998});
 			$('#rocket').show();
-		} else {
+		}
+		else {
 			$('#app-container').css({"top": "44px", "z-index": 99997});
 			$('#fs_toggle').removeClass('disabled');
 			$('#rocket').hide();
@@ -489,7 +500,8 @@ Actions = ({
 			$.ajax({
 				dataType: 'json',
 				type:     'POST',
-				url:      CurrentServer + '/REST/User/Challenge/?app_name=launchpad&email=' + $('#UserEmail').val() + '&method=POST',
+				url: CurrentServer + '/REST/User/Challenge/?app_name=launchpad&email=' + $('#UserEmail').val() +
+					 '&method=POST',
 				data:     JSON.stringify({security_answer: $('#Answer').val()}),
 				cache:    false,
 				success:  function(response) {
@@ -508,7 +520,8 @@ Actions = ({
 					$("#forgotPasswordErrorMessage").addClass('alert-error').html('Please check the answer to your security question.');
 				}
 			});
-		} else {
+		}
+		else {
 			$("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the security answer to continue, or contact your administrator for help.');
 		}
 	},
@@ -532,7 +545,7 @@ Actions = ({
 		var that = this;
 		$.ajax({
 			dataType: 'json',
-			url:      CurrentServer + '/rest/user/profile/' + CurrentUserID + '/',
+			url: CurrentServer + '/rest/user/profile/' + CurrentUserID + '/',
 			data:     'method=GET&app_name=launchpad',
 			cache:    false,
 			success:  function(response) {
@@ -559,7 +572,8 @@ Actions = ({
 		$("#default_app").val(Profile.default_app_id);
 		if (Profile.security_question) {
 			$("#security_question").val(Profile.security_question);
-		} else {
+		}
+		else {
 			$("#security_question").val('');
 		}
 		$("#security_answer").val('');
@@ -599,7 +613,7 @@ Actions = ({
 		$.ajax({
 			dataType: 'json',
 			type:     'POST',
-			url:      CurrentServer + '/rest/user/profile/' + CurrentUserID + '/?method=MERGE&app_name=launchpad',
+			url: CurrentServer + '/rest/user/profile/' + CurrentUserID + '/?method=MERGE&app_name=launchpad',
 			data:     JSON.stringify(NewUser),
 			cache:    false,
 			success:  function(response) {
@@ -613,7 +627,8 @@ Actions = ({
 				if (response.status == 401) {
 					$("#changeProfileDialog").modal('hide');
 					that.doSignInDialog();
-				} else {
+				}
+				else {
 					$("#changeProfileErrorMessage").addClass('alert-error').html('There was an error updating the profile.');
 				}
 			}
@@ -650,7 +665,8 @@ Actions = ({
 				new_password: $("#NPassword").val()
 			};
 			this.updatePassword(JSON.stringify(data));
-		} else {
+		}
+		else {
 			$("#changePasswordErrorMessage").addClass('alert-error').html('<b style="color:red;">Passwords do not match!</b> New and Verify Password fields need to match before you can submit the request.');
 		}
 	},
@@ -659,7 +675,7 @@ Actions = ({
 		$.ajax({
 			dataType: 'json',
 			type:     'POST',
-			url:      CurrentServer + '/rest/user/password/?method=MERGE&app_name=launchpad',
+			url: CurrentServer + '/rest/user/password/?method=MERGE&app_name=launchpad',
 			data:     pass,
 			cache:    false,
 			success:  function(response) {
@@ -670,7 +686,8 @@ Actions = ({
 				if (response.status == 401) {
 					$("#changePasswordDialog").modal('hide');
 					that.doSignInDialog();
-				} else {
+				}
+				else {
 					$("#changePasswordErrorMessage").addClass('alert-error').html('There was an error changing the password. Make sure you entered the correct old password.');
 				}
 			}
@@ -689,7 +706,7 @@ Actions = ({
 		$.ajax({
 			dataType: 'json',
 			type:     'POST',
-			url:      CurrentServer + '/rest/user/session/' + CurrentUserID + '/',
+			url: CurrentServer + '/rest/user/session/' + CurrentUserID + '/',
 			data:     'app_name=launchpad&method=DELETE',
 			cache:    false,
 			success:  function(response) {
@@ -720,7 +737,8 @@ Actions = ({
 	showStatus:             function(message, type) {
 		if (type == "error") {
 			$('#error-container').html(message).removeClass().addClass('alert alert-danger center').show().fadeOut(10000);
-		} else {
+		}
+		else {
 			$('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
 		}
 	}
@@ -750,11 +768,13 @@ jQuery(function($) {
 			if (value == verify) {
 				$_password.removeClass("RedBorder").addClass("GreenBorder");
 				$_passwordConfirm.removeClass("RedBorder").addClass("GreenBorder");
-			} else {
+			}
+			else {
 				$_password.removeClass("GreenBorder").addClass("RedBorder");
 				$_passwordConfirm.removeClass("GreenBorder").addClass("RedBorder");
 			}
-		} else {
+		}
+		else {
 			$_password.removeClass("RedBorder").removeClass("GreenBorder");
 			$_passwordConfirm.removeClass("RedBorder").removeClass("GreenBorder");
 		}
@@ -795,7 +815,8 @@ jQuery(function($) {
 		var _provider = $(this).data('provider');
 
 		if (_provider) {
-			window.top.location.href = '/web/remoteLogin?pid=' + _provider + '&return_url=' + encodeURI(window.top.location);
+			window.top.location.href =
+			'/web/remoteLogin?pid=' + _provider + '&return_url=' + encodeURI(window.top.location);
 		}
 	});
 });

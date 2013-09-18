@@ -8,10 +8,12 @@
 	<title>LaunchPad</title>
 
 	<!-- Standard CSS -->
-	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet" />
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css"
+		  rel="stylesheet" />
 	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
 	<!--[if IE 7]>
-	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.css" rel="stylesheet" />    <![endif]-->
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome-ie7.css"
+		  rel="stylesheet" />    <![endif]-->
 	<link rel="stylesheet" href="css/layout.css" type="text/css" />
 	<link rel="stylesheet" href="css/launch.css" type="text/css" />
 	<link rel="stylesheet" href="/public/web-core/js/pnotify/pnotify.css" type="text/css" />
@@ -19,65 +21,47 @@
 	<link rel="stylesheet" href="/public/web-core/js/pnotify/pnotify.css" type="text/css" />
 </head>
 <body>
-<div id="rocket" class="btn btn-inverse " onclick="Actions.toggleFullScreen(false)"><i id="toggleIcon" class="icon-resize-small"></i> Exit Fullscreen</div>
-<div id="loading" class="well"><i class="icon-spinner icon-spin icon-4x"></i></div>
+<div id="rocket" class="btn btn-inverse " onclick="Actions.toggleFullScreen(false)"><i id="toggleIcon"
+																					   class="icon-resize-small"></i> Exit Fullscreen
+</div>
+<div id="loading"><i class="icon-spinner icon-spin icon-4x"></i></div>
 
 <!-- Navigation -->
 <div id="navbar-container"></div>
 <div id="app-list-container"></div>
 <div id="app-container"></div>
 
-<div id="changeProfileDialog" class="modal hide fade">
+<div id="changeProfileDialog" class="modal hide">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearProfile()">&times;</button>
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+				onclick="Actions.clearProfile()">&times;</button>
 		<h3>Change Profile</h3>
 	</div>
 	<div class="alert-area">
 		<div class="alert alert-block" id="changeProfileErrorMessage"></div>
 	</div>
 	<div class="modal-body">
-
 		<div class="modal-body-form">
-			<p>
-				<label class="formLabel" for="email">Email:</label>
-				<input type="email" class="cW98 ONKEYUP" id="email" value="" />
-			</p>
+			<label for="email">Email:</label>
+			<input type="email" class="input-xlarge ONKEYUP" id="email" value="" />
+			<label for="firstname">First Name:</label>
+			<input type="text" class="input-xlarge ONKEYUP" id="firstname" value="" />
+			<label for="lastname">Last Name:</label>
+			<input type="text" class="input-xlarge ONKEYUP" id="lastname" value="" />
+			<label for="displayname">Display Name:</label>
+			<input type="text" class="input-xlarge ONKEYUP" id="displayname" value="" />
 
-			<p>
-				<label class="formLabel" for="firstname">First&nbsp;Name:&nbsp;</label>
-				<input type="text" class="cW98 ONKEYUP" id="firstname" value="" />
-			</p>
+			<label for="displayname">Default Application:</label>
+			<select class="input-xlarge ONKEYUP" id="default_app">
+				<option value>None</option>
+			</select>
 
-			<p>
-				<label class="formLabel" for="lastname">Last&nbsp;Name:&nbsp;</label>
-				<input type="text" class="cW98 ONKEYUP" id="lastname" value="" />
-			</p>
-
-			<p>
-				<label class="formLabel" for="displayname">Display&nbsp;Name:&nbsp;</label>
-				<input type="text" class="cW98 ONKEYUP" id="displayname" value="" />
-			</p>
-
-			<p>
-				<label class="formLabel" for="displayname">Default App:&nbsp;</label>
-				<select class="cW98 ONKEYUP" id="default_app">
-					<option value>None</option>
-				</select>
-			</p>
-			<p>
-				<label class="formLabel" for="displayname">Phone:&nbsp;</label>
-				<input type="text" class="cW98 ONKEYUP" id="phone" value="" />
-			</p>
-
-			<p>
-				<label class="formLabel" for="displayname">Security&nbsp;Question:&nbsp;</label>
-				<input type="text" class="cW98 ONKEYUP" id="security_question" value="" />
-			</p>
-
-			<p>
-				<label class="formLabel" for="displayname">Security&nbsp;Answer:&nbsp;</label>
-				<input type="text" class="cW98 ONKEYUP" id="security_answer" value="" />
-			</p>
+			<label for="displayname">Phone:</label>
+			<input type="text" class="input-xlarge ONKEYUP" id="phone" value="" />
+			<label for="displayname">Security Question:</label>
+			<input type="text" class="input-xlarge ONKEYUP" id="security_question" value="" />
+			<label for="displayname">Security Answer:</label>
+			<input type="text" class="input-xlarge ONKEYUP" id="security_answer" value="" />
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -86,30 +70,23 @@
 	</div>
 </div>
 
-<div class="modal hide fade" id="changePasswordDialog">
+<div class="modal hide" id="changePasswordDialog">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearChangePassword()">&times;</button>
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+				onclick="Actions.clearChangePassword()">&times;</button>
 		<h3>Change Password</h3>
 	</div>
 	<div class="alert-area">
-		<div class="alert" id="changePasswordErrorMessage"></div>
+		<div class="alert alert-block" id="changePasswordErrorMessage"></div>
 	</div>
 	<div class="modal-body">
 		<div class="modal-body-form">
-			<p>
-				<label class="formLabel" for="OPassword">Old&nbsp;Password:&nbsp;</label>
-				<input type="password" class="cW98" id="OPassword" value="" />
-			</p>
-
-			<p>
-				<label class="formLabel" for="NPassword">New&nbsp;Password:&nbsp;</label>
-				<input type="password" class="cW98" id="NPassword" value="" />
-			</p>
-
-			<p>
-				<label class="formLabel" for="VPassword">Verify&nbsp;Password:&nbsp;</label>
-				<input type="password" class="cW98" id="VPassword" value="" />
-			</p>
+			<label for="OPassword">Old Password:</label>
+			<input type="password" class="input-xlarge" id="OPassword" value="" />
+			<label for="NPassword">New Password:</label>
+			<input type="password" class="input-xlarge" id="NPassword" value="" />
+			<label for="VPassword">Verify Password:</label>
+			<input type="password" class="input-xlarge" id="VPassword" value="" />
 		</div>
 	</div>
 	<div class="modal-footer">
@@ -122,7 +99,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearSignIn()">&times;</button>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+						onclick="Actions.clearSignIn()">&times;</button>
 				<h3>Sign In</h3>
 			</div>
 			<div class="alert-area">
@@ -130,16 +108,10 @@
 			</div>
 			<div class="modal-body">
 				<div class="modal-body-form">
-					<p>
-						<label class="formLabel" for="VPassword">User&nbsp;Email:&nbsp;</label>
-						<input type="email" class="cW98" name="UserEmail" id="UserEmail" value="" />
-					</p>
-
-					<p>
-						<label class="formLabel" for="VPassword">Password:&nbsp;</label>
-						<input type="password" class="cW98" name="Password" id="Password" value="" />
-					</p>
-
+					<input placeholder="Email Address" type="email" class="input-xlarge" name="UserEmail"
+						   id="UserEmail" />
+					<input placeholder="Password" type="password" class="input-xlarge" name="Password" id="Password"
+						   value="" />
 					<div class="remote-login hide">
 						<h5>Or</h5>
 
@@ -149,7 +121,6 @@
 							<div class="remote-login-providers" data-owner="#loginDialog"></div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -167,8 +138,10 @@
 		<h3>Sign Out</h3>
 	</div>
 	<div class="modal-body">
-		<p>
-			Are you sure you want to sign out of the application? All unsaved work will be lost! </p>
+		<div class="modal-body-form" style="margin-top: 20px; font-size: 14px;">
+			Are you sure you want to sign out of the application?<br /><br />
+			<strong style="font-size:18px;">Any unsaved changes will be lost!</strong>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -178,7 +151,8 @@
 
 <div id="forgotPasswordDialog" class="modal hide fade">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="Actions.clearForgotPassword()">&times;</button>
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+				onclick="Actions.clearForgotPassword()">&times;</button>
 		<h3>Forgot Password</h3>
 	</div>
 	<div class="alert-area">
@@ -187,25 +161,19 @@
 	</div>
 	<div class="modal-body">
 		<div class="modal-body-form">
-			<p>
-				<label class="formLabel" for="Question">Security Question:</label>
+			<label for="Question">Security Question:</label>
+			<span class="cM1" id="Question" value=""></span>
 
-			<p>
-				<span class="cM1" id="Question" value=""></span>
-			</p>
-
-			<p>
-				<label class="formLabel" for="Question">Security Answer:</label>
-				<input type="password" class=" cW98" name="Answer" id="Answer" value="" />
-			</p>
+			<label for="Question">Security Answer:</label>
+			<input type="password" class=" input-xlarge" name="Answer" id="Answer" value="" />
 		</div>
 	</div>
-
 	<div class="modal-footer">
 		<a href="#" class="btn" data-dismiss="modal" onclick="Actions.clearForgotPassword()">Close</a>
 		<a href="#" class="btn btn-primary" onclick="Actions.forgotPassword()">Submit</a>
 	</div>
 </div>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script src="/public/web-core/js/mustache.js"></script>

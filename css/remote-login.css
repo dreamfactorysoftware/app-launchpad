@@ -7,7 +7,7 @@
 	font-size:     18pt;
 	text-align:    center;
 	text-shadow:   0 1px 0 rgba(0, 0, 0, 0.3);
-	margin-bottom: 12px;
+	padding-bottom: 12px;
 }
 
 .remote-login-wrapper {
