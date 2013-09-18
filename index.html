@@ -24,7 +24,7 @@
 <div id="rocket" class="btn btn-inverse " onclick="Actions.toggleFullScreen(false)"><i id="toggleIcon"
 																					   class="icon-resize-small"></i> Exit Fullscreen
 </div>
-<div id="loading"><i class="icon-spinner icon-spin icon-4x"></i></div>
+<div id="loading" class="hide"><i class="icon-spinner icon-spin icon-4x"></i></div>
 
 <!-- Navigation -->
 <div id="navbar-container"></div>
@@ -112,6 +112,7 @@
 						   id="UserEmail" />
 					<input placeholder="Password" type="password" class="input-xlarge" name="Password" id="Password"
 						   value="" />
+
 					<div class="remote-login hide">
 						<h5>Or</h5>
 
@@ -162,6 +163,7 @@
 	<div class="modal-body">
 		<div class="modal-body-form">
 			<label for="Question">Security Question:</label>
+
 			<span class="cM1" id="Question" value=""></span>
 
 			<label for="Question">Security Answer:</label>

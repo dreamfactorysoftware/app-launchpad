@@ -2152,20 +2152,18 @@ body {
 }
 
 #loading {
-	display:          none;
-	/*width:            50px;*/
-	/*height:           50px;*/
+	width:            50px;
+	height:           50px;
+	background-color: #E78F1E;
 	position:         absolute;
 	left:             50%;
-	top:              50%;
-	margin-left:      -100px;
-	/*margin-top:       -25px;*/
+	top:              25%;
 	z-index:          999999;
-	background-color: #E78F1E;
 	border:           1px solid #c1680e;
 	border-radius:    6px;
 	box-shadow:       0 0 12px rgba(0, 0, 0, .6);
 	padding:          8px;
+	margin:           -33px auto 0 -33px;
 }
 
 #loading .icon-spinner {
@@ -2174,7 +2172,7 @@ body {
 
 #rocket {
 	box-shadow:   0 5px 3px #000000;
-	display:      none;
+	display:      block;
 	font-size:    0.9em;
 	left:         50%;
 	margin-left:  -68px;

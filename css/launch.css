@@ -117,7 +117,8 @@ Main stylesheet for LaunchPad
 }
 
 .modal {
-	width: 400px;
+	width:       400px;
+	margin-left: -200px;
 }
 
 .modal-header {
