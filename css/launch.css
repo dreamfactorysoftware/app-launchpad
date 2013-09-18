@@ -1,6 +1,7 @@
 /*
 Main stylesheet for LaunchPad
 */
+@import url(//fonts.googleapis.com/css?family=Lato:300,400,700);
 
 .make-inline {
 	display: inline-block;
@@ -8,24 +9,19 @@ Main stylesheet for LaunchPad
 
 #navbar-container {
 	background: black;
-
 }
 
 #app-groups-container {
-	font-family: Lato;
+	font-family: 'Lato', sans-serif;
 }
 
 #app-list-container {
-
-	background:        #222;
 	/*background-image: url('http://galleryheart.com/wp-content/uploads/2012/02/30_Mind-Blowing-Examples-of-Creative-Art-7.jpg');*/
-	background-image:  url('../img/launchpad_bg_gray.png');
-	background-repeat: no-repeat;
-	background-size:   cover;
+	background:      #222 url('../img/launchpad_bg_gray.png') no-repeat;
+	background-size: cover;
 }
 
-#app-list-container
-.accordion-group {
+#app-list-container .accordion-group {
 	/*background-color: rgba(5, 124, 221, 0.8);*/
 	background-color: rgba(170, 39, 0, .85);
 	/*background-color: #AA2700;*/
@@ -121,7 +117,7 @@ Main stylesheet for LaunchPad
 }
 
 .modal {
-	font-family: Lato;
+	font-family: 'Lato', sans-serif;
 	font-weight: 400;
 }
 
@@ -132,16 +128,16 @@ Main stylesheet for LaunchPad
 }
 
 .modal-header h3 {
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	text-shadow: 0 2px 2px rgba(0, 0, 0, .8);
 	color:       white;
-	font-size:   18px;
+	font-size:   18pt;
 }
 
 .alert-area {
-    width: 90%;
-    padding: 20px 0;
-    text-align: center;
-    margin: auto;
+	width:      90%;
+	padding:    20px 0;
+	text-align: center;
+	margin:     auto;
 }
 
 .modal-body {

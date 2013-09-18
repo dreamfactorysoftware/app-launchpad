@@ -21,68 +21,68 @@ Actions = ({
 	},
 
 	getApps: function(data, action) {
-		$('#error-container').empty().hide();
+		var _apps = [], _defaultShown = false, $_defaultApps = $('#default_app'), _options;
 
-		AllApps = [];
-		AllApps = data.no_group_apps;
+		$('#error-container').hide().empty();
+		$_defaultApps.empty();
+
+		if (data && data.no_group_apps) {
+			_apps = data.no_group_apps;
+		}
+
 		data.app_groups.forEach(function(group) {
 			group.apps.forEach(function(app) {
-				AllApps.push(app);
+				_apps.push(app);
 			});
 		});
-		var defaultShown = false;
-		$("#default_app").empty();
 
-		AllApps.forEach(function(app) {
+		_options = "";
+
+		_apps.forEach(function(app) {
 			if (app.is_default && !data.is_sys_admin) {
 				Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen, app.allow_fullscreen_toggle);
+
 				//window.defaultApp = app.id;
-				defaultShown = true;
+				_defaultShown = true;
 
 				if (app.allow_fullscreen_toggle) {
 					Actions.toggleFullScreen(true);
 				} else if (app.is_default && data.is_sys_admin) {
-
 					app.requires_fullscreen = false;
-
 					Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen, app.allow_fullscreen_toggle);
-					//window.defaultApp = app.id;
-					defaultShown = true;
 
+					//window.defaultApp = app.id;
+					_defaultShown = true;
 				}
-				var option = '<option value="' + app.id + '">' + app.name + '</option>';
-				$("#default_app").append(option);
 			}
+
+			_options += '<option value="' + app.id + '">' + app.name + '</option>';
 		});
 
-		var noption = '<option value="">None</option>';
-		$("#default_app").append(noption);
-		//$("#default_app").val(window.defaultApp);
+		$_defaultApps.append(_options + '<option value>None</option>');
 
-		if (action == "update") {
+		if ('update' == action) {
 			return;
 		}
-		if (data.is_sys_admin && !defaultShown) {
+
+		if (data.is_sys_admin && !_defaultShown) {
 			this.showApp('admin', '/public/admin/#/app', '0', false);
 		} else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
 			$('#app-list-container').hide();
 			this.showApp(data.app_groups[0].apps[0].api_name, data.app_groups[0].apps[0].launch_url, data.app_groups[0].apps[0].is_url_external,
 				data.app_groups[0].apps[0].requires_fullscreen, data.app_groups[0].apps[0].allow_fullscreen_toggle);
-			return;
 		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 1) {
 			$('#app-list-container').hide();
 			this.showApp(data.no_group_apps[0].api_name, data.no_group_apps[0].launch_url, data.no_group_apps[0].is_url_external,
 				data.no_group_apps[0].requires_fullscreen, data.no_group_apps[0].allow_fullscreen_toggle);
-			return;
 		} else if (data.app_groups.length == 0 && data.no_group_apps.length == 0) {
 			$('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
-			return;
 		} else {
 			$('#fs_toggle').addClass('disabled');
 			$('#app-list-container').show();
 		}
-
 	},
+
 	showApp: function(name, url, type, fullscreen, allowfullscreentoggle) {
 
 		$('#fs_toggle').addClass('disabled');
@@ -324,15 +324,18 @@ Actions = ({
 		if (Config.allow_remote_logins && Config.remote_login_providers) {
 			$_providers.empty();
 
-			for (var _i = 0; _i < Config.remote_login_providers.length; _i++) {
-				var _icon = Config.remote_login_providers[_i].toLowerCase();
+			Config.remote_login_providers.forEach(function(provider) {
+				if ('1' == provider.is_active) {
 
-				if ('google' == _icon) {
-					_icon = 'google-plus';
+					var _icon = provider.api_name.toLowerCase();
+
+					if ('google' == _icon) {
+						_icon = 'google-plus';
+					}
+
+					$_providers.append('<i class="icon-' + _icon + ' icon-3x" data-provider="' + provider.api_name + '"></i>');
 				}
-
-				$_providers.append('<i class="icon-' + _icon + ' icon-3x" data-provider="' + Config.remote_login_providers[_i] + '"></i>');
-			}
+			});
 
 			$('.remote-login', $_dlg).show();
 		} else {

@@ -5,6 +5,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Google jQuery CDN v1.x" level="application" />
+    <orderEntry type="library" name="jquery" level="application" />
   </component>
 </module>
 
