@@ -500,7 +500,7 @@ Actions = ({
 			$.ajax({
 				dataType: 'json',
 				type:     'POST',
-				url: CurrentServer + '/REST/User/Challenge/?app_name=launchpad&email=' + $('#UserEmail').val() +
+				url: CurrentServer + '/rest/user/challenge/?app_name=launchpad&email=' + $('#UserEmail').val() +
 					 '&method=POST',
 				data:     JSON.stringify({security_answer: $('#Answer').val()}),
 				cache:    false,
