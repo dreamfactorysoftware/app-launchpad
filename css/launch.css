@@ -117,8 +117,7 @@ Main stylesheet for LaunchPad
 }
 
 .modal {
-	width:       400px;
-	margin-left: -200px;
+
 }
 
 .modal-header {
@@ -145,7 +144,7 @@ Main stylesheet for LaunchPad
 
 .modal-body {
 	padding-top:  0;
-	max-height:   400px;
+	max-height:   300px;
 	overflow-y:   auto;
 	margin-right: 4px;
 }
