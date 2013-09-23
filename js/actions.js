@@ -46,21 +46,26 @@ Actions = ({
                 //window.defaultApp = app.id;
                 _defaultShown = true;
 
-                if (app.allow_fullscreen_toggle) {
-                    Actions.toggleFullScreen(true);
-                }
-                else if (app.is_default && data.is_sys_admin) {
+
+            }
+
+            else if (app.is_default && data.is_sys_admin) {
                     app.requires_fullscreen = false;
+
                     Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen,
                         app.allow_fullscreen_toggle);
 
+
                     //window.defaultApp = app.id;
                     _defaultShown = true;
-                }
+
+
+
             }
 
             _options += '<option value="' + app.id + '">' + app.name + '</option>';
         });
+
 
         $_defaultApps.append(_options + '<option value>None</option>');
 
@@ -68,8 +73,13 @@ Actions = ({
             return;
         }
 
-        if (data.is_sys_admin && !_defaultShown) {
+        if (data.is_sys_admin && _defaultShown) {
+            return;
+        }
+        else if (data.is_sys_admin && !_defaultShown) {
             this.showApp('admin', '/public/admin/#/app', '0', false);
+            $('#adminLink').off('click');
+            $('#fs_toggle').off('click');
         }
         else if (data.app_groups.length == 1 && data.app_groups[0].apps.length == 1 && data.no_group_apps.length == 0) {
             $('#app-list-container').hide();
@@ -87,18 +97,19 @@ Actions = ({
             $('#error-container').html("Sorry, it appears you have no active applications.  Please contact your system administrator").show();
         }
         else {
-            $('#fs_toggle').addClass('disabled');
-            $('#app-list-container').show();
+            Actions.showAppList();
         }
     },
 
     showApp: function(name, url, type, fullscreen, allowfullscreentoggle) {
 
+
         $('#fs_toggle').addClass('disabled');
         $('#app-list-container').hide();
         $('#apps-list-btn').removeClass('disabled');
-
         $('iframe').hide();
+
+
 
         // Show the admin if your an admin
         if (name == "admin") {
@@ -209,24 +220,29 @@ Actions = ({
 
     showAppList: function() {
 
-        $('#apps-list-btn').addClass('disabled');
+        $('#adminLink').on('click', Actions.showAdmin());
         $('#adminLink').removeClass('disabled');
         $('#fs_toggle').off('click');
         $('#fs_toggle').addClass('disabled');
         $('app-container').css({"z-index": 1});
         $('#app-list-container').show();
-        $('#app-list-container').css({"z-index": 99998})
-
+        $('#app-list-container').css({"z-index": 998});
+        $('#apps-list-btn').addClass('disabled');
         this.animateNavBarClose();
+
 
     },
     showAdmin:   function() {
+        $('#fs_toggle').off('click');
 
-        var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0;
+        var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0, allowfullscreentoggle = 0;
 
         this.animateNavBarClose(function() {
-            this.showApp(name, url, type, fullscreen)
+            this.showApp(name, url, type, fullscreen, allowfullscreentoggle);
+
         });
+
+
 
     },
 
@@ -479,18 +495,29 @@ Actions = ({
     },
     toggleFullScreen:       function(toggle) {
         if (toggle) {
-            $('#app-container').css({"top": "0px", "z-index": 99998});
-            $('#rocket').show();
+
+            Actions.animateNavBarClose(function() {
+                $('#app-container').css({"top": "0px", "z-index": 998});
+                $('#navbar-container').css({
+                    "z-index" : 10
+                });
+                $('#rocket').show();
+            });
+
+
         }
         else {
-            $('#app-container').css({"top": "44px", "z-index": 99997});
+            $('#app-container').css({"top": "44px", "z-index": 997});
+            $('#navbar-container').css({
+                "z-index" : 999
+            })
             $('#fs_toggle').removeClass('disabled');
             $('#rocket').hide();
         }
     },
 
     requireFullScreen: function() {
-        $('#app-container').css({"top": "0px", "z-index": 99998});
+        $('#app-container').css({"top": "0px", "z-index": 998});
     },
     forgotPassword:    function() {
 

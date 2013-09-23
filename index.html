@@ -30,7 +30,6 @@
 <div id="navbar-container"></div>
 <div id="app-list-container"></div>
 <div id="app-container"></div>
-
 <div id="changeProfileDialog" class="modal hide">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -69,6 +68,7 @@
 		<a href="#" class="btn btn-primary" onclick="Actions.updateProfile()">Save changes</a>
 	</div>
 </div>
+
 
 <div class="modal hide" id="changePasswordDialog">
 	<div class="modal-header">
@@ -114,7 +114,7 @@
 						   value="" />
 
 					<div class="remote-login hide">
-						<h5>Or</h5>
+
 
 						<div class="remote-login-wrapper">
 							<h4 style="">Sign-in with one of these providers</h4>
@@ -184,5 +184,16 @@
 <script src="/public/web-core/js/pnotify/pnotify.js"></script>
 <script src="js/querystring-0.9.0-min.js"></script>
 <script src="js/actions.js"></script>
+
+<script type="text/javascript">
+
+    function modalBodySizer() {
+        var h = $(window).height();
+        $('.modal-body').css({
+            "max-height" : (h *.4) + "px"
+        });
+    }
+    modalBodySizer();
+</script>
 </body>
 </html>
