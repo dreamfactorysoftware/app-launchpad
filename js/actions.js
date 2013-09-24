@@ -59,6 +59,10 @@ Actions = ({
                     //window.defaultApp = app.id;
                     _defaultShown = true;
 
+                $('#adminLink').on('click', function() {
+                    Actions.showAdmin()
+                });
+
             }
 
             _options += '<option value="' + app.id + '">' + app.name + '</option>';
