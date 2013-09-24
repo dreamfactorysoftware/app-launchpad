@@ -233,16 +233,16 @@ Actions = ({
 
     },
     showAdmin:   function() {
-        $('#fs_toggle').off('click');
+		if ( !$('#app-container #admin').length ) {
+			$('#fs_toggle').off('click');
 
-        var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0, allowfullscreentoggle = 0;
+			var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0, allowfullscreentoggle = 0;
 
-        this.animateNavBarClose(function() {
-            this.showApp(name, url, type, fullscreen, allowfullscreentoggle);
+			this.animateNavBarClose(function() {
+				this.showApp(name, url, type, fullscreen, allowfullscreentoggle);
 
-        });
-
-
+			});
+		}
 
     },
 
