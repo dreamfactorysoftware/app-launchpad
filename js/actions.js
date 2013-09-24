@@ -59,8 +59,6 @@ Actions = ({
                     //window.defaultApp = app.id;
                     _defaultShown = true;
 
-
-
             }
 
             _options += '<option value="' + app.id + '">' + app.name + '</option>';
@@ -220,7 +218,9 @@ Actions = ({
 
     showAppList: function() {
 
-        $('#adminLink').on('click', Actions.showAdmin());
+        $('#adminLink').on('click', function() {
+            Actions.showAdmin()
+        });
         $('#adminLink').removeClass('disabled');
         $('#fs_toggle').off('click');
         $('#fs_toggle').addClass('disabled');
@@ -233,7 +233,8 @@ Actions = ({
 
     },
     showAdmin:   function() {
-		if ( !$('#app-container #admin').length ) {
+
+            $('#adminLink').off('click');
 			$('#fs_toggle').off('click');
 
 			var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0, allowfullscreentoggle = 0;
@@ -242,7 +243,7 @@ Actions = ({
 				this.showApp(name, url, type, fullscreen, allowfullscreentoggle);
 
 			});
-		}
+
 
     },
 
@@ -435,6 +436,9 @@ Actions = ({
                 Actions.getApps(sessionInfo);
                 $("#loginDialog").modal('hide');
                 $("#loading").hide();
+                $('#adminLink').on('click', function() {
+                    Actions.showAdmin()
+                });
             }).fail(function(response) {
                 Actions.displayModalError('#loginErrorMessage', getErrorString(response));
             });
