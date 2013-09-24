@@ -1415,7 +1415,7 @@ body {
 
 #rocket {
 	box-shadow:   0 5px 3px #000000;
-	display:      block;
+	display:      none;
 	font-size:    0.9em;
 	left:         50%;
 	margin-left:  -68px;
