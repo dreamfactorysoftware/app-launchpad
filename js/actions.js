@@ -50,14 +50,18 @@ Actions = ({
             }
 
             else if (app.is_default && data.is_sys_admin) {
-                    app.requires_fullscreen = false;
+                app.requires_fullscreen = false;
 
-                    Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen,
-                        app.allow_fullscreen_toggle);
+                Actions.showApp(app.api_name, app.launch_url, app.is_url_external, app.requires_fullscreen,
+                    app.allow_fullscreen_toggle);
 
 
-                    //window.defaultApp = app.id;
-                    _defaultShown = true;
+                //window.defaultApp = app.id;
+                _defaultShown = true;
+
+                $('#adminLink').on('click', function() {
+                    Actions.showAdmin()
+                });
 
             }
 
@@ -75,7 +79,7 @@ Actions = ({
             return;
         }
         else if (data.is_sys_admin && !_defaultShown) {
-            this.showApp('admin', '/public/admin/#/app', '0', false);
+            this.showApp('admin', '/public/admin/#/', '0', false);
             $('#adminLink').off('click');
             $('#fs_toggle').off('click');
         }
@@ -234,15 +238,15 @@ Actions = ({
     },
     showAdmin:   function() {
 
-            $('#adminLink').off('click');
-			$('#fs_toggle').off('click');
+        $('#adminLink').off('click');
+        $('#fs_toggle').off('click');
 
-			var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0, allowfullscreentoggle = 0;
+        var name = 'admin', url = '/public/admin/#/app', type = 0, fullscreen = 0, allowfullscreentoggle = 0;
 
-			this.animateNavBarClose(function() {
-				this.showApp(name, url, type, fullscreen, allowfullscreentoggle);
+        this.animateNavBarClose(function() {
+            this.showApp(name, url, type, fullscreen, allowfullscreentoggle);
 
-			});
+        });
 
 
     },
