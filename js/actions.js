@@ -63,6 +63,10 @@ Actions = ({
                     Actions.showAdmin()
                 });
 
+                $('#adminLink').on('click', function() {
+                    Actions.showAdmin()
+                });
+
             }
 
             _options += '<option value="' + app.id + '">' + app.name + '</option>';
