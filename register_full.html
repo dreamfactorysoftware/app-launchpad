@@ -176,6 +176,7 @@ var createUser = function() {
 	$.post('/rest/user/register/?app_name=launchpad', data)
 			.done(function() {
 				$("#statusMessage").removeClass('alert-error').addClass("alert-success").html("Registration was successful. You may now login.").show();
+				window.location = "/";
 			}
 	)
 			.fail(function(response) {

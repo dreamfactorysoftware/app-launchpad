@@ -17,7 +17,12 @@ Actions = ({
     },
 
     createAccount: function() {
-        window.location = "register.html";
+		if (Config.open_reg_email_service_id) {
+			window.location = "register_via_email.html";
+		}
+		else{
+			window.location = "register_full.html";
+		}
     },
 
     getApps: function(data, action) {
