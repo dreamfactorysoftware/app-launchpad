@@ -4,9 +4,9 @@
 }
 
 .remote-login h5 {
-	font-size:     18pt;
-	text-align:    center;
-	text-shadow:   0 1px 0 rgba(0, 0, 0, 0.3);
+	font-size:      18pt;
+	text-align:     center;
+	text-shadow:    0 1px 0 rgba(0, 0, 0, 0.3);
 	padding-bottom: 12px;
 }
 
@@ -69,4 +69,9 @@
 	margin:     12px auto 0;
 	display:    table;
 	text-align: center;
+}
+
+.remote-login-providers .icon-salesforce.icon-3x {
+	background:      url(../img/icon-salesforce.png) center center no-repeat;
+	background-size: 48px 48px;
 }
