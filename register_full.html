@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+
+	<title>DreamFactory Services Platform&trade;</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="DreamFactory Software, Inc.">
+	<meta name="language" content="en" />
+	<link rel="shortcut icon" href="/public/images/logo-32x32.png" />
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+	<style>
+		body {
+			padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+		}
+
+		img#logo-img {
+			margin-top:   5px;
+			margin-right: 15px;
+			float:        left;
+			height:       32px;
+		}
+
+		h2.headline {
+			border-bottom: 1px solid #ddd;
+			margin-top:    25px;
+			margin-bottom: 50px;
+		}
+
+		.main-content {
+			height:     640px;
+			font-size:  18px !important;
+			background: url(../images/bg-initial.png) 25% 0 no-repeat;
+		}
+
+		.main-content.step2 {
+			height:     640px;
+			font-size:  18px !important;
+			background: url(../images/bg-initial.png) 100% 50% no-repeat;
+		}
+
+		.main-content p {
+			font-size: 18px;
+			width:     450px;
+		}
+
+		.main-content .spacer {
+			height:        1px;
+			width:         1px;
+			margin-bottom: 25px;
+		}
+
+		.main-content label {
+			font-size: 16px;
+		}
+
+		.main-content.step1 .form-actions {
+			margin-top: 160px;
+		}
+
+		.main-content footer p {
+			width: 960px;
+		}
+
+		label.error {
+			color:       darkred;
+			padding-top: 0;
+			margin-top:  -10px;
+			font-size:   10pt;
+			display:     block;
+		}
+	</style>
+	<!--[if IE 7]>
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome-ie7.css" rel="stylesheet"><![endif]-->
+	<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->    <!--[if lt IE 9]>
+	<script type="text/javascript" src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>    <![endif]-->
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> </a> <img id="logo-img" src="/public/images/logo-48x48.png"><a
+				class="brand" href="#">DreamFactory Powers Activate!</a>
+
+			<div class="nav-collapse collapse">
+				<ul class="nav"></ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container main-content step1">
+	<h2 class="headline">Register as a New User on this DSP!</h2>
+
+	<p>Please enter your email address, name, and desired password to complete the registration.</p>
+
+	<div class="spacer"></div>
+	<!--
+		<form id="register-form">
+	-->
+	<div class="control-group">
+		<label for="email">Email Address</label>
+		<div class="controls">
+			<input id="email" class="email required" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="firstname">First Name</label>
+		<div class="controls">
+			<input id="firstname" class="required" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="lastname">Last Name</label>
+		<div class="controls">
+			<input id="lastname" class="required" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="password">Password</label>
+		<div class="controls">
+			<input id="password" class="required" type="password" />
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="password_verify">Verify Password</label>
+		<div class="controls">
+			<input id="password_verify" class="required" type="password" />
+		</div>
+	</div>
+	<div class="form-actions">
+		<button onclick="createUser()" class="btn btn-success">Register!</button>
+	</div>
+	<!--
+		</form>
+	-->
+	<div class="alert hide" id="statusMessage"></div>
+	<footer>
+		<p>&copy; DreamFactory Software, Inc. 2013. All Rights Reserved.</p>
+	</footer>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="js/json2.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/jquery.validate.min.js"></script>
+<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.10.0/additional-methods.min.js"></script>
+<!--<script type="text/javascript">
+    /*<![CDATA[*/
+    jQuery(function($) {
+        var	_validator = $("form#register-form").validate({"ignoreTitle":true,"errorClass":"error","errorPlacement":function(error,element){error.appendTo(element.parent("div"));error.css("margin","-10px 0 0");},"error_placement":function(error,element){error.appendTo(element.parent("div"));},"highlight":function( element, errorClass ) {$(element).closest('div.control-group').addClass('error');$(element).addClass(errorClass);},"unhighlight":function( element, errorClass ) {$(element).closest('div.control-group').removeClass('error');$(element).removeClass(errorClass);}});
+    });
+    /*]]>*/
+</script>-->
+<script>
+var createUser = function() {
+
+	var data = {};
+	data.email = $("#email").val();
+	data.first_name = $("#firstname").val();
+	data.last_name = $("#lastname").val();
+	if (data.email == '' || data.first_name == '' || data.last_name == '') {
+		$("#statusMessage").addClass('alert-error').html("Please enter all fields.").show();
+		return;
+	}
+	data.new_password = $("#password").val();
+	if (data.new_password == '' || data.new_password != $("#password_verify").val()) {
+		$("#statusMessage").addClass('alert-error').html("Please enter matching passwords.").show();
+		return;
+	}
+	data = JSON.stringify(data);
+	$.post('/rest/user/register/?app_name=launchpad', data)
+			.done(function() {
+				$("#statusMessage").removeClass('alert-error').addClass("alert-success").html("Registration was successful. You may now login.").show();
+			}
+	)
+			.fail(function(response) {
+				$("#statusMessage").addClass('alert-error').removeClass("alert-success").html(getErrorString(response)).show();
+			}
+	)
+};
+</script>
+<script src="/public/web-core/js/utils.js"></script>
+</body>
+</html>
