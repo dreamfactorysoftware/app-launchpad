@@ -504,11 +504,11 @@ Actions = ({
                     $("#forgotPasswordDialog").modal('show');
                 }
                 else {
-                    $("#loginErrorMessage").addClass('alert-error').html('Unable to retrieve your security question.');
+                    $("#loginErrorMessage").addClass('alert-error').html('Please check your email for a link to reset your password.');
                 }
             },
             error:    function(response) {
-                $("#loginErrorMessage").addClass('alert-error').html('Unable to retrieve your security question.');
+                $("#loginErrorMessage").addClass('alert-error').html(getErrorString(response));
             }
         });
 
