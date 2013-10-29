@@ -620,24 +620,26 @@ Actions = ({
         if (NewUser.default_app_id == "") {
             NewUser.default_app_id = null;
         }
-        // require question
+
         var q = $("#security_question").val();
-        if (q == '') {
-            $("#changeProfileErrorMessage").addClass('alert-error').html('Please enter a security question.');
-            return;
-        }
         var a = $("#security_answer").val();
-        if (q != Profile.security_question) {
-            // require answer if question has changed
-            if (a == '') {
+        if (!q) {
+            NewUser.security_question = '';
+            NewUser.security_answer = '';
+        } else if (q == Profile.security_question) {
+            if (a) {
+                NewUser.security_question = q;
+                NewUser.security_answer = a;
+            }
+        } else {
+            if (!a) {
                 $("#changeProfileErrorMessage").addClass('alert-error').html('You changed your security question. Please enter a security answer.');
                 return;
             }
             NewUser.security_question = q;
-        }
-        if (a != '') {
             NewUser.security_answer = a;
         }
+
         $.ajax({
             dataType: 'json',
             type:     'POST',
