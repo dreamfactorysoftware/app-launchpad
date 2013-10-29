@@ -479,7 +479,9 @@ Actions = ({
 
     clearForgotPassword:    function() {
 
-        $('#Answer').val('');
+		$('#Answer').val('');
+		$('#NewPassword').val('');
+		$('#ConfirmPassword').val('');
     },
     doForgotPasswordDialog: function() {
         var that = this;
@@ -488,16 +490,17 @@ Actions = ({
             return;
         }
         $.ajax({
+			type:     'POST',
             dataType: 'json',
-            url: CurrentServer + '/rest/user/challenge',
-            data: 'app_name=launchpad&email=' + $('#UserEmail').val() + '&method=GET',
+			url:      CurrentServer + '/rest/user/password/?app_name=launchpad&reset=true',
+			data:     JSON.stringify({email: $('#UserEmail').val()}),
             cache:    false,
             success:  function(response) {
                 if (response.security_question) {
                     $("#Question").html(response.security_question);
                     $("#loginDialog").modal('hide');
                     that.clearForgotPassword();
-                    $("#forgotPasswordErrorMessage").removeClass('alert-error').html('Please answer your security question to log in.');
+                    $("#forgotPasswordErrorMessage").removeClass('alert-error').html('Please answer your security question and provide a new password to log in.');
                     $("#forgotPasswordDialog").modal('show');
                 }
                 else {
@@ -510,63 +513,45 @@ Actions = ({
         });
 
     },
-    toggleFullScreen:       function(toggle) {
-        if (toggle) {
-
-            Actions.animateNavBarClose(function() {
-                $('#app-container').css({"top": "0px", "z-index": 998});
-                $('#navbar-container').css({
-                    "z-index" : 10
-                });
-                $('#rocket').show();
-            });
-
-
-        }
-        else {
-            $('#app-container').css({"top": "44px", "z-index": 997});
-            $('#navbar-container').css({
-                "z-index" : 999
-            })
-            $('#fs_toggle').removeClass('disabled');
-            $('#rocket').hide();
-        }
-    },
-
-    requireFullScreen: function() {
-        $('#app-container').css({"top": "0px", "z-index": 998});
-    },
     forgotPassword:    function() {
 
-        if ($('#Answer').val()) {
-            var that = this;
-            $.ajax({
-                dataType: 'json',
-                type:     'POST',
-                url: CurrentServer + '/rest/user/challenge/?app_name=launchpad&email=' + $('#UserEmail').val() +
-                    '&method=POST',
-                data:     JSON.stringify({security_answer: $('#Answer').val()}),
-                cache:    false,
-                success:  function(response) {
-                    $('#forgotPasswordErrorMessage').removeClass('alert-error');
-                    $("#forgotPasswordDialog").modal('hide');
-                    Actions.clearForgotPassword();
-                    User = response;
-                    Actions.updateSession('init');
-                    Actions.getApps(response);
-                    CurrentUserID = response.id;
-                    if (response.is_sys_admin) {
-                        Actions.buildAdminDropDown();
-                    }
-                },
-                error:    function(response) {
-                    $("#forgotPasswordErrorMessage").addClass('alert-error').html('Please check the answer to your security question.');
-                }
-            });
-        }
-        else {
-            $("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the security answer to continue, or contact your administrator for help.');
-        }
+		if ($('#Answer').val() == '' || $("#NewPassword").val() == '' || $("#ConfirmPassword").val() == '') {
+			$("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the answer and a new password in both password fields.');
+			return;
+		}
+		if ($("#NewPassword").val() == $("#ConfirmPassword").val()) {
+			var data = {
+				email: $('#UserEmail').val(),
+				security_answer: $('#Answer').val(),
+				new_password: $("#NewPassword").val()
+			};
+			var that = this;
+			$.ajax({
+				dataType: 'json',
+				type:     'POST',
+				url:      CurrentServer + '/rest/user/password/?app_name=launchpad',
+				data:     JSON.stringify(data),
+				cache:    false,
+				success:  function(response) {
+					$('#forgotPasswordErrorMessage').removeClass('alert-error');
+					$("#forgotPasswordDialog").modal('hide');
+					Actions.clearForgotPassword();
+					User = response;
+					Actions.updateSession('init');
+					Actions.getApps(response);
+					CurrentUserID = response.id;
+					if (response.is_sys_admin) {
+						Actions.buildAdminDropDown();
+					}
+				},
+				error:    function(response) {
+					$("#forgotPasswordErrorMessage").addClass('alert-error').html('Please check the answer to your security question.');
+				}
+			});
+		}
+		else {
+			$("#forgotPasswordErrorMessage").addClass('alert-error').html('<b style="color:red;">Passwords do not match!</b> New and Confirm Password fields need to match before you can submit the request.');
+		}
     },
 
 //*************************************************************************
@@ -784,7 +769,32 @@ Actions = ({
         else {
             $('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
         }
-    }
+    },
+	toggleFullScreen:       function(toggle) {
+		if (toggle) {
+
+			Actions.animateNavBarClose(function() {
+				$('#app-container').css({"top": "0px", "z-index": 998});
+				$('#navbar-container').css({
+					"z-index" : 10
+				});
+				$('#rocket').show();
+			});
+
+
+		}
+		else {
+			$('#app-container').css({"top": "44px", "z-index": 997});
+			$('#navbar-container').css({
+				"z-index" : 999
+			})
+			$('#fs_toggle').removeClass('disabled');
+			$('#rocket').hide();
+		}
+	},
+	requireFullScreen: function() {
+		$('#app-container').css({"top": "0px", "z-index": 998});
+	}
 });
 
 /**
