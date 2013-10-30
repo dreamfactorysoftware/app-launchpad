@@ -10,8 +10,11 @@ Actions = ({
             Config = configInfo;
             document.title = "Launchpad " + configInfo.dsp_version;
             that.updateSession("init");
-            // simulate session info
-            Templates.loadTemplate(Templates.navBarTemplate, {User: {allow_open_registration:Config.allow_open_registration}}, 'navbar-container');
+            var data = {
+                allow_open_registration:Config.allow_open_registration,
+                allow_guest_user:Config.allow_guest_user
+            };
+            Templates.loadTemplate(Templates.navBarTemplate, {User: data}, 'navbar-container');
         }).fail(function(response) {
                 alertErr(response);
             });
@@ -319,6 +322,7 @@ Actions = ({
                 sessionInfo.activeSession = true;
             }
             sessionInfo.allow_open_registration = Config.allow_open_registration;
+            sessionInfo.allow_guest_user = Config.allow_guest_user;
 
             Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
             Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
@@ -336,8 +340,11 @@ Actions = ({
 
         }).fail(function(response) {
                 if (response.status == 401 || response.status == 403) {
-                    // simulate session info
-                    Templates.loadTemplate(Templates.navBarTemplate, {User: {allow_open_registration:Config.allow_open_registration}}, 'navbar-container');
+                    var data = {
+                        allow_open_registration:Config.allow_open_registration,
+                        allow_guest_user:Config.allow_guest_user
+                    };
+                    Templates.loadTemplate(Templates.navBarTemplate, {User: data}, 'navbar-container');
                     that.doSignInDialog();
                 }
                 else if (response.status == 500) {
@@ -447,6 +454,7 @@ Actions = ({
                     sessionInfo.activeSession = true;
                 }
                 sessionInfo.allow_open_registration = Config.allow_open_registration;
+                sessionInfo.allow_guest_user = Config.allow_guest_user;
 
                 Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
                 Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
@@ -753,8 +761,11 @@ Actions = ({
             error:    function(response) {
                 if (response.status == 401) {
                     //that.showSignInButton();
-                    // simulate session info
-                    Templates.loadTemplate(Templates.navBarTemplate, {User: {allow_open_registration:Config.allow_open_registration}}, 'navbar-container');
+                    var data = {
+                        allow_open_registration:Config.allow_open_registration,
+                        allow_guest_user:Config.allow_guest_user
+                    };
+                    Templates.loadTemplate(Templates.navBarTemplate, {User: data}, 'navbar-container');
                     that.doSignInDialog();
                 }
             }

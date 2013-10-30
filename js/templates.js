@@ -117,22 +117,23 @@ var Templates = {
             ' <!-- Everything you want hidden at 940px or less, place within here -->' +
             '<div id="main-nav" class="nav-collapse collapse pull-right">' +
             '<!-- .nav, .navbar-search, .navbar-form, etc -->' +
-            '<a id="apps-list-btn" onclick="Actions.showAppList()" class="btn btn-inverse btn-launch btn-stack disabled" title="Show Apps"><i class="icon-list"></i></a>' +
             '{{#User.activeSession}}' +
+            '<a id="apps-list-btn" onclick="Actions.showAppList()" class="btn btn-inverse btn-launch btn-stack disabled" title="Show Apps"><i class="icon-list"></i></a>' +
             '<a onclick="Actions.doProfileDialog()" id="dfProfileLnk" class="btn btn-inverse btn-launch btn-stack" title="Change Your Profile"><i class="icon-user"></i></a>' +
             '<a id="dfPasswordLnk" onclick="Actions.doChangePasswordDialog()" class="btn btn-inverse btn-launch btn-stack" title="Change Your Password"><i class="icon-key"></i></a>' +
-            '{{/User.activeSession}}' +
             '<a id="fs_toggle" class="btn btn-inverse btn-launch btn-stack" title="Full Screen" ><i class="icon-resize-full"></i></a>' +
-            '{{#User.activeSession}}' +
             '{{#User.is_sys_admin}}' +
             '<a id="adminLink" class="btn btn-inverse btn-launch btn-stack" title="Admin Console"><i class="icon-cog"></i></a>' +
             '{{/User.is_sys_admin}}' +
-            '{{/User.activeSession}}' +
             '<a id="helpLink" target="df-new" class="btn btn-inverse btn-launch btn-stack" href="http://dreamfactorysoftware.github.io" title="Help"><i class="icon-question-sign"></i></a>' +
-            '{{#User.activeSession}}' +
             '<a id="dfSignOutLink" onclick="Actions.doSignOutDialog()" class="btn btn-inverse btn-launch btn-stack" title="End Your Session Now"><i class="icon-signout"></i></a>' +
             '{{/User.activeSession}}' +
             '{{^User.activeSession}}' +
+            '{{#User.allow_guest_user}}' +
+            '<a id="apps-list-btn" onclick="Actions.showAppList()" class="btn btn-inverse btn-launch btn-stack disabled" title="Show Apps"><i class="icon-list"></i></a>' +
+            '<a id="fs_toggle" class="btn btn-inverse btn-launch btn-stack" title="Full Screen" ><i class="icon-resize-full"></i></a>' +
+            '{{/User.allow_guest_user}}' +
+            '<a id="helpLink" target="df-new" class="btn btn-inverse btn-launch btn-stack" href="http://dreamfactorysoftware.github.io" title="Help"><i class="icon-question-sign"></i></a>' +
             ' <a class="btn btn-inverse btn-launch btn-stack btn-signin" onclick="Actions.doSignInDialog()"><li class="icon-signin"></li>&nbsp;Sign In</a>' +
             '{{#User.allow_open_registration}}' +
             '<a class="btn btn-inverse btn-launch btn-stack btn-signin" onclick="Actions.createAccount()"><li class="icon-key"></li>&nbsp;Create Account</a>' +
