@@ -10,19 +10,20 @@ Actions = ({
             Config = configInfo;
             document.title = "Launchpad " + configInfo.dsp_version;
             that.updateSession("init");
-            Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+            // simulate session info
+            Templates.loadTemplate(Templates.navBarTemplate, {User: {allow_open_registration:Config.allow_open_registration}}, 'navbar-container');
         }).fail(function(response) {
                 alertErr(response);
             });
     },
 
     createAccount: function() {
-		if (Config.open_reg_email_service_id) {
-			window.location = "register_via_email.html";
-		}
-		else{
-			window.location = "register_full.html";
-		}
+        if (Config.open_reg_email_service_id) {
+            window.location = "register_via_email.html";
+        }
+        else{
+            window.location = "register_full.html";
+        }
     },
 
     getApps: function(data, action) {
@@ -317,6 +318,7 @@ Actions = ({
             if (CurrentUserID) {
                 sessionInfo.activeSession = true;
             }
+            sessionInfo.allow_open_registration = Config.allow_open_registration;
 
             Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
             Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
@@ -334,7 +336,8 @@ Actions = ({
 
         }).fail(function(response) {
                 if (response.status == 401 || response.status == 403) {
-                    Templates.loadTemplate(Templates.navBarTemplate, Config, 'navbar-container');
+                    // simulate session info
+                    Templates.loadTemplate(Templates.navBarTemplate, {User: {allow_open_registration:Config.allow_open_registration}}, 'navbar-container');
                     that.doSignInDialog();
                 }
                 else if (response.status == 500) {
@@ -443,6 +446,7 @@ Actions = ({
                 if (CurrentUserID) {
                     sessionInfo.activeSession = true;
                 }
+                sessionInfo.allow_open_registration = Config.allow_open_registration;
 
                 Templates.loadTemplate(Templates.navBarTemplate, {User: sessionInfo}, 'navbar-container');
                 Templates.loadTemplate(Templates.appIconTemplate, {Applications: sessionInfo}, 'app-list-container');
@@ -479,9 +483,9 @@ Actions = ({
 
     clearForgotPassword:    function() {
 
-		$('#Answer').val('');
-		$('#NewPassword').val('');
-		$('#ConfirmPassword').val('');
+        $('#Answer').val('');
+        $('#NewPassword').val('');
+        $('#ConfirmPassword').val('');
     },
     doForgotPasswordDialog: function() {
         var that = this;
@@ -490,10 +494,10 @@ Actions = ({
             return;
         }
         $.ajax({
-			type:     'POST',
+            type:     'POST',
             dataType: 'json',
-			url:      CurrentServer + '/rest/user/password/?app_name=launchpad&reset=true',
-			data:     JSON.stringify({email: $('#UserEmail').val()}),
+            url:      CurrentServer + '/rest/user/password/?app_name=launchpad&reset=true',
+            data:     JSON.stringify({email: $('#UserEmail').val()}),
             cache:    false,
             success:  function(response) {
                 if (response.security_question) {
@@ -515,43 +519,43 @@ Actions = ({
     },
     forgotPassword:    function() {
 
-		if ($('#Answer').val() == '' || $("#NewPassword").val() == '' || $("#ConfirmPassword").val() == '') {
-			$("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the answer and a new password in both password fields.');
-			return;
-		}
-		if ($("#NewPassword").val() == $("#ConfirmPassword").val()) {
-			var data = {
-				email: $('#UserEmail').val(),
-				security_answer: $('#Answer').val(),
-				new_password: $("#NewPassword").val()
-			};
-			var that = this;
-			$.ajax({
-				dataType: 'json',
-				type:     'POST',
-				url:      CurrentServer + '/rest/user/password/?app_name=launchpad',
-				data:     JSON.stringify(data),
-				cache:    false,
-				success:  function(response) {
-					$('#forgotPasswordErrorMessage').removeClass('alert-error');
-					$("#forgotPasswordDialog").modal('hide');
-					Actions.clearForgotPassword();
-					User = response;
-					Actions.updateSession('init');
-					Actions.getApps(response);
-					CurrentUserID = response.id;
-					if (response.is_sys_admin) {
-						Actions.buildAdminDropDown();
-					}
-				},
-				error:    function(response) {
-					$("#forgotPasswordErrorMessage").addClass('alert-error').html('Please check the answer to your security question.');
-				}
-			});
-		}
-		else {
-			$("#forgotPasswordErrorMessage").addClass('alert-error').html('<b style="color:red;">Passwords do not match!</b> New and Confirm Password fields need to match before you can submit the request.');
-		}
+        if ($('#Answer').val() == '' || $("#NewPassword").val() == '' || $("#ConfirmPassword").val() == '') {
+            $("#forgotPasswordErrorMessage").addClass('alert-error').html('You must enter the answer and a new password in both password fields.');
+            return;
+        }
+        if ($("#NewPassword").val() == $("#ConfirmPassword").val()) {
+            var data = {
+                email: $('#UserEmail').val(),
+                security_answer: $('#Answer').val(),
+                new_password: $("#NewPassword").val()
+            };
+            var that = this;
+            $.ajax({
+                dataType: 'json',
+                type:     'POST',
+                url:      CurrentServer + '/rest/user/password/?app_name=launchpad',
+                data:     JSON.stringify(data),
+                cache:    false,
+                success:  function(response) {
+                    $('#forgotPasswordErrorMessage').removeClass('alert-error');
+                    $("#forgotPasswordDialog").modal('hide');
+                    Actions.clearForgotPassword();
+                    User = response;
+                    Actions.updateSession('init');
+                    Actions.getApps(response);
+                    CurrentUserID = response.id;
+                    if (response.is_sys_admin) {
+                        Actions.buildAdminDropDown();
+                    }
+                },
+                error:    function(response) {
+                    $("#forgotPasswordErrorMessage").addClass('alert-error').html('Please check the answer to your security question.');
+                }
+            });
+        }
+        else {
+            $("#forgotPasswordErrorMessage").addClass('alert-error').html('<b style="color:red;">Passwords do not match!</b> New and Confirm Password fields need to match before you can submit the request.');
+        }
     },
 
 //*************************************************************************
@@ -742,8 +746,6 @@ Actions = ({
             success:  function(response) {
                 $('#app-container').empty();
                 $('#app-list-container').empty();
-                $('#app-list').empty();
-                $('#admin-container').empty();
                 $("#logoffDialog").modal('hide');
                 that.updateSession("init");
 
@@ -751,7 +753,8 @@ Actions = ({
             error:    function(response) {
                 if (response.status == 401) {
                     //that.showSignInButton();
-                    Templates.loadTemplate(Templates.navBarTemplate, null, 'navbar-container');
+                    // simulate session info
+                    Templates.loadTemplate(Templates.navBarTemplate, {User: {allow_open_registration:Config.allow_open_registration}}, 'navbar-container');
                     that.doSignInDialog();
                 }
             }
@@ -772,31 +775,31 @@ Actions = ({
             $('#error-container').html(message).removeClass().addClass('alert alert-success center').show().fadeOut(5000);
         }
     },
-	toggleFullScreen:       function(toggle) {
-		if (toggle) {
+    toggleFullScreen:       function(toggle) {
+        if (toggle) {
 
-			Actions.animateNavBarClose(function() {
-				$('#app-container').css({"top": "0px", "z-index": 998});
-				$('#navbar-container').css({
-					"z-index" : 10
-				});
-				$('#rocket').show();
-			});
+            Actions.animateNavBarClose(function() {
+                $('#app-container').css({"top": "0px", "z-index": 998});
+                $('#navbar-container').css({
+                    "z-index" : 10
+                });
+                $('#rocket').show();
+            });
 
 
-		}
-		else {
-			$('#app-container').css({"top": "44px", "z-index": 997});
-			$('#navbar-container').css({
-				"z-index" : 999
-			})
-			$('#fs_toggle').removeClass('disabled');
-			$('#rocket').hide();
-		}
-	},
-	requireFullScreen: function() {
-		$('#app-container').css({"top": "0px", "z-index": 998});
-	}
+        }
+        else {
+            $('#app-container').css({"top": "44px", "z-index": 997});
+            $('#navbar-container').css({
+                "z-index" : 999
+            })
+            $('#fs_toggle').removeClass('disabled');
+            $('#rocket').hide();
+        }
+    },
+    requireFullScreen: function() {
+        $('#app-container').css({"top": "0px", "z-index": 998});
+    }
 });
 
 /**
